@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+
+@theme components {
+  --font-alike: "Alike", "sans-serif";
+  --font-pop: "Poppins", "sans-serif"
+}
+
