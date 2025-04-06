@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar novo plano de auditoria</title>
+    <style>
+        /* Estilos base */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EFF2F4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 40000px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+        }
+        
+        /* Cabeçalho */
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-button {
+            background-color: #03045E;
+            box-shadow: 0px 4px 20px #03045E;
+            color: #f5f5f5;
+            border: none;
+            border-radius: 10px / 30%;
+            width: 80px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 25px;
+        }
+        .back-button:hover {
+            transform: translateY(-5px);
+        }
+        h1 {
+            color: #03045E;
+            margin: 0;
+            font-size: 30px;
+            font-weight: normal;
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            max-width: 80px;
+        }
+        
+        /* Layout do formulário */
+        .form-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 30px;
+        }
+        .left-column {
+            grid-column: 1;
+        }
+        .right-column {
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Campos do formulário */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #695C5C;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #03045E;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #03045E12;
+        }
+        .form-control-icon {
+            position: relative;
+        }
+        .form-control-icon input {
+            padding-right: 35px;
+        }
+        .form-control-icon img {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Dropdown de opções */
+        .options-dropdown {
+            position: absolute;
+            background-color: #EFF2F4;
+            border: 2px solid #102073;
+            border-radius: 5px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .options-dropdown ul {
+            list-style-type: none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            
+        }
+        .options-dropdown li {
+            padding: 8px 12px;
+            cursor:pointer;
+            color:#695C5C;
+        }
+        .options-dropdown li:hover {
+            background-color: #03045E12; 
+        }
+
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .options-dropdown, .dropdown-container {
+            margin-bottom: 50px; /* Adiciona mais espaçamento entre o botão de upload e o dropdown */
+        }
+
+        
+        /* Estilo para o campo de descrição */
+        .description-area {
+            height: 200px; /* Altura do textarea  */
+            resize: none; /* Impede que o userredimensione o textarea */
+            padding-top: 12px; /* Espaçamento interno consistente */
+        }
+
+        .description-container {
+            position: relative;
+            display: block;
+        }
+
+        .description-icon {
+            position: absolute !important;
+            right: 10px !important;
+            top: 12px !important; /* Ajuste esse valor se necessário */
+            transform: none !important; /* Remove qualquer transformação existente */
+            z-index: 2; /* Garante que o ícone fique acima do textarea */
+        }
+
+         /* Botão de registro */
+         .criar-btn {
+            background-color: #102073;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 150px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+            margin-top: -10px;
+        }  
+        .criar-btn:hover {
+            transform: translateY(-5px);
+        }
+        
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button">
+                <span>←</span>
+            </button>
+            <h1>Criar novo plano de auditoria</h1>
+            <img src="logo.png" alt="Logo" class="logo">
+        </div>
+        
+        <!-- Form -->
+        <form>
+        <div class="form-layout">
+            <div class="left-column">
+                <div class="form-group">
+                    <label class="form-label">Nome</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="Insira um nome para a auditoria">
+                        <img src="auditoria.png" alt="Ícone de auditoria">
+                    </div>
+                </div>
+
+
+                <div class="dropdown-container">
+                    <label class="form-label">Materiais e Equipamentos necessários</label>
+                    <div class="form-control-icon">
+                        <input type="search" class="form-control" placeholder="Materiais e equipamentos necessários" id="materiaisSearch" readonly>
+                        <img src="setabaixo.png" alt="Ícone de dropdown" id="dropdownIcon" onclick="toggleDropdown()">
+                    </div>
+                    <div id="optionsDropdown" class="options-dropdown" style="display:none;">
+                        <ul>
+                            <li onclick="selectOption('Lanterna')">Lanterna</li>
+                            <li onclick="selectOption('Especialista em Iluminação Pública')">Especialista em Iluminação Pública</li>
+                            <li onclick="selectOption('Fiscalizador de Obras Públicas')">Fiscalizador de Obras Públicas</li>
+                            <li onclick="selectOption('Técnico de Sinalização de Trânsito')">Técnico de Sinalização de Trânsito</li>
+                            <li onclick="selectOption('Consultor de Segurança Rodoviária')">Consultor de Segurança Rodoviária</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Descrição</label>
+                    <div class="form-control-icon description-container">
+                        <textarea class="form-control description-area" placeholder="Escreva algo..."></textarea>
+                        <img src="descrição.png" alt="Ícone de descrição" class="description-icon">
+                    </div>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="form-group">
+                    <label class="form-label">Duração Estimada</label>
+                    <div class="form-control-icon">
+                    <input type="text" class="form-control" placeholder="HH:MM:SS">
+                    <img src="clock.png" alt="Ícone de relógio">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Data de nascimento</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+                        <img src="calendario.png" alt="Ícone de data">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Morada</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="Insira morada">
+                        <img src="localização.png" alt="Ícone de morada">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Código Postal</label>
+                    <input type="text" class="form-control" placeholder="XXXX-XXX">
+                </div>
+
+
+                <div class="dropdown-container">
+                    <label class="form-label">Peritos</label>
+                    <div class="form-control-icon">
+                        <input type="search" class="form-control" placeholder="Escolha um dos peritos disponíveis" id="Search" readonly>
+                        <img src="setabaixo.png" alt="Ícone de dropdown" id="dropdownIcon" onclick="toggleDropdown()">
+                    </div>
+                    <div id="optionsDropdown" class="options-dropdown" style="display:none;">
+                        <ul>
+                            <li onclick="selectOption('Lanterna')">Lanterna</li>
+                            <li onclick="selectOption('Especialista em Iluminação Pública')">Especialista em Iluminação Pública</li>
+                            <li onclick="selectOption('Fiscalizador de Obras Públicas')">Fiscalizador de Obras Públicas</li>
+                            <li onclick="selectOption('Técnico de Sinalização de Trânsito')">Técnico de Sinalização de Trânsito</li>
+                            <li onclick="selectOption('Consultor de Segurança Rodoviária')">Consultor de Segurança Rodoviária</li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <button class="criar-btn">Criar</button>
+
+
+
+
+
+
+
+
+
+            
+
+
+                <!-- Script para o dropdown -->
+                <script>
+                    function toggleDropdown() {
+                        var dropdown = document.getElementById("optionsDropdown");
+                        if (dropdown.style.display === "none" || dropdown.style.display === "") {
+                            dropdown.style.display = "block";
+                        } else {
+                            dropdown.style.display = "none";
+                        }
+                    }
+            
+                    // Fechar o dropdown se clicar fora dele
+                    window.onclick = function(event) {
+                        var dropdown = document.getElementById("optionsDropdown");
+                        if (!event.target.matches('#dropdownIcon') && !event.target.matches('#especialidadeSearch')) {
+                            dropdown.style.display = "none";
+                        }
+                    }
+            
+                    // Função para selecionar uma opção e fechar o dropdown
+                    function selectOption(option) {
+                        document.getElementById("especialidadeSearch").value = option;
+                        document.getElementById("optionsDropdown").style.display = "none"; // Fecha o dropdown
+                    }
+                </script>

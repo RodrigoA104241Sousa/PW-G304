@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peritos - Eyes Everywhere</title>
+    <link rel="stylesheet" href="peritos.css">
+    <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Logo -->
+            <div class="logo">
+                <div>Eyes</div>
+                <div>EveryWhere</div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav>
+                <div class="menu-item">
+                    <i data-lucide="filter"></i>
+                    <span>Filtros</span>
+                </div>
+
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="filter"></i>
+                        <span>Especialidade</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
+
+                <!-- Especialidade Submenu -->
+                <div class="submenu">
+                    <div class="submenu-item"><span class="dot"></span>Buraco na Estrada</div>
+                    <div class="submenu-item"><span class="dot"></span>Passeio Danificado</div>
+                    <div class="submenu-item"><span class="dot"></span>Falta de Sinalização</div>
+                    <div class="submenu-item"><span class="dot"></span>Iluminação Pública</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="filter"></i>
+                        <span>Estado</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
+
+                <!-- Estado Submenu -->
+                <div class="submenu">
+                    <button class="submenu-item" data-status="Disponível">
+                        <span class="dot"></span>
+                        <span>Disponível</span>
+                    </button>
+                    <button class="submenu-item" data-status="Não Disponível">
+                        <span class="dot"></span>
+                        <span>Não Disponível</span>
+                    </button>
+                    <button class="submenu-item" data-status="Em Auditoria">
+                        <span class="dot"></span>
+                        <span>Em Auditoria</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header>
+                <div class="header-left">
+                    <button id="addExpertBtn" class="btn btn-primary">
+                        <i data-lucide="plus"></i>
+                        <span>ADICIONAR</span>
+                    </button>
+                </div>
+
+                <div class="page-selector">
+                    <button class="page-dropdown-btn">
+                        Peritos
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="page-dropdown-content">
+                        <a href="peritos.html" class="active">Peritos</a>
+                        <a href="ocorrencias.html">Ocorrências</a>
+                        <a href="auditorias.html">Auditorias</a>
+                        <a href="dashboard.html">Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn btn-danger">
+                        <i data-lucide="minus"></i>
+                        <span>REMOVER</span>
+                    </button>
+                    <i data-lucide="settings"></i>
+                    <div class="avatar">
+                        <img src="logo.png" alt="Avatar" width="24" height="24">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Filters -->
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Nome / Email Perito ...">
+                <input type="date" id="dateInput" placeholder="Trabalha desde ...">
+                <button class="search-button" id="searchButton">
+                    <span>Procurar</span>
+                    <i data-lucide="search"></i>
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="card-container">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr class="table-header">
+                                <th><input type="checkbox" class="header-checkbox"></th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>Nome / Email Perito</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>Trabalha desde</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>ESPECIALIDADE</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>ESTADO</span>
+                                    </div>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="expertsTableBody">
+                            <!-- Table rows will be inserted here via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    Mostrando 1 - 16 de 5.000 peritos registradas
+                </div>
+                <div class="pagination-controls">
+                    <select>
+                        <option>16</option>
+                        <option>32</option>
+                        <option>64</option>
+                    </select>
+                    <div class="pagination-buttons">
+                        <button>&lt;</button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button>4</button>
+                        <button>&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="peritos.js"></script>
+</body>
+</html>
