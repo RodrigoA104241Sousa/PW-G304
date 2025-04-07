@@ -1,0 +1,349 @@
+<!DOCTYPE html>  <!-- Ficheiro HTML5 -->
+<html lang="pt"> <!-- idioma português -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- adaptado a dispositivos móveis -->
+  <title>Histórico de Auditorias</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Importa a fonte Inter -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> <!--Importa o Vue.js 2.7.14 -->
+
+  <style>
+  /* para toda a página */
+    * {
+      margin: 0; 
+      padding: 0;
+      box-sizing: border-box;
+      /* Remove margens e espaçamentos padrao de todos os elementos*/
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f7fa;
+      padding: 2rem;
+    }
+
+  /* CABEÇALHO SUPERIOR */
+    .cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+      /* Título Histórico de auditorias */
+      .cabecalho h1 {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem;
+        color: #111357;
+      }
+
+      /* Botão voltar */
+      .btn-voltar {
+        background-color: #0d0f47;         
+        color: white;                      
+        border: none;                      
+        border-radius: 20px;               
+        width: 120px;                      
+        height: 70px;                      
+        font-size: 3rem;                   
+        cursor: pointer;                  
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); 
+        display: flex;                    
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+      /* efeito expandido ao passar por cima */
+      .btn-voltar:hover {
+        transform: scale(1.05);            
+      }
+
+      /* Logotipo do topo direito */
+      .logo {
+        width: 80px;
+        height: auto;
+      }
+
+  /* CORPO PRINCIPAL */
+    .conteudo {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+  /* INDICADORES (VERTICAIS À ESQUERDA) */
+  .indicadores {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    background: white;
+    border-radius: 40px;
+    padding: 2.5rem 1.5rem;
+    box-shadow: 0 15px 60px rgba(183, 209, 255, 0.4);
+    width: 120px;
+  }
+
+  .indicador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.8rem;
+  }
+
+  .indicador .titulo {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.9rem;
+    color: #5c5c5c;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .circulo {
+    background-color: #d4ffe1;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .valor {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1e1e;
+  }
+
+  .icon {
+    width: 28px;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  .variacao {
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .variacao.up {
+    color: #27a745;
+  }
+
+  .variacao.down {
+    color: #dc3545;
+  }
+
+  /* TABELA */
+    /* configurações do retangulo da tabela */
+    .tabela-wrapper {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      overflow-x: auto;
+    }
+    /* Procurar e filtros */
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+      .filtros input, .filtros select {
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 1.1rem;       /* tamanho da letra do procurar e filtros*/
+        width: 100%;
+        max-width: 300px;     /* largura maxima do retangulo do procurar e filtros*/
+      }
+    
+    /* Tabela de auditorias*/
+    table {
+      width: 100%;
+      border-collapse: collapse; /* remove os espaços entre as células */
+    }
+
+      /* Estilo do cabeçalho da tabela */
+      thead {
+        background-color: #f2f5f9;
+      }
+      
+      /* Estilo das células da tabela */
+      th, td { /* th cabeçalho, td dados*/
+        padding: 1rem;
+        text-align: left; 
+        border-bottom: 1px solid #eee; /* linha de separação entre as linhas da tabela */
+        font-size: 0.95rem;
+      }
+
+      /* Estado da auditoria (concluida) */
+      .estado-tag {
+        background: #b3f2d3;
+        color: #00724d;
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        font-weight: bold;
+        font-size: 0.85rem;
+      }
+      /* detalhes da ocorrencia (seta) */
+      .detalhes {
+        text-align: center;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+  /* PAGINAÇÃO */
+  /* rodapé da tabela */
+  .footer-table {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+    /* criar o layout horizontal da paginação */
+    .pagination {
+      display: flex;
+      gap: 1rem;
+    }
+      /* configurações dos botões da paginação */
+      .pagination button {
+        padding: 0.5rem 1rem;
+        background: #e0e7f1;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      /* botão ativo da paginação */
+      .pagination .ativo {
+        background: #3b4cd1;
+        color: white;
+      }
+
+      /* Transição suave para troca de linhas da tabela */
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.4s ease;
+      }
+
+      .fade-enter, .fade-leave-to {
+        opacity: 0;
+      }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="pagina">
+
+    <!-- Cabeçalho -->
+    <header class="cabecalho">
+      <button class="btn-voltar">←</button>
+      <h1>Histórico de Auditorias</h1>
+      <img src="icon.png" class="logo" alt="Logo" />
+    </header>
+
+    <!-- Corpo da página -->
+    <main class="conteudo">
+
+      <!-- Indicadores à esquerda -->
+      <aside class="indicadores">
+        <div class="indicador">
+          <span class="titulo">Auditores Ativos</span>
+          <div class="circulo">
+            <strong class="valor">189</strong>
+            <img class="icon" src="monitor.png" alt="Monitor" />
+          </div>
+        </div>
+      
+        <div class="indicador">
+          <span class="titulo">Peritos</span>
+          <div class="circulo">
+            <strong class="valor">1.893</strong>
+            <img class="icon" src="userY.png" alt="Peritos" />
+          </div>
+          <small class="variacao down">↓ 12%<br />este mês</small>
+        </div>
+      
+        <div class="indicador">
+          <span class="titulo">Total Auditorias</span>
+          <div class="circulo">
+            <strong class="valor">5.423</strong>
+            <img class="icon" src="user.png" alt="Total" />
+          </div>
+          <small class="variacao up">↑ 18%<br />este mês</small>
+        </div>
+      </aside>
+
+      <!-- Tabela à direita -->
+      <section class="tabela-wrapper">
+        <!-- Filtros -->
+        <div class="filtros">
+          <input type="text" v-model="searchTerm" placeholder="Procurar..." />
+          <select v-model="sortOption">
+            <option value="recent">+ Recentes</option>
+            <option value="oldest">+ Antigas</option>
+          </select>
+        </div>
+
+        <table>
+          <thead>
+            <!-- Cabeçalho da tabela -->
+            <tr>
+              <th>Tipo de Auditoria</th>
+              <th>Perito Supervisor</th>
+              <th>Localização</th>
+              <th>Código Postal</th>
+              <th>Cidade</th>
+              <th>Data</th>
+              <th>Estado</th>
+              <th></th> <!-- coluna vazia para detalhes -->
+            </tr>
+          </thead>
+          <tbody is="transition-group" name="fade" tag="tbody">
+            <!-- Dados da tabela -->
+            <tr v-for="auditoria in paginatedAuditorias" :key="auditoria.id" class="fade-item">
+              <td>{{ auditoria.tipo }}</td>
+              <td>{{ auditoria.perito }}</td>
+              <td>{{ auditoria.local }}</td>
+              <td>{{ auditoria.postal }}</td>
+              <td>{{ auditoria.cidade }}</td>
+              <td>{{ formatarData(auditoria.data) }}</td>
+              <td><span class="estado-tag">{{ auditoria.estado }}</span></td>
+              <td class="detalhes"> <span @click="abrirAuditoria(auditoria)" title="Ver detalhes" class="detalhes-clique">»</span> </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Rodapé -->
+        <div class="footer-table">
+          <span>Mostrando dados {{ primeiroItem }} a {{ ultimoItem }} de {{ auditoriasFiltradas.length }} entradas</span> <!-- mostra o intervalo de dados -->
+          <div class="pagination">
+            <button @click="prevPage" :disabled="paginaAtual === 1">‹</button> <!-- botão anterior, desativo se estiver na 1ºpagina -->
+            <button
+              v-for="n in totalPaginas" 
+              :key="n"
+              @click="irParaPagina(n)"
+              :class="{ ativo: n === paginaAtual }"
+            >{{ n }}</button> 
+            <button @click="nextPage" :disabled="paginaAtual === totalPaginas">›</button> <!-- botão seguinte, desativo se estiver na ultima pagina -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
