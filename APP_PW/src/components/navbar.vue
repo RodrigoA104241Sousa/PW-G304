@@ -19,7 +19,7 @@ const router = useRouter() //
     }
 
     function goAuditoriaResolvida() {
-    router.push('/auditoriaresolvida')
+    router.push('/auditoriasInfo')
     }
 
     function goPerfil() {
@@ -45,7 +45,7 @@ const router = useRouter() //
         </div>
 
         <div class="flex items-center w-full space-x-12 justify-end">
-            <button @click="goHome">
+            <button @click="goAuditoriaResolvida">
                 <img src="/icons/auditoriaresolvida.png" class="w-8 "></img>
             </button>
             <button @click="goPerfil">

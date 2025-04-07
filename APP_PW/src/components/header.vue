@@ -29,6 +29,6 @@ const goBack = () => router.push(props.backRoute);
       src="/icons/eyeseverywhereicon.png"
       alt="Logo"
       class="h-15 w-15 object-contain"
-    />
+      />
   </div>
 </template>
