@@ -1,6 +1,19 @@
 <script setup>
 import Navbar from '../components/navbar.vue';
 import Header from '../components/header.vue';
+import { useRouter } from 'vue-router' // <- tens de importar isto!
+
+const router = useRouter()
+
+function goAuditoriaResolvida() {
+    
+    router.push('/home')
+}
+
+function goDocumentar() {
+    
+    router.push('/documentaracao')
+}
 </script>
 
 <template>
@@ -36,11 +49,35 @@ import Header from '../components/header.vue';
                 </select>
             </div>
 
-            <div class="flex flex-col items-center border-2 border-[#03045E] rounded-xl mt-8">
-                <input 
-                    class="bg-[#03045E]/5 w-full h-50 px-4 placeholder:font-semibold"
-                    placeholder="Registo de Dados">
-                </input>
+            <textarea 
+                class="w-full h-36 bg-[#03045E]/5 border-2 border-[#03045E] rounded-xl px-4 py-2 placeholder:font-semibold placeholder:text-center align-top resize-none"
+                placeholder="Registo de Dados"
+            ></textarea>
+
+            <div class="flex space-x-1 ">
+                <img
+                    src="/icons/info.png"
+                    alt="ocorrencia"
+                    >
+                </img>
+                <p class="font-semibold underline cursor-pointer"
+                    @click="goAuditoriaResolvida"
+                >Mais detalhes</p>
+            </div>
+
+            <div class="flex flex-col items-center font-semibold space-y-5">
+                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl">
+                    Registar Localização
+                </button>
+
+                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
+                    @click="goDocumentar">
+                    Documentação da ação
+                </button>
+
+                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl">
+                    Guardar
+                </button>
             </div>
                  
         </div> 
