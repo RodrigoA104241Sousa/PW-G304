@@ -10,6 +10,11 @@ function goAuditoriaResolvida() {
     router.push('/home')
 }
 
+function goMaisDetalhes() {
+    
+    router.push('/maisdetalhes')
+}
+
 function goDocumentar() {
     
     router.push('/documentaracao')
@@ -61,7 +66,7 @@ function goDocumentar() {
                     >
                 </img>
                 <p class="font-semibold underline cursor-pointer"
-                    @click="goAuditoriaResolvida"
+                    @click="goMaisDetalhes"
                 >Mais detalhes</p>
             </div>
 

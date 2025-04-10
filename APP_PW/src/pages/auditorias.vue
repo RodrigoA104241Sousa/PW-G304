@@ -3,6 +3,8 @@ import Navbar from '../components/navbar.vue';
 import Header from '../components/header.vue';
 import Card from '../components/card.vue';
 
+
+
 let user = localStorage.getItem("user");
 if (user) {
   user = JSON.parse(user);
