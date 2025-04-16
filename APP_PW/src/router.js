@@ -6,6 +6,10 @@ import Auditoria from './pages/auditorias.vue'
 import AuditoriaInfo from './pages/auditoriaInfo.vue'
 import Documentaracao from './pages/documentaracao.vue'
 import maisdetalhes from './pages/maisdetalhes.vue'
+import auditoriasresolvidas from './pages/auditoriasresolvidas.vue'
+import upload from './components/upload.vue'
+import registarlocalizacao from './pages/registarlocalizacao.vue'
+
 const routes = [
   { path: '/', component: PaginaInicial }, 
   { path: '/home', component: Home },
@@ -15,6 +19,9 @@ const routes = [
   {path: '/auditoriasInfo', component: AuditoriaInfo},
   {path: '/documentaracao', component: Documentaracao},
   {path: '/maisdetalhes', component: maisdetalhes},
+  {path: '/auditoriasresolvidas', component: auditoriasresolvidas},
+  {path: '/upload', component: upload},
+  {path: '/registarlocalizacao', component: registarlocalizacao},
 ]
 
 const router = createRouter({

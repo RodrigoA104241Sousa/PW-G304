@@ -1,7 +1,7 @@
 <script setup>
 import Header from '../components/header.vue';
 import Navbar from '../components/navbar.vue';
-import navbar from '../components/navbar.vue';
+import Upload from '../components/upload.vue';
 import { useRouter } from 'vue-router' // <- tens de importar isto!
 
 const router = useRouter()
@@ -21,12 +21,15 @@ const router = useRouter()
         ></textarea>
       </div>
       <div class="p-6 mt-6 w-full space-y-5">
+        
         <button class="relative bg-[#1865B8]/80 text-white w-full h-12 flex items-center justify-center rounded-lg">
           Upload de imagens
           <img
             src="/icons/image.png"
             class="absolute right-4 h-7"
           />
+         
+          
           
         </button>
         <div class="flex space-x-10 mt-4">

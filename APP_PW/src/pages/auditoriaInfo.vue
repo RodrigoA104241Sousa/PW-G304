@@ -5,9 +5,9 @@ import { useRouter } from 'vue-router' // <- tens de importar isto!
 
 const router = useRouter()
 
-function goAuditoriaResolvida() {
+function goRegistarLocalizacao() {
     
-    router.push('/home')
+    router.push('/registarlocalizacao')
 }
 
 function goMaisDetalhes() {
@@ -71,7 +71,8 @@ function goDocumentar() {
             </div>
 
             <div class="flex flex-col items-center font-semibold space-y-5">
-                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl">
+                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
+                    @click="goRegistarLocalizacao">
                     Registar Localização
                 </button>
 

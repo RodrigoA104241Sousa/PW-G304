@@ -22,7 +22,7 @@ const goBack = () => router.push(props.backRoute);
     </button>
 
     <!-- Título -->
-    <h1 class="text-[#03045E] text-2xl font-bold text-center flex-1">{{ title }}</h1>
+    <h1 class="text-[#03045E] text-2xl font-bold text-center flex-1 p-2">{{ title }}</h1>
 
     <!-- Ícone fixo à direita -->
     <img

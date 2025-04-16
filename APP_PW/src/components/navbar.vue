@@ -19,12 +19,13 @@ const router = useRouter() //
     }
 
     function goAuditoriaResolvida() {
-    router.push('/auditoriasInfo')
+    router.push('/auditoriasresolvidas')
     }
 
     function goPerfil() {
     router.push('/perfil')
     }
+
 </script>
 
 <template>
