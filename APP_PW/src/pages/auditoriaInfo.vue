@@ -23,7 +23,7 @@ function goDocumentar() {
 
 <template>
     <div class="bg-[#E0F1FE] h-screen">
-        <Header title="occorencia 1" backRoute="/home"></Header>
+        <Header title="occorencia 1" backRoute="/auditorias"></Header>
         <Navbar></Navbar>
         <div class="px-8 space-y-4">
             <p class="text-[#695C5C] font-semibold ml-3 mb-1">Data de Início</p>

@@ -16,12 +16,12 @@ const routes = [
   { path: '/perfil', component: Perfil},
   { path: '/auditorias', component: Auditoria },
   //{path: '/auditorias/:id', component: AuditoriaInfo, props: true}, // Pass the id as a prop to the component
-  {path: '/auditoriasInfo', component: AuditoriaInfo},
-  {path: '/documentaracao', component: Documentaracao},
-  {path: '/maisdetalhes', component: maisdetalhes},
+  {path: '/auditoriasInfo', component: AuditoriaInfo},//pagina da informação de auditoria
+  {path: '/documentaracao', component: Documentaracao},//botao documentação
+  {path: '/maisdetalhes', component: maisdetalhes},//botao mais detalhes
   {path: '/auditoriasresolvidas', component: auditoriasresolvidas},
-  {path: '/upload', component: upload},
-  {path: '/registarlocalizacao', component: registarlocalizacao},
+  {path: '/upload', component: upload},// card para verificar se o upload foi feito
+  {path: '/registarlocalizacao', component: registarlocalizacao},//botao guardar localização
 ]
 
 const router = createRouter({
