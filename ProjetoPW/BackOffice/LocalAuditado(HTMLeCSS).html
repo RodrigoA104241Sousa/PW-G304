@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- adaptado a dispositivos móveis -->
+  <title>Local Auditado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Importa a fonte Inter -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> <!--Importa o Vue.js 2.7.14 -->
+  
+  <style>
+    /* RESET BÁSICO */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    body {
+      font-family: 'Inter', sans-serif; /* Aplica a fonte Inter */
+      background-color: #f4f7fa;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    /* CABEÇALHO */
+    .cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      margin-bottom: 3rem;
+    }
+      /* Título */
+      .titulo {
+        flex: 1;
+        text-align: center;
+        font-size: 2rem;
+        color: #1c1c4c;
+      }
+      /* botão de voltar */
+      .btn-voltar {
+        background-color: #0d0f47;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        width: 80px;
+        height: 50px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+        /* botao voltar expandido */
+        .btn-voltar:hover {
+          transform: scale(1.05);
+        }
+
+      /* LOGO */
+      .logo-detalhe {
+        width: 80px;
+        height: auto;
+      }
+  
+    /* FORMULÁRIO PRINCIPAL */
+    .form-detalhe {
+      max-width: 2000px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    /* IMAGEM */
+    .imagem-local-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .imagem-local {
+      width: 110%;
+      max-width: 2000px;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* FORMULÁRIO VISUAL */
+    .conteudo-principal {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      margin-right: 3rem;
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .campo label {
+      font-size: 1.1rem;
+      color: #6a6a6a;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    .campo input,
+    .campo select {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 2px solid #0d0f47;
+      background-color: #e8ecf3;
+      font-size: 1rem;
+      color: #333;
+      pointer-events: none; /* apenas leitura */
+    }
+
+    /* ESTADO FINAL */
+    .estado-final { /*ESTADO */
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #695C5C; /* cor do texto "Estado" */
+    }
+
+    /* Badge de estado (Concluida) */
+    .estado-badge {
+      background-color: #00B087; /* fundo verde concluído */
+      color: white;
+      font-weight: bold;
+      padding: 0.8rem 2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      margin-left: 1rem;
+      display: inline-block;
+    }
+  </style> 
+</head>
+
+<body>
+  <div class="cabecalho">
+  <button class="btn-voltar" onclick="window.history.back()">←</button>
+  <h1 class="titulo">Local Auditado</h1>
+  <img src="icon.png" alt="Logo EyesEverywhere" class="logo-detalhe">
+</div>
+
+<div class="form-detalhe">
+  <!-- Imagem -->
+  <div class="imagem-local-container">
+    <img id="foto-local" src="Basemap image.png" alt="Imagem do local" class="imagem-local">
+  </div>
+
+  <!-- Formulário -->
+  <div class="conteudo-principal">
+    <div class="campo">
+      <label for="data">Data</label>
+      <input type="text" id="data" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="tipo">Tipo</label>
+      <select id="tipo" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="morada">Morada</label>
+      <input type="text" id="morada" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="localizacao">Localização</label>
+      <input type="text" id="localizacao" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="perito">Perito Supervisor</label>
+      <input type="text" id="perito" readonly value="">
+    </div>
+  </div>
+</div>
+
+<!-- Estado final -->
+<div class="estado-final">
+  Estado <span class="estado-badge">Concluída</span>
+</div>
+
+<script>
+  // Carregar os dados da auditoria do localStorage
+  window.onload = function () {
+    const id = localStorage.getItem("idAuditoria"); // Pega o ID armazenado no localStorage
+    
+    // Recupera os dados de auditoria do localStorage
+    const dadosString = localStorage.getItem("auditorias");
+    
+    if (!dadosString) {
+      console.error("Dados de auditorias não encontrados no localStorage");
+      return;
+    }
+    
+    const dados = JSON.parse(dadosString);
+
+    // Encontra os dados da auditoria pelo ID
+    const auditoria = dados.find((item) => item.id == id);
+
+    if (auditoria) {
+      // Formatar a data de YYYY-MM-DD para DD/MM/YYYY
+      const [ano, mes, dia] = auditoria.data.split("-");
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+      
+      // Preenche os campos do Local Auditado com os dados encontrados
+      document.getElementById("data").value = dataFormatada;
+      
+      // Preenche o select de tipo
+      const tipoSelect = document.getElementById("tipo");
+      tipoSelect.innerHTML = `<option value="${auditoria.tipo}" selected>${auditoria.tipo}</option>`;
+      
+      // Morada (local)
+      document.getElementById("morada").value = auditoria.local;
+
+      // Localização (cidade e postal)
+      document.getElementById("localizacao").value = auditoria.cidade + ", " + auditoria.postal;
+
+      // Perito Supervisor
+      document.getElementById("perito").value = auditoria.perito;
+      
+      console.log("Dados carregados com sucesso:", auditoria);
+    } else {
+      console.error("Auditoria não encontrada para o ID:", id);
+    }
+  };
+</script>
+</body>
+</html>
