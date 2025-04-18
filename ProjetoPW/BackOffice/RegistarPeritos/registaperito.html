@@ -86,12 +86,13 @@
                     </div>
                 </div>
               
-                <!-- Upload de documentos -->
-                <button type="button" class="upload-btn">
-                    <img src="upload.png" alt="Ícone de upload"> Upload de Documentos (CV e CC)
-                </button>
-                <input type="file" id="pdf-upload" style="display: none;" accept=".pdf">
-                <span id="file-name"></span>
+            <!-- Upload de documentos -->
+            <button type="button" class="upload-btn">
+                <img src="upload.png" alt="Ícone de upload"> Upload de Documentos (CV e CC)
+            </button>
+            <input type="file" id="pdf-upload" style="display: none;" accept=".pdf" multiple>
+            <div id="files-container"></div>
+
                 
                 <!-- Upload de foto -->
                 <div class="photo-upload">
@@ -100,7 +101,7 @@
                     <input type="file" id="file-input" accept="image/*" style="display: none;">
                 </div>
                 
-                <!-- Botão de registro -->
+                <!-- Botão de registar -->
                 <button type="button" class="register-btn">Registar</button>
             </div>
         </div>

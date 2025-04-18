@@ -13,7 +13,7 @@
             padding: 0;
         }
         .container {
-            max-width: 40000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px;
             position: relative;
@@ -27,7 +27,7 @@
         }
         .back-button {
             background-color: #03045E;
-            box-shadow: 0px 4px 20px #03045E;
+            box-shadow: 0px 4px 20px rgba(3, 4, 94, 0.3);
             color: #f5f5f5;
             border: none;
             border-radius: 10px / 30%;
@@ -39,6 +39,7 @@
             margin-right: 15px;
             cursor: pointer;
             font-size: 25px;
+            transition: transform 0.3s ease;
         }
         .back-button:hover {
             transform: translateY(-5px);
@@ -87,7 +88,13 @@
             border: 2px solid #03045E;
             border-radius: 5px;
             box-sizing: border-box;
-            background-color: #03045E12;
+            background-color: rgba(3, 4, 94, 0.07);
+            font-size: 14px;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
         }
         .form-control-icon {
             position: relative;
@@ -105,10 +112,87 @@
             height: 18px;
         }
 
-        /* Dropdown de opções */
+        /* Estilo para checklist de materiais */
+        .materials-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .materials-search {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .materials-search input {
+            width: 100%;
+            padding: 10px;
+            padding-right: 35px;
+            border: 2px solid #03045E;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: rgba(3, 4, 94, 0.07);
+        }
+        .materials-search img {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+        }
+        .materials-list {
+            border: 2px solid #03045E;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+        .materials-list label {
+            display: block;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .materials-list label:hover {
+            background-color: rgba(3, 4, 94, 0.05);
+        }
+        .materials-list label:last-child {
+            border-bottom: none;
+        }
+        .materials-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .selected-materials {
+            margin-top: 10px;
+            padding: 8px 0;
+        }
+        .selected-item {
+            display: inline-block;
+            background-color: #03045E;
+            color: white;
+            border-radius: 15px;
+            padding: 5px 10px;
+            margin: 3px;
+            font-size: 12px;
+            position: relative;
+        }
+        .remove-material {
+            margin-left: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Dropdown de opções para peritos */
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 25px;
+        }
         .options-dropdown {
             position: absolute;
-            background-color: #EFF2F4;
+            background-color: #fff;
             border: 2px solid #102073;
             border-radius: 5px;
             width: 100%;
@@ -116,73 +200,81 @@
             max-height: 200px;
             overflow-y: auto;
             z-index: 100;
+            display: none;
         }
         .options-dropdown ul {
             list-style-type: none;
             width: 100%;
             margin: 0;
             padding: 0;
-            
         }
         .options-dropdown li {
-            padding: 8px 12px;
-            cursor:pointer;
-            color:#695C5C;
+            padding: 10px 12px;
+            cursor: pointer;
+            color: #333;
+            border-bottom: 1px solid #eee;
         }
         .options-dropdown li:hover {
-            background-color: #03045E12; 
+            background-color: rgba(3, 4, 94, 0.07);
         }
-
-        .dropdown-container {
-            position: relative;
-            width: 100%;
+        .options-dropdown li:last-child {
+            border-bottom: none;
         }
-
-        .options-dropdown, .dropdown-container {
-            margin-bottom: 50px; /* Adiciona mais espaçamento entre o botão de upload e o dropdown */
-        }
-
         
         /* Estilo para o campo de descrição */
         .description-area {
-            height: 200px; /* Altura do textarea  */
-            resize: none; /* Impede que o userredimensione o textarea */
-            padding-top: 12px; /* Espaçamento interno consistente */
+            height: 180px;
+            resize: none;
+            padding: 12px;
+            font-family: Arial, sans-serif;
         }
-
         .description-container {
             position: relative;
             display: block;
         }
-
         .description-icon {
             position: absolute !important;
             right: 10px !important;
-            top: 12px !important; /* Ajuste esse valor se necessário */
-            transform: none !important; /* Remove qualquer transformação existente */
-            z-index: 2; /* Garante que o ícone fique acima do textarea */
+            top: 12px !important;
+            transform: none !important;
+            z-index: 2;
         }
 
-         /* Botão de registro */
-         .criar-btn {
+        /* Botão de registro */
+        .criar-btn {
             background-color: #102073;
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 12px 150px;
+            padding: 14px 0;
+            width: 200px;
             font-size: 16px;
             cursor: pointer;
             display: block;
             margin-left: auto;
             margin-right: 0;
-            margin-top: -10px;
+            margin-top: 30px;
+            transition: transform 0.3s ease, background-color 0.3s;
         }  
         .criar-btn:hover {
             transform: translateY(-5px);
+            background-color: #0A184F;
         }
-        
 
-</style>
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .form-layout {
+                grid-template-columns: 1fr;
+            }
+            .criar-btn {
+                width: 100%;
+                margin-top: 20px;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -196,125 +288,299 @@
         </div>
         
         <!-- Form -->
-        <form>
-        <div class="form-layout">
-            <div class="left-column">
-                <div class="form-group">
-                    <label class="form-label">Nome</label>
-                    <div class="form-control-icon">
-                        <input type="text" class="form-control" placeholder="Insira um nome para a auditoria">
-                        <img src="auditoria.png" alt="Ícone de auditoria">
+        <form id="auditForm">
+            <div class="form-layout">
+                <div class="left-column">
+                    <div class="form-group">
+                        <label class="form-label">Nome</label>
+                        <div class="form-control-icon">
+                            <input type="text" class="form-control" placeholder="Insira um nome para a auditoria" required>
+                            <img src="auditoria.png" alt="Ícone de auditoria">
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="dropdown-container">
-                    <label class="form-label">Materiais e Equipamentos necessários</label>
-                    <div class="form-control-icon">
-                        <input type="search" class="form-control" placeholder="Materiais e equipamentos necessários" id="materiaisSearch" readonly>
-                        <img src="setabaixo.png" alt="Ícone de dropdown" id="dropdownIcon" onclick="toggleDropdown()">
+                    <!-- Checklist para materiais e equipamentos -->
+                    <div class="form-group">
+                        <label class="form-label">Materiais e Equipamentos necessários</label>
+                        <div class="materials-container">
+                            <div class="materials-search">
+                                <input type="text" id="materialsSearchInput" placeholder="Buscar materiais e equipamentos" class="form-control" readonly>
+                                <img src="setabaixo.png" alt="Ícone de seta para baixo" id="materialsDropdownIcon">
+                            </div>
+                            <div class="materials-list" id="materialsList" style="display: none;">
+                                <label><input type="checkbox" name="materials" value="Lanterna"> Lanterna</label>
+                                <label><input type="checkbox" name="materials" value="Câmera fotográfica"> Câmera fotográfica</label>
+                                <label><input type="checkbox" name="materials" value="Fita sinalizadora e cones"> Fita sinalizadora e cones</label>
+                                <label><input type="checkbox" name="materials" value="Fita métrica "> Fita métrica </label>
+                                <label><input type="checkbox" name="materials" value="Luvas de proteção"> Luvas de proteção</label>
+                                <label><input type="checkbox" name="materials" value="Capacete de segurança"> Capacete de segurança</label>
+                                <label><input type="checkbox" name="materials" value="Canetas e marcadores"> Canetas e marcadores</label>
+                                <label><input type="checkbox" name="materials" value="Colete reflexor"> Colete reflexor</label>
+                                <label><input type="checkbox" name="materials" value="Tablet"> Tablet ou notebook</label>
+                                <label><input type="checkbox" name="materials" value="Drone "> Drone </label>
+                            </div>
+                            <div class="selected-materials" id="selectedMaterials"></div>
+                        </div>
                     </div>
-                    <div id="optionsDropdown" class="options-dropdown" style="display:none;">
-                        <ul>
-                            <li onclick="selectOption('Lanterna')">Lanterna</li>
-                            <li onclick="selectOption('Especialista em Iluminação Pública')">Especialista em Iluminação Pública</li>
-                            <li onclick="selectOption('Fiscalizador de Obras Públicas')">Fiscalizador de Obras Públicas</li>
-                            <li onclick="selectOption('Técnico de Sinalização de Trânsito')">Técnico de Sinalização de Trânsito</li>
-                            <li onclick="selectOption('Consultor de Segurança Rodoviária')">Consultor de Segurança Rodoviária</li>
-                        </ul>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <div class="form-control-icon description-container">
+                            <textarea class="form-control description-area" placeholder="Descreva os objetivos e procedimentos da auditoria..."></textarea>
+                            <img src="descrição.png" alt="Ícone de descrição" class="description-icon">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Descrição</label>
-                    <div class="form-control-icon description-container">
-                        <textarea class="form-control description-area" placeholder="Escreva algo..."></textarea>
-                        <img src="descrição.png" alt="Ícone de descrição" class="description-icon">
+                <div class="right-column">
+                    <div class="form-group">
+                        <label class="form-label">Duração Estimada</label>
+                        <div class="form-control-icon">
+                            <input type="text" class="form-control" placeholder="HH:MM:SS" id="durationInput">
+                            <img src="clock.png" alt="Ícone de relógio">
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="right-column">
-                <div class="form-group">
-                    <label class="form-label">Duração Estimada</label>
-                    <div class="form-control-icon">
-                    <input type="text" class="form-control" placeholder="HH:MM:SS">
-                    <img src="clock.png" alt="Ícone de relógio">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Data de nascimento</label>
-                    <div class="form-control-icon">
-                        <input type="text" class="form-control" placeholder="DD/MM/YYYY">
-                        <img src="calendario.png" alt="Ícone de data">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Data da Auditoria</label>
+                        <div class="form-control-icon">
+                            <input type="text" class="form-control" placeholder="DD/MM/YYYY" id="dateInput">
+                            <img src="calendario.png" alt="Ícone de data">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Morada</label>
-                    <div class="form-control-icon">
-                        <input type="text" class="form-control" placeholder="Insira morada">
-                        <img src="localização.png" alt="Ícone de morada">
+                    <div class="form-group">
+                        <label class="form-label">Morada</label>
+                        <div class="form-control-icon">
+                            <input type="text" class="form-control" placeholder="Insira morada">
+                            <img src="localização.png" alt="Ícone de morada">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Código Postal</label>
-                    <input type="text" class="form-control" placeholder="XXXX-XXX">
-                </div>
+                    <div class="form-group">
+                        <label class="form-label">Código Postal</label>
+                        <input type="text" class="form-control" placeholder="XXXX-XXX" id="postalCode">
+                    </div>
 
-
+                <!-- Dropdown para peritos -->
                 <div class="dropdown-container">
                     <label class="form-label">Peritos</label>
                     <div class="form-control-icon">
-                        <input type="search" class="form-control" placeholder="Escolha um dos peritos disponíveis" id="Search" readonly>
-                        <img src="setabaixo.png" alt="Ícone de dropdown" id="dropdownIcon" onclick="toggleDropdown()">
+                        <input type="text" class="form-control" placeholder="Escolha um dos peritos disponíveis" id="peritosSearch" readonly data-value="">
+                        <img src="setabaixo.png" alt="Ícone de dropdown" id="peritosDropdownIcon">
                     </div>
-                    <div id="optionsDropdown" class="options-dropdown" style="display:none;">
+                    <div id="peritosDropdown" class="options-dropdown" style="display: none;">
                         <ul>
-                            <li onclick="selectOption('Lanterna')">Lanterna</li>
-                            <li onclick="selectOption('Especialista em Iluminação Pública')">Especialista em Iluminação Pública</li>
-                            <li onclick="selectOption('Fiscalizador de Obras Públicas')">Fiscalizador de Obras Públicas</li>
-                            <li onclick="selectOption('Técnico de Sinalização de Trânsito')">Técnico de Sinalização de Trânsito</li>
-                            <li onclick="selectOption('Consultor de Segurança Rodoviária')">Consultor de Segurança Rodoviária</li>
+                            <!-- Os itens serão carregados dinamicamente pelo JavaScript -->
                         </ul>
                     </div>
                 </div>
-            </form>
-            <button class="criar-btn">Criar</button>
 
+                  <!-- Dropdown para ocorrências -->
+                  <div class="dropdown-container">
+                    <label class="form-label">Ocorrências</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="Escolha uma das ocorrências disponíveis" id="ocorrenciaSearch" readonly data-value="">
+                        <img src="setabaixo.png" alt="Ícone de dropdown" id="ocorrenciaDropdownIcon">
+                    </div>
+                    <div id="ocorenciaDropdown" class="options-dropdown" style="display: none;">
+                        <ul>
+                            <!-- Os itens serão carregados dinamicamente pelo JavaScript -->
+                        </ul>
+                    </div>
+                </div>
 
+                    <button type="submit" class="criar-btn">Criar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+    
+    <script>
+        // Exibir/ocultar a lista de materiais ao clicar no ícone
+        const materialsSearchInput = document.getElementById('materialsSearchInput');
+        const materialsList = document.getElementById('materialsList');
+        const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
 
+        // Toggle da lista de materiais
+        function toggleMaterialsList() {
+            materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
+        }
 
+        // Adicionar eventos para abrir/fechar a lista
+        materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
+        materialsSearchInput.addEventListener('click', toggleMaterialsList);
 
+        // Fechar a lista se clicar fora dela
+        window.addEventListener('click', function(event) {
+            if (!event.target.matches('#materialsSearchInput') && 
+                !event.target.matches('#materialsDropdownIcon') && 
+                !event.target.closest('.materials-list')) {
+                materialsList.style.display = 'none';
+            }
+        });
 
-
-
+        // Função para filtrar materiais na busca
+        materialsSearchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const items = document.querySelectorAll('.materials-list label');
             
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Atualizar exibição de materiais selecionados
+        const checkboxes = document.querySelectorAll('input[name="materials"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectedMaterials);
+        });
+
+        function updateSelectedMaterials() {
+            const selectedContainer = document.getElementById('selectedMaterials');
+            selectedContainer.innerHTML = '';
+            
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const tag = document.createElement('span');
+                    tag.className = 'selected-item';
+                    tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
+                    selectedContainer.appendChild(tag);
+                }
+            });
+            
+            // Adicionar listeners para remover itens
+            document.querySelectorAll('.remove-material').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    document.querySelector('input[value="' + value + '"]').checked = false;
+                    updateSelectedMaterials();
+                });
+            });
+
+        // Atualizar o texto no input para refletir as seleções
+        updateInputText();
+        }
+
+        // Atualizar o texto do input com base nos itens selecionados
+        function updateInputText() {
+            const selected = Array.from(checkboxes)
+                                .filter(cb => cb.checked)
+                                .map(cb => cb.value);
+            
+            materialsSearchInput.value = selected.length > 0 ? 
+                                        `${selected.length} item(ns) selecionado(s)` : 
+                                        '';
+        }
+
+       // Dropdown de peritos
+        const peritosSearch = document.getElementById('peritosSearch');
+        const peritosDropdown = document.getElementById('peritosDropdown');
+        const peritosDropdownIcon = document.getElementById('peritosDropdownIcon');
+
+        // Carregar peritos disponíveis do localStorage
+        function loadAvailableExperts() {
+            const peritosDropdownList = document.querySelector('#peritosDropdown ul');
+            // Limpar lista atual
+            peritosDropdownList.innerHTML = '';
+            
+            // Obter peritos do localStorage
+            const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+            
+            // Filtrar apenas peritos disponíveis
+            const availableExperts = experts.filter(expert => expert.status === "Disponível");
+            
+            if (availableExperts.length === 0) {
+                // Se não houver peritos disponíveis, mostrar mensagem
+                const noExpertsItem = document.createElement('li');
+                noExpertsItem.textContent = "Não há peritos disponíveis";
+                noExpertsItem.style.fontStyle = "italic";
+                noExpertsItem.style.color = "#999";
+                peritosDropdownList.appendChild(noExpertsItem);
+            } else {
+                // Adicionar cada perito disponível à lista
+                availableExperts.forEach(expert => {
+                    const item = document.createElement('li');
+                    item.setAttribute('data-value', expert.id);
+                    item.textContent = expert.name + " - " + expert.specialty;
+                    
+                    // Adicionar evento de clique
+                    item.addEventListener('click', function() {
+                        peritosSearch.value = this.textContent;
+                        peritosSearch.setAttribute('data-value', this.getAttribute('data-value'));
+                        peritosDropdown.style.display = 'none';
+                    });
+                    
+                    peritosDropdownList.appendChild(item);
+                });
+            }
+        }
+
+        peritosSearch.addEventListener('click', function() {
+            // Carregar peritos disponíveis antes de abrir o dropdown
+            loadAvailableExperts();
+            togglePeritosDropdown();
+        });
+
+        peritosDropdownIcon.addEventListener('click', function() {
+            // Carregar peritos disponíveis antes de abrir o dropdown
+            loadAvailableExperts();
+            togglePeritosDropdown();
+        });
+
+        function togglePeritosDropdown() {
+            peritosDropdown.style.display = peritosDropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Fechar dropdown se clicar fora
+        window.addEventListener('click', function(event) {
+            if (!event.target.matches('#peritosSearch') && !event.target.matches('#peritosDropdownIcon')) {
+                peritosDropdown.style.display = 'none';
+            }
+        });
+
+        // Validação básica de formato de data
+        document.getElementById('dateInput').addEventListener('blur', function() {
+            const value = this.value;
+            if (value && !/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+                alert('Por favor, insira a data no formato DD/MM/YYYY');
+                this.value = '';
+            }
+        });
+
+        // Validação básica de código postal
+        document.getElementById('postalCode').addEventListener('blur', function() {
+            const value = this.value;
+            if (value && !/^\d{4}-\d{3}$/.test(value)) {
+                alert('Por favor, insira o código postal no formato XXXX-XXX');
+                this.value = '';
+            }
+        });
+
+        // Validação do formato de duração
+        document.getElementById('durationInput').addEventListener('blur', function() {
+            const value = this.value;
+            if (value && !/^\d{2}:\d{2}:\d{2}$/.test(value)) {
+                alert('Por favor, insira a duração no formato HH:MM:SS');
+                this.value = '';
+            }
+        });
+
+        // Envio do formulário
+        document.getElementById('auditForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Aqui você pode adicionar lógica para enviar os dados para o servidor
+            alert('Plano de auditoria criado com sucesso!');
+        });
 
 
-                <!-- Script para o dropdown -->
-                <script>
-                    function toggleDropdown() {
-                        var dropdown = document.getElementById("optionsDropdown");
-                        if (dropdown.style.display === "none" || dropdown.style.display === "") {
-                            dropdown.style.display = "block";
-                        } else {
-                            dropdown.style.display = "none";
-                        }
-                    }
-            
-                    // Fechar o dropdown se clicar fora dele
-                    window.onclick = function(event) {
-                        var dropdown = document.getElementById("optionsDropdown");
-                        if (!event.target.matches('#dropdownIcon') && !event.target.matches('#especialidadeSearch')) {
-                            dropdown.style.display = "none";
-                        }
-                    }
-            
-                    // Função para selecionar uma opção e fechar o dropdown
-                    function selectOption(option) {
-                        document.getElementById("especialidadeSearch").value = option;
-                        document.getElementById("optionsDropdown").style.display = "none"; // Fecha o dropdown
-                    }
-                </script>
+    </script>
+</body>
+</html>
