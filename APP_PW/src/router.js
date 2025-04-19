@@ -16,7 +16,7 @@ const routes = [
   { path: '/perfil', component: Perfil},
   { path: '/auditorias', component: Auditoria },
   //{path: '/auditorias/:id', component: AuditoriaInfo, props: true}, // Pass the id as a prop to the component
-  {path: '/auditoriasInfo', component: AuditoriaInfo},//pagina da informação de auditoria
+  { path: '/auditoriasInfo/:id', component: AuditoriaInfo, props: true },
   {path: '/documentaracao', component: Documentaracao},//botao documentação
   {path: '/maisdetalhes', component: maisdetalhes},//botao mais detalhes
   {path: '/auditoriasresolvidas', component: auditoriasresolvidas},
