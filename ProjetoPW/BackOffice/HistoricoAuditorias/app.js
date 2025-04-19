@@ -70,26 +70,37 @@ new Vue({ // Cria uma nova instância do Vue
     // ir para pagina anterior
     prevPage() {
       if (this.paginaAtual > 1) { // verifica se página atual é a 1º página
-        this.irParaPagina(this.paginaAtual - 1); // se sim, vai para a página anterior
+        this.irParaPagina(this.paginaAtual - 1) // se sim, vai para a página anterior
       }
     },
 
     // carregar dados de data.Json
     carregarDados() {
-      fetch('data.json')
-        .then(res => res.json())
-        .then(dados => {
-          this.auditorias = dados;
-        });
+      fetch("data.json")
+        .then((res) => res.json())
+        .then((dados) => {
+          this.auditorias = dados
+          // Salvar os dados no localStorage para uso em outras páginas
+          localStorage.setItem("auditorias", JSON.stringify(dados))
+        })
     },
 
     // formata a data
     formatarData(dataStr) {
       // Converte YYYY-MM-DD para DD/MM/YYYY
       const [ano, mes, dia] = dataStr.split("-");
-      return `${dia}/${mes}/${ano}`;
+      return `${dia}/${mes}/${ano}`
+    },
+
+    irParaLocalAuditado(id) {
+      // Salva o ID da auditoria no localStorage
+      localStorage.setItem('idAuditoria', id)
+  
+      // Redireciona para a página de Local Auditado
+      window.location.href = "LocalAuditado/LocalAuditado(HTMLeCSS).html";
     }
   },
+  
 
   mounted() {
     // Função Carregar os dados

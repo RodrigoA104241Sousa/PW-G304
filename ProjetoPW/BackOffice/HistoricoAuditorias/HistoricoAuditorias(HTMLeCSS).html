@@ -241,6 +241,9 @@
       .fade-enter, .fade-leave-to {
         opacity: 0;
       }
+
+  
+  
   </style>
 </head>
 
@@ -321,7 +324,10 @@
               <td>{{ auditoria.cidade }}</td>
               <td>{{ formatarData(auditoria.data) }}</td>
               <td><span class="estado-tag">{{ auditoria.estado }}</span></td>
-              <td class="detalhes"> <span @click="abrirAuditoria(auditoria)" title="Ver detalhes" class="detalhes-clique">»</span> </td>
+              <td class="detalhes">
+                <!-- O evento de clique passa o ID da auditoria para o método -->
+                <span @click="irParaLocalAuditado(auditoria.id)" title="Ver detalhes" class="detalhes-clique">»</span>
+              </td>
             </tr>
           </tbody>
         </table>
