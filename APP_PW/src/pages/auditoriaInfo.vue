@@ -1,9 +1,12 @@
 <script setup>
 import Navbar from '../components/navbar.vue';
 import Header from '../components/header.vue';
-import { useRouter } from 'vue-router' // <- tens de importar isto!
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
+const id = route.params.id
+console.log("ID:", id)
 
 function goRegistarLocalizacao() {
     
@@ -19,6 +22,7 @@ function goDocumentar() {
     
     router.push('/documentaracao')
 }
+
 </script>
 
 <template>
