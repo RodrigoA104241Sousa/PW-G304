@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import Navbar from '../components/navbar.vue'
 import Header from '../components/header.vue'
 import axios from 'axios'
 import '/leaflet-fix.js'
+
+const route = useRoute()
+const id = route.params.id
+console.log('ID:', id)
 
 // Token do MapTiler (podes pôr num .env com import.meta.env.VITE_MAPTILER_TOKEN)
 const MAPTILER_TOKEN = 'K5f6nm9wH1vXIXaoKcl5'
@@ -53,7 +57,7 @@ const selectSuggestion = (place) => {
 
 <template>
   <div class="bg-[#E0F1FE] min-h-screen flex flex-col">
-    <Header title="Mapa" backRoute="/auditoriasInfo" />
+    <Header title="Mapa" :backRoute="`/auditoriasInfo/${id}`" />
 
     <div class="flex flex-col items-center px-4 py-4 gap-4">
       <!-- Mapa com tiles do MapTiler -->

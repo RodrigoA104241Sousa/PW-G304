@@ -2,16 +2,19 @@
 import Header from '../components/header.vue';
 import Navbar from '../components/navbar.vue';
 import Upload from '../components/upload.vue';
-import { useRouter } from 'vue-router' // <- tens de importar isto!
+import { useRouter, useRoute} from 'vue-router' // <- tens de importar isto!
 
 const router = useRouter()
+const route = useRoute()
+const id = route.params.id
+console.log("ID:", id)
 
 
 </script>
 
 <template>
     <div class="h-screen bg-[#E0F1FE]">
-      <Header title="Documentação" backRoute="/auditoriasInfo" />
+      <Header title="Documentação" :backRoute="`/auditoriasInfo/${id}`"/>
       <Navbar/>
       <div class="flex flex-col items-center px-10">
         <p class="text-[#695F5F] text-xl font-semibold mb-5">Descrição</p>
@@ -29,8 +32,6 @@ const router = useRouter()
             class="absolute right-4 h-7"
           />
          
-          
-          
         </button>
         <div class="flex space-x-10 mt-4">
           <div class="w-1/3 h-0.5 bg-[#03045E] mt-6"></div>

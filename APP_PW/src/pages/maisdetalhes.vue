@@ -1,11 +1,21 @@
 <script setup>
 import Header from '../components/header.vue';
 import Navbar from '../components/navbar.vue';  
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter()
+const route = useRoute()
+const id = route.params.id
+console.log("ID:", id)
+
+function getocorrenciabyid(){
+    return store.lista.find
+}
 </script>
 
 <template>
     <div class="h-screen bg-[#E0F1FE]">
-        <Header title="Indicadores" backRoute="/auditoriasInfo" />
+        <Header title="Indicadores" :backRoute="`/auditoriasInfo/${id}`"/>
         <Navbar/>
         <div class="pt-1 pl-2 flex flex-col items-center w-full">
             <div class="relative w-full flex items-center h-10">

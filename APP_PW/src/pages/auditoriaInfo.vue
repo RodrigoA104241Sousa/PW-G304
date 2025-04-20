@@ -2,25 +2,31 @@
 import Navbar from '../components/navbar.vue';
 import Header from '../components/header.vue';
 import { useRouter, useRoute } from 'vue-router'
+import { useOcorrenciasStore } from '../stores/ocorrencia.js';
 
+const store = useOcorrenciasStore()
+store.carregarOcorrencias()
+console.log("Lista de ocorrências:", store.lista)
 const router = useRouter()
 const route = useRoute()
 const id = route.params.id
 console.log("ID:", id)
+const ocorrencia = store.getOcorrenciaById(id)
+console.log("Ocorrência:", ocorrencia)
 
-function goRegistarLocalizacao() {
+function goRegistarLocalizacao(id) {
     
-    router.push('/registarlocalizacao')
+    router.push(`/registarlocalizacao/${id}`)
 }
 
-function goMaisDetalhes() {
+function goMaisDetalhes(id) {
     
-    router.push('/maisdetalhes')
+    router.push(`/maisdetalhes/${id}`)
 }
 
 function goDocumentar() {
     
-    router.push('/documentaracao')
+    router.push(`/documentaracao/${id}`)
 }
 
 </script>
@@ -70,13 +76,13 @@ function goDocumentar() {
                     >
                 </img>
                 <p class="font-semibold underline cursor-pointer"
-                    @click="goMaisDetalhes"
+                    @click="goMaisDetalhes(id)"
                 >Mais detalhes</p>
             </div>
 
             <div class="flex flex-col items-center font-semibold space-y-5">
                 <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
-                    @click="goRegistarLocalizacao">
+                    @click="goRegistarLocalizacao(id)">
                     Registar Localização
                 </button>
 
