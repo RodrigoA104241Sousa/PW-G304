@@ -16,11 +16,12 @@
     }
   
     body {
-      font-family: 'Inter', sans-serif; /* Aplica a fonte Inter */
+      font-family: 'Inter', sans-serif;
       background-color: #f4f7fa;
-      padding: 2rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
+      height: 100vh;
     }
   
     /* CABEÇALHO */
@@ -28,8 +29,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 2rem;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
       /* Título */
       .titulo {
@@ -43,7 +43,7 @@
         background-color: #0d0f47;
         color: white;
         border: none;
-        border-radius: 15px;
+        border-radius: 12px;
         width: 80px;
         height: 50px;
         font-size: 1.5rem;
@@ -67,40 +67,38 @@
   
     /* FORMULÁRIO PRINCIPAL */
     .form-detalhe {
-      max-width: 2000px;
-      margin: 0 auto;
       display: flex;
-      gap: 1rem;
-      justify-content: center;
+      gap: 2rem;
+      height: calc(100vh - 200px);
+      align-items: stretch;
     }
 
-    /* IMAGEM */
+    /* MAPA */
     .imagem-local-container {
       flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      max-width: 45%;
     }
 
     .imagem-local {
-      width: 110%;
-      max-width: 2000px;
-      height: auto;
-      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      border: none;
     }
+
 
     /* FORMULÁRIO VISUAL */
     .conteudo-principal {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 1.6rem;
-      margin-right: 3rem;
+      gap: 1.2rem;
     }
 
     .campo {
       display: flex;
       flex-direction: column;
+      margin-bottom: 0.5rem;
     }
 
     .campo label {
@@ -154,7 +152,7 @@
 <div class="form-detalhe">
   <!-- Imagem -->
   <div class="imagem-local-container">
-    <img id="foto-local" src="Basemap image.png" alt="Imagem do local" class="imagem-local">
+    <iframe id="mapa-local" class="imagem-local" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 
   <!-- Formulário -->
@@ -232,6 +230,11 @@
       // Perito Supervisor
       document.getElementById("perito").value = auditoria.perito;
       
+      // 🗺️ Gerar imagem estática da localização
+      const moradaCompleta = `${auditoria.local}, ${auditoria.postal}, ${auditoria.cidade}`;
+      const mapaEmbed = `https://www.google.com/maps?q=${encodeURIComponent(moradaCompleta)}&output=embed`;
+      document.getElementById("mapa-local").src = mapaEmbed;
+
       console.log("Dados carregados com sucesso:", auditoria);
     } else {
       console.error("Auditoria não encontrada para o ID:", id);
