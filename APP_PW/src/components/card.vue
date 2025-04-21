@@ -25,8 +25,9 @@ const router = useRouter()
         <p class="text-white text-2xl font-semibold">{{ nomeAuditoria }}</p>
         <button 
             @click="verAuditoria(id)"
-            class="text-white  bg-[#03045E] h-11 w-35 flex items-center justify-center text-sm rounded-xl font-semibold">
-            <p>{{textoBotao}}</p>
+            class="text-white bg-[#03045E] h-11 w-36 flex items-center justify-center text-sm rounded-xl font-semibold text-center overflow-hidden">
+            <p class="whitespace-nowrap truncate w-full text-center">{{ textoBotao }}</p>
         </button>
+
     </div>
 </template>

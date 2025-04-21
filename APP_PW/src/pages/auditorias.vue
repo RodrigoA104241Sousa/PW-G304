@@ -11,6 +11,7 @@ const ocorrencias = [
     tipo_de_problema: 'Buraco na estrada',
     denunciante: 'Pedro',
     localizacao: 'Rua Central',
+    codigoPostal: '4800-039',
     descricao: 'Existe um buraco grande na estrada que pode causar acidentes.'
   },
   {
@@ -18,6 +19,7 @@ const ocorrencias = [
     tipo_de_problema: 'Semáforo avariado',
     denunciante: 'Joana',
     localizacao: 'Av. das Flores',
+    codigoPostal: '4800-045',
     descricao: 'O semáforo está apagado e causa confusão no trânsito.'
   },
   {
@@ -25,6 +27,7 @@ const ocorrencias = [
     tipo_de_problema: 'Caixote do lixo partido',
     denunciante: 'Rui',
     localizacao: 'Rua do Lixo',
+    codigoPostal: '4800-051',
     descricao: 'O caixote está partido e o lixo está a espalhar-se na rua.'
   },
   {
@@ -32,6 +35,7 @@ const ocorrencias = [
     tipo_de_problema: 'Tampa de esgoto solta',
     denunciante: 'Ana',
     localizacao: 'Rua dos Gatos',
+    codigoPostal: '4800-062',
     descricao: 'A tampa está fora do lugar e representa perigo para peões.'
   },
   {
@@ -39,6 +43,7 @@ const ocorrencias = [
     tipo_de_problema: 'Luz pública apagada',
     denunciante: 'Carlos',
     localizacao: 'Travessa Escura',
+    codigoPostal: '4800-071',
     descricao: 'A rua está completamente às escuras à noite.'
   },
   {
@@ -46,9 +51,11 @@ const ocorrencias = [
     tipo_de_problema: 'Luz pública apagada',
     denunciante: 'Marta',
     localizacao: 'Travessa Escura',
+    codigoPostal: '4800-071',
     descricao: 'A luz não funciona há vários dias.'
   }
 ]
+
 
 
 // 2. Guardar no localStorage

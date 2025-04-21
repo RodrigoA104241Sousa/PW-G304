@@ -6,7 +6,6 @@ import { useOcorrenciasStore } from '../stores/ocorrencia.js';
 
 const store = useOcorrenciasStore()
 store.carregarOcorrencias()
-console.log("Lista de ocorrências:", store.lista)
 const router = useRouter()
 const route = useRoute()
 const id = route.params.id
@@ -24,7 +23,7 @@ function goMaisDetalhes(id) {
     router.push(`/maisdetalhes/${id}`)
 }
 
-function goDocumentar() {
+function goDocumentar(id) {
     
     router.push(`/documentaracao/${id}`)
 }
@@ -33,7 +32,7 @@ function goDocumentar() {
 
 <template>
     <div class="bg-[#E0F1FE] h-screen">
-        <Header title="occorencia 1" backRoute="/auditorias"></Header>
+        <Header title="occorencia 1" :backRoute="`/verauditoria/${id}`"></Header>
         <Navbar></Navbar>
         <div class="px-8 space-y-4">
             <p class="text-[#695C5C] font-semibold ml-3 mb-1">Data de Início</p>
@@ -87,7 +86,7 @@ function goDocumentar() {
                 </button>
 
                 <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
-                    @click="goDocumentar">
+                    @click="goDocumentar(id)">
                     Documentação da ação
                 </button>
 
