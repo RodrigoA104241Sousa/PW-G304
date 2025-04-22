@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Ocorrência</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-button">←</button>
+      <h1 class="title">Formulário de Ocorrência</h1>
+      <img src="logo.png" alt="Logo" class="logo">
+    </div>
+
+    <div class="content">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label">Tipo de Ocorrência</label>
+          <select class="form-control">
+            <option selected>Buracos na Estrada</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <div class="form-control-with-icon">
+            <input type="email" class="form-control" value="rodrigoamsousa1922@gmail.com" readonly>
+            <div class="icon">📧</div>
+          </div>
+        </div>
+
+        <div class="location-row">
+          <div class="form-group">
+            <label class="form-label">Localização</label>
+            <div class="form-control-with-icon">
+              <input type="text" class="form-control" value="Rua Dr. Augusto Ferreira , Guimarães" readonly>
+              <div class="icon">📍</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Código Postal</label>
+            <input type="text" class="form-control" value="4800-039" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <div class="form-control-with-icon">
+            <textarea class="form-control descricao" readonly>
+Perto da passadeira, existe um buraco de grandes dimensões que representa um perigo para os condutores e peões. O buraco está localizado na faixa de rodagem, e tem aproximadamente 50 metros de diâmetro e 15profundidade. A sua presença tem causado dificuldades no trânsito, especialmente para veículos de duas rodas, que têm de desviar-se para a faixa oposta, colocando em risco a segurança de todos. A situação persiste desde meados de fevereiro, e apesar de vários condutores terem sinalizado o problema, não parece ter sido resolvido até ao momento.
+            </textarea>
+            <div class="icon">📝</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-section">
+        <img src="mapa.png" alt="Mapa" class="map-image">
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
