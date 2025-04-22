@@ -1,0 +1,761 @@
+    /* Estilos base */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #EFF2F4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px;
+        position: relative;
+    }
+
+    /* Cabeçalho */
+    .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .back-button {
+        background-color: #03045E;
+        box-shadow: 0px 4px 20px rgba(3, 4, 94, 0.3);
+        color: #f5f5f5;
+        border: none;
+        border-radius: 10px / 30%;
+        width: 80px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        cursor: pointer;
+        font-size: 25px;
+        transition: transform 0.3s ease;
+    }
+    .back-button:hover {
+        transform: translateY(-5px);
+    }
+    h1 {
+        color: #03045E;
+        margin: 0;
+        font-size: 30px;
+        font-weight: normal;
+    }
+    .logo {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        max-width: 80px;
+    }
+
+    /* Layout do formulário */
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 30px;
+    }
+    .left-column {
+        grid-column: 1;
+    }
+    .right-column {
+        grid-column: 2;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Campos do formulário */
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .form-label {
+        display: block;
+        font-size: 14px;
+        color: #695C5C;
+        margin-bottom: 8px;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #03045E;
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: rgba(3, 4, 94, 0.07);
+        font-size: 14px;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: #0066CC;
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+    }
+    .form-control-icon {
+        position: relative;
+    }
+    .form-control-icon input {
+        padding-right: 35px;
+    }
+    .form-control-icon img {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Estilo para checklist de materiais */
+    .materials-container {
+        position: relative;
+        margin-bottom: 25px;
+    }
+    .materials-search {
+        margin-bottom: 10px;
+        position: relative;
+    }
+    .materials-search input {
+        width: 100%;
+        padding: 10px;
+        padding-right: 35px;
+        border: 2px solid #03045E;
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: rgba(3, 4, 94, 0.07);
+    }
+    .materials-search img {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+    }
+    .materials-list {
+        border: 2px solid #03045E;
+        border-radius: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+    }
+    .materials-list label {
+        display: block;
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .materials-list label:hover {
+        background-color: rgba(3, 4, 94, 0.05);
+    }
+    .materials-list label:last-child {
+        border-bottom: none;
+    }
+    .materials-list input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    .selected-materials {
+        margin-top: 10px;
+        padding: 8px 0;
+    }
+    .selected-item {
+        display: inline-block;
+        background-color: #03045E;
+        color: white;
+        border-radius: 15px;
+        padding: 5px 10px;
+        margin: 3px;
+        font-size: 12px;
+        position: relative;
+    }
+    .remove-material {
+        margin-left: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Dropdown de opções para peritos */
+    .dropdown-container {
+        position: relative;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+    .options-dropdown {
+        position: absolute;
+        background-color: #fff;
+        border: 2px solid #102073;
+        border-radius: 5px;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 100;
+        display: none;
+    }
+    .options-dropdown ul {
+        list-style-type: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .options-dropdown li {
+        padding: 10px 12px;
+        cursor: pointer;
+        color: #333;
+        border-bottom: 1px solid #eee;
+    }
+    .options-dropdown li:hover {
+        background-color: rgba(3, 4, 94, 0.07);
+    }
+    .options-dropdown li:last-child {
+        border-bottom: none;
+    }
+
+    /* Estilo para o campo de descrição */
+    .description-area {
+        height: 180px;
+        resize: none;
+        padding: 12px;
+        font-family: Arial, sans-serif;
+    }
+    .description-container {
+        position: relative;
+        display: block;
+    }
+    .description-icon {
+        position: absolute !important;
+        right: 10px !important;
+        top: 12px !important;
+        transform: none !important;
+        z-index: 2;
+    }
+
+    /* Botão de registro */
+    .criar-btn {
+        background-color: #102073;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 14px 0;
+        width: 200px;
+        font-size: 16px;
+        cursor: pointer;
+        display: block;
+        margin-left: auto;
+        margin-right: 0;
+        margin-top: 30px;
+        transition: transform 0.3s ease, background-color 0.3s;
+    }  
+    .criar-btn:hover {
+        transform: translateY(-5px);
+        background-color: #0A184F;
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+        }
+        .criar-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .container {
+            padding: 20px;
+        }
+    }
+
+    /* NOVOS ESTILOS PARA O TIME PICKER */
+    .time-picker-container {
+        position: absolute;
+        background: white;
+        border: 2px solid #03045E;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 1000;
+        display: none;
+        width: 280px;
+        box-sizing: border-box;
+    }
+
+    .time-picker-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .time-picker-title {
+        font-weight: bold;
+        color: #03045E;
+    }
+
+    .time-picker-close {
+        cursor: pointer;
+        color: #777;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .time-picker-content {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .time-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .time-up, .time-down {
+        width: 30px;
+        height: 30px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+
+    .time-up:hover, .time-down:hover {
+        background-color: #e0e0e0;
+    }
+
+    .time-value {
+        font-size: 24px;
+        width: 50px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .time-label {
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+    }
+
+    .time-separator {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        padding-top: 30px;
+    }
+
+    .time-picker-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .time-picker-apply {
+        background-color: #03045E;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .time-picker-apply:hover {
+        background-color: #020347;
+    }
+
+    /* ESTILOS PARA O CALENDÁRIO */
+    .calendar-container {
+        position: absolute;
+        background: white;
+        border: 2px solid #03045E;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 1000;
+        display: none;
+        width: 320px;
+        box-sizing: border-box;
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .calendar-title {
+        font-weight: bold;
+        color: #03045E;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .calendar-month-label {
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .calendar-nav-btn {
+        width: 30px;
+        height: 30px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+
+    .calendar-nav-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .calendar-close {
+        cursor: pointer;
+        color: #777;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        margin-bottom: 5px;
+    }
+
+    .calendar-weekday {
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        font-weight: bold;
+        padding: 5px 0;
+    }
+
+    .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+    }
+
+    .calendar-day {
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+        font-size: 14px;
+    }
+
+    .calendar-day:hover {
+        background-color: rgba(3, 4, 94, 0.1);
+    }
+
+    .calendar-day.today {
+        background-color: rgba(3, 4, 94, 0.1);
+        font-weight: bold;
+    }
+
+    .calendar-day.selected {
+        background-color: #03045E;
+        color: white;
+    }
+
+    .calendar-day.other-month {
+        color: #ccc;
+    }
+
+    .calendar-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    .calendar-today-btn {
+        background-color: transparent;
+        color: #03045E;
+        border: 1px solid #03045E;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-size: 12px;
+    }
+
+    .calendar-today-btn:hover {
+        background-color: rgba(3, 4, 94, 0.05);
+    }
+
+    .calendar-apply-btn {
+        background-color: #03045E;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .calendar-apply-btn:hover {
+        background-color: #020347;
+    }
+
+    /* Estilo para o seletor de ano */
+    .year-selector {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .year-input {
+        width: 60px;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+
+    .peritos-button {
+    width: 100%;
+    background-color: rgba(3, 4, 94, 0.07);
+    border: 2px solid #03045E;
+    border-radius: 5px;
+    padding: 10px 12px;
+    text-align: left;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+    }
+
+    .peritos-button:hover {
+    background-color: rgba(3, 4, 94, 0.12);
+    }
+
+    .peritos-button img {
+    width: 18px;
+    height: 18px;
+    }
+
+    /* Estilo para o container de peritos selecionados */
+    .selected-peritos {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 8px;
+    }
+
+    .perito-tag {
+    background-color: #03045E;
+    color: white;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    }
+
+    .perito-tag img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    }
+
+    .remove-perito {
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    }
+
+    /* Estilo para o modal de peritos */
+    .peritos-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .peritos-modal-content {
+    background-color: #fff;
+    width: 80%;
+    max-width: 700px;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    }
+
+    .peritos-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    }
+
+    .peritos-modal-header h3 {
+    margin: 0;
+    color: #03045E;
+    }
+
+    .close-modal {
+    font-size: 24px;
+    cursor: pointer;
+    color: #777;
+    }
+
+    .peritos-search-container {
+    padding: 15px 20px;
+    position: relative;
+    }
+
+    .peritos-search-container input {
+    width: 100%;
+    padding-right: 35px;
+    }
+
+    .peritos-search-container img {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    }
+
+    .peritos-list {
+    padding: 0 20px;
+    overflow-y: auto;
+    max-height: 50vh;
+    }
+
+    .perito-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    }
+
+    .perito-card:hover {
+    background-color: rgba(3, 4, 94, 0.05);
+    }
+
+    .perito-card.selected {
+    background-color: rgba(3, 4, 94, 0.1);
+    border-color: #03045E;
+    }
+
+    .perito-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    }
+
+    .perito-info {
+    flex: 1;
+    }
+
+    .perito-name {
+    font-weight: bold;
+    color: #03045E;
+    margin-bottom: 3px;
+    }
+
+    .perito-specialty {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 2px;
+    }
+
+    .perito-email {
+    color: #888;
+    font-size: 12px;
+    }
+
+    .perito-checkbox {
+    margin-left: 10px;
+    transform: scale(1.2);
+    }
+
+    .peritos-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    }
+
+    .apply-peritos-btn {
+    background-color: #03045E;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    }
+
+    .apply-peritos-btn:hover {
+    background-color: #020347;
+    }
+
+    /* Para quando não há peritos disponíveis */
+    .no-peritos-message {
+    padding: 20px;
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    }
