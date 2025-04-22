@@ -57,9 +57,10 @@ function goDocumentar(id) {
                 <select
                     class="bg-[#03045E]/5 w-full h-10 pl-4 placeholder:font-semibold"
                     >
-                    <option value="joana" class="py-1">Joana Silva</option>
-                    <option value="mario" class="py-1">Mário Costa</option>
-                    <option value="ines" class="py-1">Inês Duarte</option>
+                    <option value="joana" class="py-1">Jurídico</option>
+                    <option value="mario" class="py-1">Saúde</option>
+                    <option value="ines" class="py-1">Inspeção</option>
+                    
                 </select>
             </div>
 
