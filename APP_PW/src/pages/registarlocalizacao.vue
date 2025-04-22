@@ -97,7 +97,6 @@ const selectSuggestion = (place) => {
         </ul>
       </div>
     </div>
-
     <Navbar />
   </div>
 </template>

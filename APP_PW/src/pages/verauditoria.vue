@@ -4,10 +4,11 @@ import Navbar from '../components/navbar.vue';
 import {useRoute, useRouter} from 'vue-router';
 import { useOcorrenciasStore } from '../stores/ocorrencia.js';
 
-const store = useOcorrenciasStore()
-store.carregarOcorrencias()
 const route = useRoute()
 const router = useRouter()
+
+const store = useOcorrenciasStore()
+store.carregarOcorrencias()
 const id = route.params.id
 console.log("id:", id)
 const ocorrencia = store.getOcorrenciaById(id);

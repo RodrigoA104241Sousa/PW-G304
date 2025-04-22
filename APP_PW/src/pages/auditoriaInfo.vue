@@ -3,15 +3,27 @@ import Navbar from '../components/navbar.vue';
 import Header from '../components/header.vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useOcorrenciasStore } from '../stores/ocorrencia.js';
+import { useAuditoriaStore } from '../stores/auditoria.js';
+
 
 const store = useOcorrenciasStore()
+const auditoria = useAuditoriaStore()
+
+
 store.carregarOcorrencias()
 const router = useRouter()
 const route = useRoute()
 const id = route.params.id
 console.log("ID:", id)
 const ocorrencia = store.getOcorrenciaById(id)
+const tipo_problema = ocorrencia.tipo_de_problema
 console.log("Ocorrência:", ocorrencia)
+
+function guardarTudo(id, tipo_problema) {
+
+    auditoria.guardarAuditoriaCompleta(id, tipo_problema)
+    alert('Auditoria guardada com sucesso!')
+}
 
 function goRegistarLocalizacao(id) {
     
@@ -32,7 +44,7 @@ function goDocumentar(id) {
 
 <template>
     <div class="bg-[#E0F1FE] h-screen">
-        <Header title="occorencia 1" :backRoute="`/verauditoria/${id}`"></Header>
+        <Header :title="ocorrencia.tipo_de_problema" :backRoute="`/verauditoria/${id}`"></Header>
         <Navbar></Navbar>
         <div class="px-8 space-y-4">
             <p class="text-[#695C5C] font-semibold ml-3 mb-1">Data de Início</p>
@@ -40,7 +52,8 @@ function goDocumentar(id) {
                 <input 
                     type="date"
                     class="bg-[#03045E]/5 w-full h-10 px-4 placeholder:font-semibold"
-                    placeholder="Inicío: dd/mm/aaaa">
+                    placeholder="Inicío: dd/mm/aaaa"
+                    v-model="auditoria.pagina1.dataInicio">
                 </input>
             </div>
 
@@ -49,7 +62,8 @@ function goDocumentar(id) {
                 <input 
                     type="date"
                     class="bg-[#03045E]/5 w-full h-10 px-4 placeholder:font-semibold"
-                    placeholder="Fim: dd/mm/aaaa">
+                    placeholder="Fim: dd/mm/aaaa"
+                    v-model="auditoria.pagina1.dataFim">
                 </input>
             </div>
 
@@ -57,9 +71,11 @@ function goDocumentar(id) {
                 <select
                     class="bg-[#03045E]/5 w-full h-10 pl-4 placeholder:font-semibold"
                     >
-                    <option value="joana" class="py-1">Joana Silva</option>
-                    <option value="mario" class="py-1">Mário Costa</option>
-                    <option value="ines" class="py-1">Inês Duarte</option>
+                    <option value="juridico" class="py-1">Jurídico</option>
+                    <option value="saude" class="py-1">Saúde</option>
+                    <option value="inspecao" class="py-1">Inspeção</option>
+                    <option value="inspecao" class="py-1">Inspeção</option>
+                    
                 </select>
             </div>
 
@@ -90,7 +106,8 @@ function goDocumentar(id) {
                     Documentação da ação
                 </button>
 
-                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl">
+                <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
+                        @click="guardarTudo(id,tipo_problema)">
                     Guardar
                 </button>
             </div>
