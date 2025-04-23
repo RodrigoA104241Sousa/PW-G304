@@ -816,3 +816,57 @@
     font-size: 16px;
     font-weight: 500;
 }
+
+.urgency-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+.urgency-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #000050;
+}
+.urgency-options {
+    display: flex;
+    gap: 1rem;
+}
+.urgency-options input[type="radio"] {
+    display: none;
+}
+.urgency-options label {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border: 2px solid #000050;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    color: #000050;
+    transition: all 0.2s ease;
+}
+
+/* Cores personalizadas para cada nível quando selecionado */
+.urgency-options input[type="radio"]#urgency1:checked + label,
+.urgency-options input[type="radio"]#urgency2:checked + label{
+    background-color: #4CAF50; /* Verde */
+    border-color: #4CAF50;
+    color: #000050;
+}
+
+.urgency-options input[type="radio"]#urgency3:checked + label,
+.urgency-options input[type="radio"]#urgency4:checked + label {
+    background-color: #FFC107; /* Amarelo */
+    border-color: #FFC107;
+    color: #000050;
+}
+
+.urgency-options input[type="radio"]#urgency5:checked + label{
+    background-color: red; /* Vermelho */
+    border-color: red;
+    color: #000050;
+}

@@ -638,16 +638,6 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
         if (errorMsg) errorMsg.remove();
     }
 
-    // Verificar se o campo está vazio
-    if (!field.value.trim()) {
-        field.classList.add('invalid');
-        field.parentElement.insertAdjacentHTML('afterend', 
-            `<div class="error-message">Por favor, preencha o campo ${fieldName}</div>`);
-        isValid = false;
-        if (!firstInvalidField) firstInvalidField = field;
-    } else {
-        field.classList.remove('invalid');
-    }
     
     // Verificar se pelo menos um perito foi selecionado
     if (selectedPeritosArray.length === 0) {
