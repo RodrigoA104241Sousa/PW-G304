@@ -3,12 +3,18 @@ document.getElementById("googleLoginBtn").addEventListener("click", function(eve
   
   // Parâmetros para autenticação OAuth2
   const clientId = "315984364753-t1pnd1ugsh9ig5f09kvv9aud6sj4erpa.apps.googleusercontent.com";
-  const redirectUri = window.location.origin + window.location.pathname;
+  const redirectUri = "http://127.0.0.1:5501/backofficefrancisco/LoginEyesEverywhere.html"; // URL fixa
   const scope = "email profile openid";
   const responseType = "token";
+  const prompt = "consent"; // Adiciona prompt para sempre pedir consentimento
   
   // Construa a URL de autenticação
-  const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=${responseType}`;
+  const authUrl = `https://accounts.google.com/o/oauth2/auth?`+
+    `client_id=${encodeURIComponent(clientId)}&`+
+    `redirect_uri=${encodeURIComponent(redirectUri)}&`+
+    `scope=${encodeURIComponent(scope)}&`+
+    `response_type=${responseType}&`+
+    `prompt=${prompt}`;
   
   // Redirecione para a página de login do Google
   window.location.href = authUrl;
