@@ -1,0 +1,158 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Get the occurrence ID from localStorage
+    const occurrenceId = localStorage.getItem('selectedOccurrenceId');
+    if (!occurrenceId) {
+        console.error('No occurrence ID found');
+        return;
+    }
+
+    // Get occurrences from localStorage
+    const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+    const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
+
+    if (!occurrence) {
+        console.error('Occurrence not found');
+        return;
+    }
+
+    // Populate the page with occurrence details
+    document.querySelector('.tag-blue').textContent = occurrence.type;
+    document.querySelector('.tag-green').textContent = occurrence.status;
+    document.getElementById('occurrenceDescription').textContent = occurrence.description;
+    document.getElementById('reporterInfo').textContent = `${occurrence.userName} (${occurrence.userEmail})`;
+    document.getElementById('locationInfo').textContent = occurrence.location;
+    document.getElementById('coordinates').textContent = 
+        `${occurrence.coordinates.latitude}, ${occurrence.coordinates.longitude}`;
+
+    // Display images in the images grid
+    const imagesGrid = document.getElementById('imagesGrid');
+    if (imagesGrid && occurrence.images && occurrence.images.length > 0) {
+        occurrence.images.forEach(imagePath => {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'image-container';
+            
+            const img = document.createElement('img');
+            img.src = `imagens/${imagePath}`; // Adjust path according to your images folder
+            img.alt = 'Imagem da ocorrência';
+            img.className = 'occurrence-image';
+            
+            // Add click handler to show image in full size
+            img.addEventListener('click', () => {
+                showImageFullsize(imagePath);
+            });
+            
+            imgContainer.appendChild(img);
+            imagesGrid.appendChild(imgContainer);
+        });
+    } else if (imagesGrid) {
+        imagesGrid.innerHTML = '<p class="no-images">Não foram anexadas imagens</p>';
+    }
+
+    // Initialize map
+    initMap(occurrence.coordinates.latitude, occurrence.coordinates.longitude);
+
+    // Handle back button
+    document.querySelector('.back-button').addEventListener('click', () => {
+        window.location.href = 'ocorrencia.html';
+    });
+
+    // Handle approve/reject buttons
+    document.querySelector('.button-green').addEventListener('click', () => {
+        occurrence.status = 'Aceite';
+        updateOccurrenceStatus(occurrence);
+    });
+
+    document.querySelector('.button-red').addEventListener('click', () => {
+        occurrence.status = 'Não Aceite';
+        updateOccurrenceStatus(occurrence);
+    });
+});
+
+// Make initMap available globally
+window.initMap = function() {
+    try {
+        const occurrenceId = localStorage.getItem('selectedOccurrenceId');
+        const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+        const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
+
+        if (!occurrence) {
+            console.error('Occurrence not found');
+            return;
+        }
+
+        const coordinates = {
+            lat: parseFloat(occurrence.coordinates.latitude),
+            lng: parseFloat(occurrence.coordinates.longitude)
+        };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: coordinates,
+        });
+
+        new google.maps.Marker({
+            position: coordinates,
+            map: map,
+            title: "Local da Ocorrência"
+        });
+    } catch (error) {
+        console.error('Error initializing map:', error);
+    }
+}
+
+// Add error handling
+function handleMapError() {
+    console.error('Google Maps failed to load');
+    document.getElementById('map').innerHTML = 
+        '<div style="padding: 1rem; text-align: center;">Error loading map</div>';
+}
+
+function initMap(lat, lng) {
+    const coordinates = { lat: parseFloat(lat), lng: parseFloat(lng) };
+    
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: coordinates,
+    });
+
+    // Add a marker
+    new google.maps.Marker({
+        position: coordinates,
+        map: map,
+        title: "Local da Ocorrência"
+    });
+}
+
+function updateOccurrenceStatus(updatedOccurrence) {
+    const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+    const index = occurrences.findIndex(o => o.id === updatedOccurrence.id);
+    if (index !== -1) {
+        occurrences[index] = updatedOccurrence;
+        localStorage.setItem('occurrencesData', JSON.stringify(occurrences));
+        window.location.href = 'ocorrencia.html';
+    }
+}
+
+// Add this function for fullsize image viewing
+function showImageFullsize(imagePath) {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="imagens/${imagePath}" alt="Imagem em tamanho completo">
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.close-modal').onclick = () => {
+        modal.remove();
+    };
+    
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    };
+}

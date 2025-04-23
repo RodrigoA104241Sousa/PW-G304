@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Detalhes da Ocorrência</title>
+        <link rel="stylesheet" href="detalhesocorrencia.css">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1ldhr7kUyjyPpgnXcWUQFynuIl-OMUg&callback=initMap" async defer></script>
+    </head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <h1 class="title">Detalhes da Ocorrência</h1>
+            <img class="logo" src="imagens/logo.png" alt="Logo">
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Left column -->
+            <div class="left-column">
+                <h2 class="section-title">Detalhes</h2>
+                <div class="tags">
+                    <div class="tag tag-blue">Buraco na estrada</div>
+                    <div class="tag tag-green">Aceite</div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">Descrição</h3>
+                    <div class="description-box">
+                        <p class="description-text" id="occurrenceDescription">
+                            <!-- Description will be loaded from JavaScript -->
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">Registos pelo denunciante</h3>
+                    <div class="images-grid" id="imagesGrid">
+                        <!-- Images will be loaded from JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="right-column">
+                <div>
+                    <h3 class="section-subtitle">Denunciante</h3>
+                    <div class="info-box">
+                        <p class="info-text" id="reporterInfo"></p>
+                        <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-subtitle">Localização</h3>
+                    <div class="info-box">
+                        <p class="info-text" id="locationInfo"></p>
+                        <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <div id="map" style="width: 100%; height: 300px;"></div>
+                    <div class="coordinates" id="coordinates"></div>
+                </div>
+                <div class="buttons-grid">
+                    <button class="button button-green">Aprovar</button>
+                    <button class="button button-red">Rejeitar</button>
+                </div>
+                <button class="button button-blue">Informações</button>
+            </div>
+        </div>
+    </div>
+    <script src="detalhesocorrencia.js"></script>
+</body>
+</html>

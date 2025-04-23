@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registar novo perito</title>
+    <link rel="stylesheet" href="registaperito.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button type="button" class="back-button" onclick="window.location.href='peritos.html'">
+                <span>←</span>
+            </button>
+            <h1>Registar novo perito</h1>
+            <img src="imagens/logo.png" alt="Logo" class="logo">
+        </div>
+        
+        <!-- Form -->
+        <form id="perito-form">
+        <div class="form-layout">
+            <div class="left-column">
+                <div class="form-group">
+                    <label class="form-label">Nome</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="Insira nome completo">
+                        <img src="imagens/user.png" alt="Ícone de user">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div class="form-control-icon">
+                        <input type="email" class="form-control" placeholder="exemplo@gmail.com" id="email">
+                        <img src="imagens/email.png" alt="Ícone de email">
+                    </div>
+                    <span class="error-message" style="color: red; display: none;">Email inválido. Por favor, insira um email válido.</span>
+                </div>
+               
+                <div class="form-group">
+                    <label class="form-label">Morada</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="Insira morada">
+                        <img src="imagens/localização.png" alt="Ícone de morada">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Telemóvel</label>
+                    <div class="form-control-icon">
+                        <input type="tel" class="form-control" placeholder="Insira n° de telemóvel" 
+                               id="telefones" maxlength="9" title="Digite um número de 9 dígitos, começando com 9" required>
+                        <img src="imagens/telemovel.png" alt="Ícone de telemóvel">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Data de nascimento</label>
+                    <div class="form-control-icon">
+                        <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+                        <img src="imagens/calendario.png" alt="Ícone de data">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="form-group">
+                    <label class="form-label">Código Postal</label>
+                    <input type="text" class="form-control" placeholder="XXXX-XXX">
+                </div>
+                
+                <div class="dropdown-container">
+                    <label class="form-label">Especialidade</label>
+                    <div class="form-control-icon">
+                        <input type="search" class="form-control" placeholder="Escolha a especialidade" id="especialidadeSearch" readonly>
+                        <img src="imagens/setabaixo.png" alt="Ícone de dropdown" id="dropdownIcon" onclick="toggleDropdown()">
+                    </div>
+                    <div id="optionsDropdown" class="options-dropdown" style="display:none;">
+                        <ul>
+                            <li onclick="selectOption('Buraco na Estrada')">Buraco na Estrada</li>
+                            <li onclick="selectOption('Passeio Danificado')">Passeio Danificado</li>
+                            <li onclick="selectOption('Falta de Sinalização')"> Falta de Sinalização </li>
+                            <li onclick="selectOption('Iluminação Pública')">Iluminação Pública</li>
+                        
+                    </div>
+                </div>
+              
+                <!-- Upload de documentos -->
+                <button type="button" class="upload-btn">
+                    <img src="imagens/upload.png" alt="Ícone de upload"> Upload de Documentos (CV e CC)
+                </button>
+                <input type="file" id="pdf-upload" style="display: none;" accept=".pdf">
+                <span id="file-name"></span>
+                
+                <!-- Upload de foto -->
+                <div class="photo-upload">
+                    <img src="imagens/camera.png" alt="Ícone de camera">
+                    <div class="photo-text">Insira Aqui a Fotografia</div>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                </div>
+                
+                <!-- Botão de registro -->
+                <button type="button" class="register-btn">Registar</button>
+            </div>
+        </div>
+        </form>
+    </div>
+    
+    <script src="registaperito.js"></script>
+</body>
+</html>
