@@ -79,179 +79,179 @@
                                         '';
         }
 
-// Elementos para o modal de peritos
-const openPeritosModalBtn = document.getElementById('openPeritosModal');
-const peritosModal = document.getElementById('peritosModal');
-const closePeritosModal = document.getElementById('closePeritosModal');
-const peritosSearchInput = document.getElementById('peritosSearchInput');
-const peritosListContainer = document.getElementById('peritosListContainer');
-const applyPeritosSelection = document.getElementById('applyPeritosSelection');
-const selectedPeritosContainer = document.getElementById('selectedPeritos');
+    // Elementos para o modal de peritos
+    const openPeritosModalBtn = document.getElementById('openPeritosModal');
+    const peritosModal = document.getElementById('peritosModal');
+    const closePeritosModal = document.getElementById('closePeritosModal');
+    const peritosSearchInput = document.getElementById('peritosSearchInput');
+    const peritosListContainer = document.getElementById('peritosListContainer');
+    const applyPeritosSelection = document.getElementById('applyPeritosSelection');
+    const selectedPeritosContainer = document.getElementById('selectedPeritos');
 
-// Array para armazenar os peritos selecionados
-let selectedPeritosArray = [];
+    // Array para armazenar os peritos selecionados
+    let selectedPeritosArray = [];
 
-// Abrir o modal de peritos
-openPeritosModalBtn.addEventListener('click', function() {
-    loadPeritos();
-    peritosModal.style.display = 'flex';
-});
+    // Abrir o modal de peritos
+    openPeritosModalBtn.addEventListener('click', function() {
+        loadPeritos();
+        peritosModal.style.display = 'flex';
+    });
 
-// Fechar o modal de peritos
-closePeritosModal.addEventListener('click', function() {
-    peritosModal.style.display = 'none';
-});
-
-// Fechar o modal ao clicar fora dele
-window.addEventListener('click', function(event) {
-    if (event.target === peritosModal) {
+    // Fechar o modal de peritos
+    closePeritosModal.addEventListener('click', function() {
         peritosModal.style.display = 'none';
-    }
-});
+    });
 
-// Carregar peritos disponíveis
-function loadPeritos() {
-    peritosListContainer.innerHTML = '';
-    
-    // Obter peritos do localStorage
-    const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-    
-    // Filtrar apenas peritos disponíveis
-    const availableExperts = experts.filter(expert => expert.status === "Disponível");
-    
-    if (availableExperts.length === 0) {
-        // Se não houver peritos disponíveis, mostrar mensagem
-        peritosListContainer.innerHTML = '<div class="no-peritos-message">Não há peritos disponíveis no momento.</div>';
-    } else {
-        // Adicionar cada perito disponível à lista
-        availableExperts.forEach(expert => {
-            const perito = document.createElement('div');
-            perito.className = 'perito-card';
-            perito.setAttribute('data-id', expert.id);
-            
-            // Verificar se o perito já está selecionado
-            if (selectedPeritosArray.some(p => p.id === expert.id)) {
-                perito.classList.add('selected');
-            }
-            
-            // Usar a foto do localStorage ou uma imagem padrão
-            const photoSrc = expert.profilePhoto || 'default-user.png';
-            
-            perito.innerHTML = `
-                <img src="${photoSrc}" alt="${expert.name}" class="perito-photo">
-                <div class="perito-info">
-                    <div class="perito-name">${expert.name}</div>
-                    <div class="perito-specialty">${expert.specialty}</div>
-                    <div class="perito-email">${expert.email || 'Email não disponível'}</div>
-                </div>
-                <input type="checkbox" class="perito-checkbox" ${selectedPeritosArray.some(p => p.id === expert.id) ? 'checked' : ''}>
-            `;
-            
-            // Evento de clique no card inteiro para selecionar/deselecionar
-            perito.addEventListener('click', function() {
-                const checkbox = this.querySelector('.perito-checkbox');
-                checkbox.checked = !checkbox.checked;
-                this.classList.toggle('selected');
-                
-                // Simular evento de mudança no checkbox
-                const changeEvent = new Event('change');
-                checkbox.dispatchEvent(changeEvent);
-            });
-            
-            // Evento para o checkbox (para prevenir propagação do evento de clique)
-            const checkbox = perito.querySelector('.perito-checkbox');
-            checkbox.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Evento de mudança no checkbox
-            checkbox.addEventListener('change', function() {
-                const perito = this.closest('.perito-card');
-                perito.classList.toggle('selected', this.checked);
-            });
-            
-            peritosListContainer.appendChild(perito);
-        });
-    }
-}
-
-// Filtrar peritos ao digitar na busca
-peritosSearchInput.addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const peritoCards = document.querySelectorAll('.perito-card');
-    
-    peritoCards.forEach(card => {
-        const name = card.querySelector('.perito-name').textContent.toLowerCase();
-        const specialty = card.querySelector('.perito-specialty').textContent.toLowerCase();
-        const email = card.querySelector('.perito-email').textContent.toLowerCase();
-        
-        if (name.includes(searchTerm) || specialty.includes(searchTerm) || email.includes(searchTerm)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
+    // Fechar o modal ao clicar fora dele
+    window.addEventListener('click', function(event) {
+        if (event.target === peritosModal) {
+            peritosModal.style.display = 'none';
         }
     });
-});
 
-// Aplicar a seleção de peritos
-applyPeritosSelection.addEventListener('click', function() {
-    // Limpar seleções anteriores
-    selectedPeritosArray = [];
-    
-    // Obter todos os peritos selecionados
-    const selectedCards = document.querySelectorAll('.perito-card.selected');
-    selectedCards.forEach(card => {
-        const id = card.getAttribute('data-id');
-        const name = card.querySelector('.perito-name').textContent;
-        const specialty = card.querySelector('.perito-specialty').textContent;
-        const photoSrc = card.querySelector('.perito-photo').src;
+    // Carregar peritos disponíveis
+    function loadPeritos() {
+        peritosListContainer.innerHTML = '';
         
-        selectedPeritosArray.push({
-            id: id,
-            name: name,
-            specialty: specialty,
-            photo: photoSrc
-        });
-    });
-    
-    // Atualizar a exibição dos peritos selecionados
-    updateSelectedPeritosDisplay();
-    
-    // Fechar o modal
-    peritosModal.style.display = 'none';
-});
-
-// Atualizar a exibição dos peritos selecionados
-function updateSelectedPeritosDisplay() {
-    selectedPeritosContainer.innerHTML = '';
-    
-    if (selectedPeritosArray.length === 0) {
-        // Opcional: adicionar uma mensagem quando não há peritos selecionados
-        selectedPeritosContainer.innerHTML = '<div class="no-peritos-selected">Nenhum perito selecionado</div>';
-        return;
+        // Obter peritos do localStorage
+        const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+        
+        // Filtrar apenas peritos disponíveis
+        const availableExperts = experts.filter(expert => expert.status === "Disponível");
+        
+        if (availableExperts.length === 0) {
+            // Se não houver peritos disponíveis, mostrar mensagem
+            peritosListContainer.innerHTML = '<div class="no-peritos-message">Não há peritos disponíveis no momento.</div>';
+        } else {
+            // Adicionar cada perito disponível à lista
+            availableExperts.forEach(expert => {
+                const perito = document.createElement('div');
+                perito.className = 'perito-card';
+                perito.setAttribute('data-id', expert.id);
+                
+                // Verificar se o perito já está selecionado
+                if (selectedPeritosArray.some(p => p.id === expert.id)) {
+                    perito.classList.add('selected');
+                }
+                
+                // Usar a foto do localStorage ou uma imagem padrão
+                const photoSrc = expert.profilePhoto || 'default-user.png';
+                
+                perito.innerHTML = `
+                    <img src="${photoSrc}" alt="${expert.name}" class="perito-photo">
+                    <div class="perito-info">
+                        <div class="perito-name">${expert.name}</div>
+                        <div class="perito-specialty">${expert.specialty}</div>
+                        <div class="perito-email">${expert.email || 'Email não disponível'}</div>
+                    </div>
+                    <input type="checkbox" class="perito-checkbox" ${selectedPeritosArray.some(p => p.id === expert.id) ? 'checked' : ''}>
+                `;
+                
+                // Evento de clique no card inteiro para selecionar/deselecionar
+                perito.addEventListener('click', function() {
+                    const checkbox = this.querySelector('.perito-checkbox');
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected');
+                    
+                    // Simular evento de mudança no checkbox
+                    const changeEvent = new Event('change');
+                    checkbox.dispatchEvent(changeEvent);
+                });
+                
+                // Evento para o checkbox (para prevenir propagação do evento de clique)
+                const checkbox = perito.querySelector('.perito-checkbox');
+                checkbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Evento de mudança no checkbox
+                checkbox.addEventListener('change', function() {
+                    const perito = this.closest('.perito-card');
+                    perito.classList.toggle('selected', this.checked);
+                });
+                
+                peritosListContainer.appendChild(perito);
+            });
+        }
     }
-    
-    selectedPeritosArray.forEach(perito => {
-        const tag = document.createElement('div');
-        tag.className = 'perito-tag';
-        tag.innerHTML = `
-            <img src="${perito.photo}" alt="${perito.name}" class="perito-tag-photo">
-            <span class="perito-tag-name">${perito.name}</span>
-            <span class="remove-perito" data-id="${perito.id}">×</span>
-        `;
+
+    // Filtrar peritos ao digitar na busca
+    peritosSearchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const peritoCards = document.querySelectorAll('.perito-card');
         
-        selectedPeritosContainer.appendChild(tag);
-    });
-    
-    // Adicionar eventos para remover peritos
-    document.querySelectorAll('.remove-perito').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            selectedPeritosArray = selectedPeritosArray.filter(p => p.id !== id);
-            updateSelectedPeritosDisplay();
+        peritoCards.forEach(card => {
+            const name = card.querySelector('.perito-name').textContent.toLowerCase();
+            const specialty = card.querySelector('.perito-specialty').textContent.toLowerCase();
+            const email = card.querySelector('.perito-email').textContent.toLowerCase();
+            
+            if (name.includes(searchTerm) || specialty.includes(searchTerm) || email.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
         });
     });
-}
+
+    // Aplicar a seleção de peritos
+    applyPeritosSelection.addEventListener('click', function() {
+        // Limpar seleções anteriores
+        selectedPeritosArray = [];
+        
+        // Obter todos os peritos selecionados
+        const selectedCards = document.querySelectorAll('.perito-card.selected');
+        selectedCards.forEach(card => {
+            const id = card.getAttribute('data-id');
+            const name = card.querySelector('.perito-name').textContent;
+            const specialty = card.querySelector('.perito-specialty').textContent;
+            const photoSrc = card.querySelector('.perito-photo').src;
+            
+            selectedPeritosArray.push({
+                id: id,
+                name: name,
+                specialty: specialty,
+                photo: photoSrc
+            });
+        });
+        
+        // Atualizar a exibição dos peritos selecionados
+        updateSelectedPeritosDisplay();
+        
+        // Fechar o modal
+        peritosModal.style.display = 'none';
+    });
+
+    // Atualizar a exibição dos peritos selecionados
+    function updateSelectedPeritosDisplay() {
+        selectedPeritosContainer.innerHTML = '';
+        
+        if (selectedPeritosArray.length === 0) {
+            // Opcional: adicionar uma mensagem quando não há peritos selecionados
+            selectedPeritosContainer.innerHTML = '<div class="no-peritos-selected">Nenhum perito selecionado</div>';
+            return;
+        }
+        
+        selectedPeritosArray.forEach(perito => {
+            const tag = document.createElement('div');
+            tag.className = 'perito-tag';
+            tag.innerHTML = `
+                <img src="${perito.photo}" alt="${perito.name}" class="perito-tag-photo">
+                <span class="perito-tag-name">${perito.name}</span>
+                <span class="remove-perito" data-id="${perito.id}">×</span>
+            `;
+            
+            selectedPeritosContainer.appendChild(tag);
+        });
+        
+        // Adicionar eventos para remover peritos
+        document.querySelectorAll('.remove-perito').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                selectedPeritosArray = selectedPeritosArray.filter(p => p.id !== id);
+                updateSelectedPeritosDisplay();
+            });
+        });
+    }
 
 
         // Elementos do time picker
@@ -638,6 +638,20 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
         if (errorMsg) errorMsg.remove();
     }
 
+       // Verificar nível de urgência
+       const urgencySelected = document.querySelector('input[name="urgency"]:checked');
+       if (!urgencySelected) {
+           document.querySelector('.urgency-options').classList.add('invalid-urgency');
+           document.querySelector('.urgency-options').insertAdjacentHTML('afterend', 
+               '<div class="error-message">Por favor, selecione o nível de urgência</div>');
+           isValid = false;
+           if (!firstInvalidField) firstInvalidField = document.querySelector('.urgency-options');
+       } else {
+           document.querySelector('.urgency-options').classList.remove('invalid-urgency');
+           const errorMsg = document.querySelector('.urgency-options + .error-message');
+           if (errorMsg) errorMsg.remove();
+       }
+
     
     // Verificar se pelo menos um perito foi selecionado
     if (selectedPeritosArray.length === 0) {
@@ -730,7 +744,8 @@ function saveAuditToLocalStorage() {
     const data = document.getElementById('dateInput').value;
     const morada = document.querySelector('.form-group:nth-child(3) input').value;
     const codigoPostal = document.getElementById('postalCode').value;
-    
+    const nivelUrgencia = document.querySelector('input[name="urgency"]:checked')?.value || '';
+
     // Obter materiais selecionados
     const materiaisSelecionados = Array.from(document.querySelectorAll('input[name="materials"]:checked'))
         .map(checkbox => checkbox.value);
@@ -744,6 +759,7 @@ function saveAuditToLocalStorage() {
         data: data,
         morada: morada,
         codigoPostal: codigoPostal,
+        nivelUrgencia: nivelUrgencia,
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,
         dataCriacao: new Date().toISOString()
