@@ -252,40 +252,6 @@ function updateSelectedPeritosDisplay() {
         });
     });
 }
-        // Validação básica de formato de data
-        document.getElementById('dateInput').addEventListener('blur', function() {
-            const value = this.value;
-            if (value && !/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-                alert('Por favor, insira a data no formato DD/MM/YYYY');
-                this.value = '';
-            }
-        });
-
-        // Validação básica de código postal
-        document.getElementById('postalCode').addEventListener('blur', function() {
-            const value = this.value;
-            if (value && !/^\d{4}-\d{3}$/.test(value)) {
-                alert('Por favor, insira o código postal no formato XXXX-XXX');
-                this.value = '';
-            }
-        });
-
-        // Validação do formato de duração
-        document.getElementById('durationInput').addEventListener('blur', function() {
-            const value = this.value;
-            if (value && !/^\d{2}:\d{2}:\d{2}$/.test(value)) {
-                alert('Por favor, insira a duração no formato HH:MM:SS');
-                this.value = '';
-            }
-        });
-
-        // Envio do formulário
-        document.getElementById('auditForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Aqui você pode adicionar lógica para enviar os dados para o servidor
-            alert('Plano de auditoria criado com sucesso!');
-        });
 
 
         // Elementos do time picker
@@ -626,3 +592,208 @@ function updateSelectedPeritosDisplay() {
         // Inicializar o calendário
         updateCalendar();
 
+// Adicionar validação ao envio do formulário
+document.getElementById('auditForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    let isValid = true;
+    let firstInvalidField = null;
+    
+    // Obter todos os campos obrigatórios
+    const requiredFields = {
+        'nome': document.querySelector('.form-group:nth-child(1) input'),
+        'duração': document.getElementById('durationInput'),
+        'data': document.getElementById('dateInput'),
+        'morada': document.querySelector('.form-group:nth-child(3) input'),
+        'código postal': document.getElementById('postalCode')
+    };
+    
+    // Verificar se os materiais foram selecionados
+    const materialsSelected = Array.from(document.querySelectorAll('input[name="materials"]'))
+        .some(checkbox => checkbox.checked);
+    
+    if (!materialsSelected) {
+        document.querySelector('.materials-search').classList.add('invalid');
+        document.querySelector('.materials-search').insertAdjacentHTML('afterend', 
+            '<div class="error-message">Por favor, selecione pelo menos um material</div>');
+        isValid = false;
+        if (!firstInvalidField) firstInvalidField = document.getElementById('materialsSearchInput');
+    } else {
+        document.querySelector('.materials-search').classList.remove('invalid');
+        const errorMsg = document.querySelector('.materials-search + .error-message');
+        if (errorMsg) errorMsg.remove();
+    }
+    
+    // Verificar descrição
+    const descricao = document.querySelector('textarea.description-area');
+    if (!descricao.value.trim()) {
+        descricao.classList.add('invalid');
+        descricao.insertAdjacentHTML('afterend', 
+            '<div class="error-message">Por favor, preencha a descrição</div>');
+        isValid = false;
+        if (!firstInvalidField) firstInvalidField = descricao;
+    } else {
+        descricao.classList.remove('invalid');
+        const errorMsg = descricao.parentElement.querySelector('.error-message');
+        if (errorMsg) errorMsg.remove();
+    }
+
+    // Verificar se o campo está vazio
+    if (!field.value.trim()) {
+        field.classList.add('invalid');
+        field.parentElement.insertAdjacentHTML('afterend', 
+            `<div class="error-message">Por favor, preencha o campo ${fieldName}</div>`);
+        isValid = false;
+        if (!firstInvalidField) firstInvalidField = field;
+    } else {
+        field.classList.remove('invalid');
+    }
+    
+    // Verificar se pelo menos um perito foi selecionado
+    if (selectedPeritosArray.length === 0) {
+        document.querySelector('.peritos-button').classList.add('invalid');
+        document.querySelector('.peritos-button').insertAdjacentHTML('afterend', 
+            '<div class="error-message">Por favor, selecione pelo menos um perito</div>');
+        isValid = false;
+        if (!firstInvalidField) firstInvalidField = document.getElementById('openPeritosModal');
+    } else {
+        document.querySelector('.peritos-button').classList.remove('invalid');
+        const errorMsg = document.querySelector('.peritos-button + .error-message');
+        if (errorMsg) errorMsg.remove();
+    }
+    
+    // Validar cada campo obrigatório
+    for (const [fieldName, field] of Object.entries(requiredFields)) {
+        // Remover mensagens de erro anteriores
+        const parentNode = field.parentElement.tagName === 'DIV' ? field.parentElement : field.parentElement;
+        const existingError = parentNode.nextElementSibling;
+        if (existingError && existingError.className === 'error-message') {
+            existingError.remove();
+        }
+        
+        // Verificar se o campo está vazio
+        if (!field.value.trim()) {
+            field.classList.add('invalid');
+            field.parentElement.insertAdjacentHTML('afterend', 
+                `<div class="error-message">Por favor, preencha o campo ${fieldName}</div>`);
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = field;
+        } else {
+            field.classList.remove('invalid');
+        }
+        
+        // Validações específicas
+        if (field.id === 'postalCode' && field.value.trim() && !/^\d{4}-\d{3}$/.test(field.value)) {
+            field.classList.add('invalid');
+            field.parentElement.insertAdjacentHTML('afterend', 
+                '<div class="error-message">Código postal deve estar no formato XXXX-XXX</div>');
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = field;
+        }
+        
+        if (field.id === 'durationInput' && field.value.trim() && !/^\d{2}:\d{2}:\d{2}$/.test(field.value)) {
+            field.classList.add('invalid');
+            field.parentElement.insertAdjacentHTML('afterend', 
+                '<div class="error-message">Duração deve estar no formato HH:MM:SS</div>');
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = field;
+        }
+        
+        if (field.id === 'dateInput' && field.value.trim() && !/^\d{2}\/\d{2}\/\d{4}$/.test(field.value)) {
+            field.classList.add('invalid');
+            field.parentElement.insertAdjacentHTML('afterend', 
+                '<div class="error-message">Data deve estar no formato DD/MM/YYYY</div>');
+            isValid = false;
+            if (!firstInvalidField) firstInvalidField = field;
+        }
+    }
+    
+    // Se houver campos inválidos, rolar até o primeiro campo com erro
+    if (!isValid && firstInvalidField) {
+        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    
+    // Se tudo estiver válido, salvar no localStorage e mostrar mensagem de sucesso
+    if (isValid) {
+        saveAuditToLocalStorage();
+        showSuccessToast('Auditoria criada com sucesso!');
+        
+        // Opcional: Limpar formulário após salvar
+        setTimeout(() => {
+            document.getElementById('auditForm').reset();
+            // Limpar seleções
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            updateSelectedMaterials();
+            selectedPeritosArray = [];
+            updateSelectedPeritosDisplay();
+        }, 2000);
+    }
+});
+
+// Função para salvar a auditoria no localStorage
+function saveAuditToLocalStorage() {
+    // Obter valores do formulário
+    const nome = document.querySelector('.form-group:nth-child(1) input').value;
+    const descricao = document.querySelector('textarea.description-area').value;
+    const duracao = document.getElementById('durationInput').value;
+    const data = document.getElementById('dateInput').value;
+    const morada = document.querySelector('.form-group:nth-child(3) input').value;
+    const codigoPostal = document.getElementById('postalCode').value;
+    
+    // Obter materiais selecionados
+    const materiaisSelecionados = Array.from(document.querySelectorAll('input[name="materials"]:checked'))
+        .map(checkbox => checkbox.value);
+    
+    // Criar objeto da auditoria
+    const auditoria = {
+        id: Date.now().toString(), // ID único baseado no timestamp
+        nome: nome,
+        descricao: descricao,
+        duracao: duracao,
+        data: data,
+        morada: morada,
+        codigoPostal: codigoPostal,
+        materiais: materiaisSelecionados,
+        peritos: selectedPeritosArray,
+        dataCriacao: new Date().toISOString()
+    };
+    
+    // Obter auditorias existentes do localStorage ou criar array vazio
+    const auditorias = JSON.parse(localStorage.getItem('auditorias')) || [];
+    
+    // Adicionar nova auditoria
+    auditorias.push(auditoria);
+    
+    // Salvar no localStorage
+    localStorage.setItem('auditorias', JSON.stringify(auditorias));
+}
+
+// Função para mostrar o toast de sucesso
+function showSuccessToast(message) {
+    // Criar elemento do toast
+    const toast = document.createElement('div');
+    toast.className = 'success-toast';
+    toast.innerHTML = `
+        <div class="toast-content">
+            <div class="toast-icon">✓</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    // Adicionar ao body
+    document.body.appendChild(toast);
+    
+    // Aplicar animação de entrada
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    // Remover toast após alguns segundos
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
