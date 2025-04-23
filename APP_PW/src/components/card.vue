@@ -21,13 +21,22 @@ const router = useRouter()
 </script>
 
 <template>
-    <div class="flex bg-[#1865B8]/80  h-20 items-center space-x-20 p-6 rounded-xl">
-        <p class="text-white text-2xl font-semibold">{{ nomeAuditoria }}</p>
-        <button 
-            @click="verAuditoria(id)"
-            class="text-white bg-[#03045E] h-11 w-36 flex items-center justify-center text-sm rounded-xl font-semibold text-center overflow-hidden">
-            <p class="whitespace-nowrap truncate w-full text-center">{{ textoBotao }}</p>
-        </button>
-
+    <div class="flex justify-between items-center bg-[#1865B8]/80 px-4 py-3 rounded-xl w-full h-24">
+      <!-- Título com quebra de linha permitida -->
+      <p class="text-white text-lg font-semibold break-words w-2/3">
+        {{ nomeAuditoria }}
+      </p>
+  
+      <!-- Botão com largura e altura fixa + truncamento do texto -->
+      <button 
+        @click="verAuditoria(id)"
+        class="bg-[#03045E] w-30 h-10 flex items-center justify-center rounded-xl overflow-hidden"
+      >
+        <p class="text-white text-sm font-semibold text-center truncate w-full px-2">
+          {{ textoBotao }}
+        </p>
+      </button>
     </div>
-</template>
+  </template>
+  
+  

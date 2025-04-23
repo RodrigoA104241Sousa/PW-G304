@@ -2,11 +2,14 @@
 import Header from '../components/header.vue';
 import Navbar from '../components/navbar.vue';  
 import { useRouter, useRoute } from 'vue-router';
+import { useAuditoriaStore } from '../stores/auditoria.js';
 
 const router = useRouter()
 const route = useRoute()
 const id = route.params.id
 console.log("ID:", id)
+
+const auditoria = useAuditoriaStore()
 
 function getocorrenciabyid(){
     return store.lista.find
@@ -32,7 +35,8 @@ function getocorrenciabyid(){
             </div>
             <input 
             type="number"
-            class="bg-white w-20 h-15 border-2 border-[#03045E] rounded-lg text-3xl mt-6 text-center"></input>
+            class="bg-white w-20 h-15 border-2 border-[#03045E] rounded-lg text-3xl mt-6 text-center"
+            v-model="auditoria.pagina2.problemasidentificados"></input>
         </div>
 
         <div class="pt-1 pl-2 flex flex-col items-center w-full">
@@ -49,7 +53,8 @@ function getocorrenciabyid(){
                
             </div>
             <input 
-            class="bg-white w-40 h-15 border-2 border-[#03045E] rounded-lg text-3xl mt-6 text-center"></input>
+            class="bg-white w-40 h-15 border-2 border-[#03045E] rounded-lg text-3xl mt-6 text-center"
+            v-model="auditoria.pagina2.tempo_total_auditoria"></input>
         </div>
 
         <div class="pt-6 pl-2 flex flex-col items-center w-full">
@@ -68,6 +73,7 @@ function getocorrenciabyid(){
             <textarea 
                 class="bg-white w-75 h-29 border-2 p-2 border-[#03045E] rounded-lg text-lg mt-6 placeholder:text-black placeholder:text-sm"
                 placeholder="Descreva as ações corretivas necessárias..."
+                v-model="auditoria.pagina2.necessidade_acoes_corretivas"
             ></textarea>
         </div>
 
@@ -87,6 +93,7 @@ function getocorrenciabyid(){
             <textarea 
                 class="bg-white w-75 h-29 border-2 p-2 border-[#03045E] rounded-lg text-lg mt-6 placeholder:text-black placeholder:text-sm"
                 placeholder="Descreva os impactos esperados..."
+                v-model="auditoria.pagina2.impacto_esperado_recomendacoes"
             ></textarea>
         </div>
     </div>

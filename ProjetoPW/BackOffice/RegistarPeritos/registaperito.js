@@ -1,3 +1,7 @@
+// Declarações de variáveis para armazenar a foto e os documentos
+let selectedProfilePhoto = null;
+let selectedFiles = [];
+
 // Funções para controlar o dropdown de especialidades
 function toggleDropdown() {
     var dropdown = document.getElementById("optionsDropdown");
@@ -20,6 +24,30 @@ window.onclick = function(event) {
 function selectOption(option) {
     document.getElementById("especialidadeSearch").value = option;
     document.getElementById("optionsDropdown").style.display = "none"; // Fecha o dropdown
+}
+
+// Função para mostrar toast notification
+function showToast(message) {
+    // Remover qualquer toast existente
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Criar novo toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    
+    // Adicionar o toast ao corpo do documento
+    document.body.appendChild(toast);
+    
+    // Remover o toast após 3 segundos
+    setTimeout(() => {
+        toast.remove();
+        // Redirecionar após o toast desaparecer
+        window.location.href = 'peritos.html';
+    }, 3000);
 }
 
 // Script para validação e uploads
@@ -161,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (isValid) {
-            // Create new expert object
+            // Criar objeto com os dados do perito
             const newExpert = {
                 id: Date.now(), // Use timestamp as unique ID
                 name: nomeInput.value,
@@ -172,8 +200,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 phone: telefoneInput.value,
                 birthDate: dataNascimentoInput.value,
                 address: moradaInput.value,
-                postalCode: codigoPostalInput.value
+                postalCode: codigoPostalInput.value,
+                profilePhoto: selectedProfilePhoto, // Adiciona a foto de perfil
+                documents: [] // Array para armazenar os documentos
             };
+            
+            // Adicionar documentos uploaded ao novo perito
+            for (let i = 0; i < selectedFiles.length; i++) {
+                newExpert.documents.push({
+                    name: selectedFiles[i].name,
+                    data: selectedFiles[i].data // Base64 string do arquivo
+                });
+            }
 
             // Get existing experts from localStorage or initialize empty array
             const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
@@ -184,10 +222,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // Save updated array back to localStorage
             localStorage.setItem('expertsData', JSON.stringify(experts));
 
-            alert('Perito registado com sucesso!');
-            
-            // Redirect back to peritos page
-            window.location.href = 'peritos.html';
+            // Substituição do alert pelo toast
+            showToast('Perito registado com sucesso!');
+            // O redirecionamento agora está dentro da função showToast
         }
     });
 
@@ -237,12 +274,15 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
-    // Função para lidar com a seleção de arquivo
+    // Função para lidar com a seleção de arquivo de foto
     function handleFileSelected(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
+                // Armazenar a foto para uso posterior
+                selectedProfilePhoto = e.target.result;
+                
                 // Limpar o conteúdo atual
                 photoUploadContainer.innerHTML = '';
                 
@@ -275,6 +315,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 removeBtn.onclick = function(evt) {
                     evt.stopPropagation(); // Impedir clique no container
                     resetPhotoUpload(); // Restaurar estado inicial
+                    selectedProfilePhoto = null; // Limpar a foto armazenada
                 };
                 
                 // Adicionar evento para a imagem (permitir trocar ao clicar na imagem)
@@ -304,78 +345,87 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+// Script para upload de documentos
+document.addEventListener("DOMContentLoaded", function() {
+    const uploadBtn = document.querySelector('.upload-btn');
+    const fileInput = document.getElementById('pdf-upload');
+    const filesContainer = document.getElementById('files-container');
+    
+    // Clicar no botão de upload ativa o input file
+    uploadBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+    
+    // Quando arquivos são selecionados
+    fileInput.addEventListener('change', function(event) {
+        const newFiles = Array.from(event.target.files);
+        
+        // Valida se são PDFs
+        for (const file of newFiles) {
+            if (file.type !== "application/pdf") {
+                alert("Por favor, selecione apenas arquivos PDF.");
+                return;
+            }
+            
+            // Converter o arquivo para Base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Adiciona o arquivo ao array se for válido, incluindo seu conteúdo Base64
+                selectedFiles.push({
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    data: e.target.result // Dados Base64
+                });
+                
+                // Atualiza a exibição dos arquivos
+                updateFilesDisplay();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Limpa o input para permitir selecionar os mesmos arquivos novamente se necessário
+        this.value = "";
+    });
+});
 
-  // Script para upload de documentos
-  const uploadBtn = document.querySelector('.upload-btn');
-  const fileInput = document.getElementById('pdf-upload');
-  const filesContainer = document.getElementById('files-container');
-  
-  // Array para armazenar os arquivos selecionados
-  let selectedFiles = [];
-  
-  // Clicar no botão de upload ativa o input file
-  uploadBtn.addEventListener('click', function() {
-      fileInput.click();
-  });
-  
-  // Quando arquivos são selecionados
-  fileInput.addEventListener('change', function(event) {
-      const newFiles = Array.from(event.target.files);
-      
-      // Valida se são PDFs
-      for (const file of newFiles) {
-          if (file.type !== "application/pdf") {
-              alert("Por favor, selecione apenas arquivos PDF.");
-              return;
-          }
-          // Adiciona o arquivo ao array se for válido
-          selectedFiles.push(file);
-      }
-      
-      // Limpa o input para permitir selecionar os mesmos arquivos novamente se necessário
-      this.value = "";
-      
-      // Atualiza a exibição dos arquivos
-      updateFilesDisplay();
-  });
-  
-  // Função para atualizar a exibição dos arquivos
-  function updateFilesDisplay() {
-      // Limpa o container
-      filesContainer.innerHTML = '';
-      
-      // Adiciona cada arquivo à lista
-      selectedFiles.forEach((file, index) => {
-          const fileItem = document.createElement('div');
-          fileItem.className = 'file-item';
-          
-          const fileName = document.createElement('span');
-          fileName.className = 'file-name';
-          fileName.textContent = file.name;
-          
-          const removeBtn = document.createElement('button');
-          removeBtn.className = 'remove-btn';
-          removeBtn.innerHTML = '&times;'; // × símbolo
-          removeBtn.setAttribute('data-index', index);
-          removeBtn.addEventListener('click', function() {
-              const fileIndex = parseInt(this.getAttribute('data-index'));
-              removeFile(fileIndex);
-          });
-          
-          fileItem.appendChild(fileName);
-          fileItem.appendChild(removeBtn);
-          filesContainer.appendChild(fileItem);
-      });
-  }
-  
-  // Função para remover um arquivo
-  function removeFile(index) {
-      // Remove o arquivo do array
-      selectedFiles.splice(index, 1);
-      // Atualiza a exibição
-      updateFilesDisplay();
-  }
+// Função para atualizar a exibição dos arquivos
+function updateFilesDisplay() {
+    const filesContainer = document.getElementById('files-container');
+    // Limpa o container
+    filesContainer.innerHTML = '';
+    
+    // Adiciona cada arquivo à lista
+    selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        const fileName = document.createElement('span');
+        fileName.className = 'file-name';
+        fileName.textContent = file.name;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '&times;'; // × símbolo
+        removeBtn.setAttribute('data-index', index);
+        removeBtn.addEventListener('click', function() {
+            const fileIndex = parseInt(this.getAttribute('data-index'));
+            removeFile(fileIndex);
+        });
+        
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(removeBtn);
+        filesContainer.appendChild(fileItem);
+    });
+}
 
+// Função para remover um arquivo
+function removeFile(index) {
+    // Remove o arquivo do array
+    selectedFiles.splice(index, 1);
+    // Atualiza a exibição
+    updateFilesDisplay();
+}
 
 
     

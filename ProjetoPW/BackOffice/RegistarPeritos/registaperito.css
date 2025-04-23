@@ -299,4 +299,27 @@ h1 {
     margin: 0;
 }
 
+.toast-notification {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+    min-width: 250px;
+    animation: fadeInOut 3s forwards;
+}
 
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
