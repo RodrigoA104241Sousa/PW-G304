@@ -759,3 +759,60 @@
     color: #777;
     font-style: italic;
     }
+
+/* Estilo para campos inválidos */
+.invalid {
+    border: 2px solid #ff4d4d !important;
+}
+
+/* Mensagens de erro */
+.error-message {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+/* Toast de confirmação */
+.success-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.success-toast.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+}
+
+.toast-icon {
+    background-color: white;
+    color: #4CAF50;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.toast-message {
+    font-size: 16px;
+    font-weight: 500;
+}
