@@ -128,7 +128,7 @@ header.navbar {
 /* Hero Section */
 .hero {
   height: 100vh;
-  background-image: url('pagina.jpg');
+  background-image: url('../imagens/imagemprincipal.png');
   background-size: cover;
   background-position: center;
   position: relative;
