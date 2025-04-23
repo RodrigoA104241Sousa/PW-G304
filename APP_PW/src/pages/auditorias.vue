@@ -102,11 +102,12 @@ function paginaAnterior() {
         :nomeAuditoria="ocorrencia.tipo_de_problema"
         textoBotao="Gerir Pedido"
         :id="ocorrencia.id"
+        :tipo="'auditoria'"
       />
     </div>
 
     <!-- Paginação -->
-    <div class="flex justify-between items-center p-6">
+    <div class="flex justify-between items-center px-6">
       <button
         @click="paginaAnterior"
         :disabled="paginaAtual === 1"

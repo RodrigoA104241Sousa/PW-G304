@@ -10,6 +10,7 @@ import auditoriasresolvidas from './pages/auditoriasresolvidas.vue'
 import upload from './components/upload.vue'
 import registarlocalizacao from './pages/registarlocalizacao.vue'
 import verauditoria from './pages/verauditoria.vue'
+import verauditoriaresolvida from './pages/verauditoriaresolvida.vue'
 
 const routes = [
   { path: '/', component: PaginaInicial }, 
@@ -23,6 +24,7 @@ const routes = [
   {path: '/upload', component: upload},// card para verificar se o upload foi feito
   {path: '/registarlocalizacao/:id', component: registarlocalizacao, props: true},//botao guardar localização
   {path: '/verauditoria/:id', component: verauditoria, props: true},//botao ver auditoria
+  {path: '/verauditoriaresolvida/:id', component: verauditoriaresolvida, props: true},//botao ver auditoria
 ]
 
 const router = createRouter({
