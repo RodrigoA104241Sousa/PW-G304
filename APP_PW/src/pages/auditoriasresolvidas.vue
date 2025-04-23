@@ -52,6 +52,7 @@ function paginaAnterior() {
         :nomeAuditoria="auditoria.tipo_problema || 'Auditoria Sem Título'"
         textoBotao="Gerir Auditoria"
         :id="auditoria.id"
+        :tipo="'resolvida'"
       />
     </div>
 
