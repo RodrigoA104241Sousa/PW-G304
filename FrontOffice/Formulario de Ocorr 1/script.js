@@ -1,35 +1,37 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector(".formulario");
-  
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // impedir envio automático
-  
-      const tipo = form.querySelector("select").value;
-      const email = form.querySelector("input[type='email']").value;
-      const morada = form.querySelector("input[type='text']").value;
-      const codPostal = form.querySelectorAll("input[type='text']")[1].value;
-      const descricao = form.querySelector("textarea").value;
-  
-      // Validação simples
-      if (
-        tipo === "Selecione" ||
-        !email.includes("@") ||
-        morada.trim() === "" ||
-        codPostal.trim() === "" ||
-        descricao.trim() === ""
-      ) {
-        alert("Por favor preencha todos os campos obrigatórios corretamente.");
-        return;
-      }
-  
-      // Sucesso
-      alert("Ocorrência registada com sucesso!");
-      form.reset();
-    });
-  
-    const uploadBtn = document.querySelector(".upload-btn");
-    uploadBtn.addEventListener("click", function () {
-      alert("Funcionalidade de upload de imagem ainda não implementada.");
-    });
-  });
-  
+// Preencher automaticamente o tipo vindo da página anterior
+const params = new URLSearchParams(window.location.search);
+const tipo = params.get("tipo");
+
+if (tipo) {
+  const select = document.getElementById("tipo-ocorrencia");
+  for (const option of select.options) {
+    if (option.value.toLowerCase() === tipo.toLowerCase()) {
+      option.selected = true;
+      break;
+    }
+  }
+}
+
+const form = document.querySelector('.formulario');
+const uploadInput = document.getElementById('upload');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const ocorrencia = {
+    tipo: document.getElementById('tipo-ocorrencia').value,
+    email: document.getElementById('email').value,
+    morada: document.getElementById('morada').value,
+    codigoPostal: document.getElementById('codigo-postal').value,
+    descricao: document.getElementById('descricao').value,
+    imagens: Array.from(uploadInput.files).map(file => file.name) // apenas nomes
+  };
+
+  // Guardar no localStorage
+  const ocorrenciasGuardadas = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+  ocorrenciasGuardadas.push(ocorrencia);
+  localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
+
+  alert("Ocorrência registada com sucesso!");
+  form.reset();
+});
