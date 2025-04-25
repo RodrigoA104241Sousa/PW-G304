@@ -20,7 +20,7 @@
   <!-- Conteúdo principal -->
   <div class="container">
     <header>
-      <button class="voltar">←</button>
+      <button class="voltar" onclick="history.back()">←</button>
       <h1>Minhas Ocorrências</h1>
       <div class="logo">
         <img src="logo.png" alt="Logo">
@@ -29,23 +29,23 @@
 
     <main class="painel-detalhes">
       <div class="painel-esquerda">
-        <button class="fechar">×</button>
+        <button class="fechar" onclick="history.back()">×</button>
         <h2>Detalhes da Ocorrência</h2>
-        <div class="subtitulo">Buraco na estrada</div>
+        <div class="subtitulo" id="tipo-ocorrencia"></div>
 
         <div class="info-bloco">
           <h3>Localização</h3>
-          <p><span class="icone">📍</span> Rua Dr. Augusto Ferreira , Guimarães <span class="cod-postal">4800-039</span></p>
+          <p><span class="icone">📍</span> <span id="morada"></span><span id="codigo-postal" class="cod-postal"></span></p>
         </div>
 
         <div class="info-bloco">
           <h3>Denunciante</h3>
-          <p><span class="icone">📧</span> Rodrigo Sousa <span class="email">(rodrigomsousa1922@gmail.com)</span></p>
+          <p><span class="icone">📧</span> <span id="email"></span></p>
         </div>
 
         <div class="info-bloco">
           <h3>Descrição</h3>
-          <p><span class="icone">📝</span> Perto da passadeira, existe um buraco de grandes dimensões que representa um perigo para os condutores e peões. O buraco está localizado na faixa de rodagem, e tem aproximadamente 50 metros de diâmetro e 15 profundidade. A sua presença tem causado dificuldades no trânsito, especialmente para veículos de duas rodas, que têm de desviar-se para a faixa oposta, colocando em risco a segurança de todos.</p>
+          <p><span class="icone">📝</span> <span id="descricao"></span></p>
         </div>
 
         <div class="status">Em Análise</div>
@@ -54,16 +54,7 @@
       <div class="painel-direita">
         <img class="mapa" src="mapa.png" alt="Mapa">
         <h4>Registos pelo denunciante</h4>
-        <div class="dupla-imagem">
-          <div class="imagem-item">
-            <img src="buraco 1.png" alt="buraco 1">
-            <p>Buraco 1</p>
-          </div>
-          <div class="imagem-item">
-            <img src="buraco 2.png" alt="buraco 2">
-            <p>Buraco 2</p>
-          </div>
-        </div>
+        <div class="dupla-imagem" id="galeria-imagens"></div>
       </div>
     </main>
 
@@ -77,5 +68,8 @@
       <button>→</button>
     </footer>
   </div>
+
+  <!-- Script para preencher os dados dinamicamente -->
+  <script src="script.js"></script>
 </body>
 </html>

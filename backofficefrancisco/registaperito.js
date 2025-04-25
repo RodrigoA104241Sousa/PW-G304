@@ -1,3 +1,7 @@
+// Declarações de variáveis para armazenar a foto e os documentos
+let selectedProfilePhoto = null;
+let selectedFiles = [];
+
 // Funções para controlar o dropdown de especialidades
 function toggleDropdown() {
     var dropdown = document.getElementById("optionsDropdown");
@@ -20,6 +24,30 @@ window.onclick = function(event) {
 function selectOption(option) {
     document.getElementById("especialidadeSearch").value = option;
     document.getElementById("optionsDropdown").style.display = "none"; // Fecha o dropdown
+}
+
+// Função para mostrar toast notification
+function showToast(message) {
+    // Remover qualquer toast existente
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Criar novo toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    
+    // Adicionar o toast ao corpo do documento
+    document.body.appendChild(toast);
+    
+    // Remover o toast após 3 segundos
+    setTimeout(() => {
+        toast.remove();
+        // Redirecionar após o toast desaparecer
+        window.location.href = 'peritos.html';
+    }, 3000);
 }
 
 // Script para validação e uploads
@@ -161,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (isValid) {
-            // Create new expert object
+            // Criar objeto com os dados do perito
             const newExpert = {
                 id: Date.now(), // Use timestamp as unique ID
                 name: nomeInput.value,
@@ -172,8 +200,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 phone: telefoneInput.value,
                 birthDate: dataNascimentoInput.value,
                 address: moradaInput.value,
-                postalCode: codigoPostalInput.value
+                postalCode: codigoPostalInput.value,
+                profilePhoto: selectedProfilePhoto, // Adiciona a foto de perfil
+                documents: [] // Array para armazenar os documentos
             };
+            
+            // Adicionar documentos uploaded ao novo perito
+            for (let i = 0; i < selectedFiles.length; i++) {
+                newExpert.documents.push({
+                    name: selectedFiles[i].name,
+                    data: selectedFiles[i].data // Base64 string do arquivo
+                });
+            }
 
             // Get existing experts from localStorage or initialize empty array
             const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
@@ -184,10 +222,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // Save updated array back to localStorage
             localStorage.setItem('expertsData', JSON.stringify(experts));
 
-            alert('Perito registado com sucesso!');
-            
-            // Redirect back to peritos page
-            window.location.href = 'peritos.html';
+            // Substituição do alert pelo toast
+            showToast('Perito registado com sucesso!');
+            // O redirecionamento agora está dentro da função showToast
         }
     });
 
@@ -197,60 +234,199 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-// Script para upload de foto
-document.addEventListener('DOMContentLoaded', function() {
-    const photoUpload = document.querySelector('.photo-upload');
-    const fileInput = document.querySelector('#file-input');
-
-    console.log('photoUpload:', photoUpload); // Debug
-    console.log('fileInput:', fileInput); // Debug
-
-    if (photoUpload && fileInput) {
-        photoUpload.addEventListener('click', function(event) {
-            console.log('Photo upload clicked'); // Debug
-            event.preventDefault();
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', function(event) {
-            console.log('File selected'); // Debug
-            const file = event.target.files[0];
-            if (file) {
-                console.log('File type:', file.type); // Debug
-                // Verificar se é uma imagem
-                if (!file.type.startsWith('image/')) {
-                    alert('Por favor, selecione apenas arquivos de imagem.');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log('File loaded'); // Debug
-                    const image = document.createElement('img');
-                    image.src = e.target.result;
-                    image.classList.add('loaded-image');
-                    
-                    // Limpar conteúdo anterior e adicionar nova imagem
-                    photoUpload.innerHTML = '';
-                    photoUpload.appendChild(image);
-                };
-                reader.readAsDataURL(file);
+//upload e remoção de foto 
+document.addEventListener("DOMContentLoaded", function() {
+    const photoUploadContainer = document.querySelector('.photo-upload');
+    
+    // Inicia o upload de foto 
+    initPhotoUpload();
+    
+    function initPhotoUpload() {
+        // Garantir que exista o evento de clique para a área de upload
+        photoUploadContainer.onclick = function(e) {
+            // Ignorar clique quando o clique for no botão de remover
+            if (e.target.classList.contains('remove-photo-btn')) {
+                return;
             }
-        });
-    } else {
-        console.error('Elements not found'); // Debug
+            
+            // Se já tem imagem carregada, não fazer nada ao clicar no container
+            // (exceto se clicar diretamente na imagem, que é tratado separadamente)
+            const hasLoadedImage = photoUploadContainer.querySelector('.loaded-image');
+            if (hasLoadedImage && e.target !== hasLoadedImage) {
+                return;
+            }
+            
+            // Abrir arquivos
+            const fileInput = document.querySelector('#file-input');
+            if (fileInput) {
+                fileInput.click();
+            }
+        };
+        
+        // Garantir que o input de arquivo tenha o evento change
+        const fileInput = document.querySelector('#file-input');
+        if (fileInput) {
+            // Remover evento antigo para evitar duplicação
+            fileInput.onchange = null;
+            
+            // Adicionar novo evento
+            fileInput.onchange = handleFileSelected;
+        }
+    }
+    
+    // Função para lidar com a seleção de arquivo de foto
+    function handleFileSelected(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Armazenar a foto para uso posterior
+                selectedProfilePhoto = e.target.result;
+                
+                // Limpar o conteúdo atual
+                photoUploadContainer.innerHTML = '';
+                
+                // Criar e adicionar a imagem
+                const image = document.createElement('img');
+                image.src = e.target.result;
+                image.classList.add('loaded-image');
+                photoUploadContainer.appendChild(image);
+                
+                // Adicionar o botão de remover
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.classList.add('remove-photo-btn');
+                removeBtn.textContent = '×';
+                removeBtn.title = 'Remover foto';
+                photoUploadContainer.appendChild(removeBtn);
+                
+                // Adicionar novamente o input file (oculto)
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.id = 'file-input';
+                newInput.accept = 'image/*';
+                newInput.style.display = 'none';
+                photoUploadContainer.appendChild(newInput);
+                
+                // Garantir que o novo input file tenha o evento change
+                newInput.onchange = handleFileSelected;
+                
+                // Adicionar evento para o botão de remoção
+                removeBtn.onclick = function(evt) {
+                    evt.stopPropagation(); // Impedir clique no container
+                    resetPhotoUpload(); // Restaurar estado inicial
+                    selectedProfilePhoto = null; // Limpar a foto armazenada
+                };
+                
+                // Adicionar evento para a imagem (permitir trocar ao clicar na imagem)
+                image.onclick = function(evt) {
+                    evt.stopPropagation();
+                    const currentInput = photoUploadContainer.querySelector('#file-input');
+                    if (currentInput) {
+                        currentInput.click();
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    // Função para resetar o upload de foto para o estado inicial
+    function resetPhotoUpload() {
+        // Restaurar o HTML original do elemento
+        photoUploadContainer.innerHTML = `
+            <img src="camera.png" alt="Ícone de camera">
+            <div class="photo-text">Insira Aqui a Fotografia</div>
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
+        `;
+        
+        // Reinicializar os eventos
+        initPhotoUpload();
     }
 });
 
 // Script para upload de documentos
-document.getElementById('pdf-upload').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        if (file.type !== "application/pdf") {
-            alert("Por favor, selecione um arquivo PDF.");
-            this.value = "";
-        } else {
-            document.getElementById('file-name').textContent = "Arquivo selecionado: " + file.name;
+document.addEventListener("DOMContentLoaded", function() {
+    const uploadBtn = document.querySelector('.upload-btn');
+    const fileInput = document.getElementById('pdf-upload');
+    const filesContainer = document.getElementById('files-container');
+    
+    // Clicar no botão de upload ativa o input file
+    uploadBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+    
+    // Quando arquivos são selecionados
+    fileInput.addEventListener('change', function(event) {
+        const newFiles = Array.from(event.target.files);
+        
+        // Valida se são PDFs
+        for (const file of newFiles) {
+            if (file.type !== "application/pdf") {
+                alert("Por favor, selecione apenas arquivos PDF.");
+                return;
+            }
+            
+            // Converter o arquivo para Base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Adiciona o arquivo ao array se for válido, incluindo seu conteúdo Base64
+                selectedFiles.push({
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    data: e.target.result // Dados Base64
+                });
+                
+                // Atualiza a exibição dos arquivos
+                updateFilesDisplay();
+            };
+            reader.readAsDataURL(file);
         }
-    }
+        
+        // Limpa o input para permitir selecionar os mesmos arquivos novamente se necessário
+        this.value = "";
+    });
 });
+
+// Função para atualizar a exibição dos arquivos
+function updateFilesDisplay() {
+    const filesContainer = document.getElementById('files-container');
+    // Limpa o container
+    filesContainer.innerHTML = '';
+    
+    // Adiciona cada arquivo à lista
+    selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        const fileName = document.createElement('span');
+        fileName.className = 'file-name';
+        fileName.textContent = file.name;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '&times;'; // × símbolo
+        removeBtn.setAttribute('data-index', index);
+        removeBtn.addEventListener('click', function() {
+            const fileIndex = parseInt(this.getAttribute('data-index'));
+            removeFile(fileIndex);
+        });
+        
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(removeBtn);
+        filesContainer.appendChild(fileItem);
+    });
+}
+
+// Função para remover um arquivo
+function removeFile(index) {
+    // Remove o arquivo do array
+    selectedFiles.splice(index, 1);
+    // Atualiza a exibição
+    updateFilesDisplay();
+}
+
+
+    
+

@@ -58,8 +58,41 @@
                 <div class="form-group">
                     <label class="form-label">Data de nascimento</label>
                     <div class="form-control-icon">
-                        <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+                        <input type="text" class="form-control" placeholder="DD/MM/YYYY" id="dateInput">
                         <img src="calendario.png" alt="Ícone de data">
+                    </div>
+                    <div class="calendar-container" id="calendar">
+                        <div class="calendar-header">
+                            <div class="calendar-title">
+                                <div class="calendar-nav">
+                                    <button type="button" class="calendar-nav-btn" id="prevMonth">&lt;</button>
+                                    <span class="calendar-month-label" id="monthYearLabel">Abril 2025</span>
+                                    <button type="button" class="calendar-nav-btn" id="nextMonth">&gt;</button>
+                                </div>
+                            </div>
+                            <span class="calendar-close" id="calendarClose">&times;</span>
+                        </div>
+                        <div class="calendar-weekdays" id="calendarWeekdays">
+                            <div class="calendar-weekday">Dom</div>
+                            <div class="calendar-weekday">Seg</div>
+                            <div class="calendar-weekday">Ter</div>
+                            <div class="calendar-weekday">Qua</div>
+                            <div class="calendar-weekday">Qui</div>
+                            <div class="calendar-weekday">Sex</div>
+                            <div class="calendar-weekday">Sáb</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays">
+                            <!-- Dias serão gerados via JavaScript -->
+                        </div>
+                        <div class="calendar-footer">
+                            <button type="button" class="calendar-today-btn" id="todayBtn">Hoje</button>
+                            <div class="year-selector">
+                                <button type="button" class="calendar-nav-btn" id="prevYear">&lt;</button>
+                                <input type="number" id="yearInput" class="year-input" min="2000" max="2100" value="2025">
+                                <button type="button" class="calendar-nav-btn" id="nextYear">&gt;</button>
+                            </div>
+                            <button type="button" class="calendar-apply-btn" id="calendarApply">Aplicar</button>
+                        </div>
                     </div>
                 </div>   
             </div>

@@ -127,7 +127,7 @@ header.navbar {
 /* ------------------------- */
 /* Hero Section */
 .hero {
-  height: 100vh;
+  min-height: calc(100vh - 80px);
   background-image: url('../imagens/imagemprincipal.png');
   background-size: cover;
   background-position: center;
@@ -153,6 +153,7 @@ header.navbar {
   z-index: 2;
   color: white;
   max-width: 600px;
+  padding-top: 100px;
 }
 
 .hero-content h1 {
@@ -196,7 +197,7 @@ header.navbar {
   cursor: pointer;
   transition: 0.3s;
   position: absolute;
-  bottom: 70px;
+  bottom: 50px;
   right: 90px;
   z-index: 2;
 }
@@ -204,6 +205,93 @@ header.navbar {
 .saber-mais:hover {
   background-color: #0000a0;
 }
+
+.sidebar {
+  position: fixed;
+  top: 80px;
+  left: -260px;
+  width: 260px;
+  height: calc(100vh - 80px);
+  background-color: #f2f4f8;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  transition: left 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-title {
+  color: #000052;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  color: #000052;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sidebar-list .icon {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.sidebar-list .badge {
+  background-color: #000052;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: auto;
+}
+
+.btn-logout {
+  width: 100%;
+  background-color: #000052;
+  color: white;
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout .icon {
+  margin-right: 0.6rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  color: #000052;
+  text-decoration: none;
+  width: 100%;
+}
+
+
 
 /* ------------------------- */
 /* Áreas de Atuação */

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulário de Ocorrência</title>
+  <title>EyesEveryWhere</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="formulario-container">
     <header>
-      <button class="voltar">←</button>
+      <button class="voltar" onclick="history.back()">←</button>
       <h1>Formulário de Ocorrência</h1>
       <div class="logo">
-        <img src="logo.png" alt="Logo">
+        <img src="../imagens/logo.png" alt="Logo">
       </div>
     </header>
 
@@ -21,46 +21,50 @@
       <form class="formulario">
         <label>Tipo de Ocorrência</label>
         <div class="input-wrapper">
-          <select>
-            <option>Selecione</option>
-            <option>Buraco na estrada</option>
-            <option>Passeio danificado</option>
-            <option>Falta de sinalização</option>
-            <option>Iluminação pública</option>
+          <select id="tipo-ocorrencia">
+            <option value="Buraco na estrada">Buraco na estrada</option>
+            <option value="Passeio danificado">Passeio danificado</option>
+            <option value="Falta de sinalização">Falta de sinalização</option>
+            <option value="Iluminação pública">Iluminação pública</option>
           </select>
         </div>
-
+      
         <label>Email</label>
         <div class="input-wrapper icon-right">
-          <input type="email" placeholder="exemplo@gmail.com">
+          <input id="email" type="email" placeholder="exemplo@gmail.com">
           <span>📧</span>
         </div>
-
+      
         <div class="linha">
           <div class="col">
             <label>Morada</label>
             <div class="input-wrapper icon-right">
-              <input type="text" placeholder="Insira morada">
+              <input id="morada" type="text" placeholder="Insira morada">
               <span>📍</span>
             </div>
           </div>
           <div class="col">
             <label>Código Postal</label>
             <div class="input-wrapper">
-              <input type="text" placeholder="xxxx-xxx">
+              <input id="codigo-postal" type="text" placeholder="xxxx-xxx">
             </div>
           </div>
         </div>
-
+      
         <label>Descrição</label>
         <div class="input-wrapper icon-right">
-          <textarea placeholder="Escreva algo...."></textarea>
+          <textarea id="descricao" placeholder="Escreva algo...."></textarea>
           <span>📝</span>
         </div>
-
-        <button type="button" class="upload-btn">upload de imagens</button>
+      
+        <label>Imagens</label>
+        <div class="input-wrapper">
+          <input id="upload" type="file" accept="image/*" multiple>
+        </div>
+      
         <button type="submit" class="registar-btn">Registar Ocorrência</button>
       </form>
+      
 
       <div class="mapa">
         <img src="mapa.png" alt="Mapa">
@@ -68,4 +72,5 @@
     </div>
   </div>
 </body>
+<script src="script.js"></script>
 </html>
