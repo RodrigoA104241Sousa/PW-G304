@@ -36,7 +36,8 @@ function getHashParams() {
 // Função para verificar se é um admin
 function isAdmin(email) {
   const adminEmails = [
-    'fmachado999888@gmail.com'
+    'fmachado999888@gmail.com',
+    'rodrigoamsousa1922@gmail.com'
   ];
   return adminEmails.includes(email);
 }
@@ -72,7 +73,7 @@ window.addEventListener('load', async function() {
         window.location.href = 'peritos.html';
       } else {
         // Redirecionar para página de usuário normal
-        window.location.href = 'user.html';
+        window.location.href = '../FrontOffice/Auditorias/index.html';
       }
     }
   }
