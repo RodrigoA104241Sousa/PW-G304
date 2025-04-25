@@ -164,19 +164,43 @@ h1 {
 
 
 /* Upload de foto */
+.photo-upload-container {
+    margin-bottom: 20px;
+}
+
 .photo-upload {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #ccc;
+    border-radius: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 150px;
-    height: 165px;
-    margin: 0 auto 20px;
-    margin-left: 10%;
-    margin-top: 30px;
     cursor: pointer;
-    background-color: rgba(217, 217, 217, 0.25);
+    overflow: hidden;
+    position: relative;
 }
+
+.photo-upload i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.photo-upload span {
+    font-size: 14px;
+    text-align: center;
+}
+
+.photo-upload .loaded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .photo-upload:hover {
     background-color: #e0e0e0;
 }

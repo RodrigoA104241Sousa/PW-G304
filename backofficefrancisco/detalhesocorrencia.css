@@ -56,7 +56,6 @@ body {
     cursor: pointer;
     font-size: 25px;
 }
-
 .back-button:hover {
     transform: translateY(-5px);
 }
@@ -106,19 +105,22 @@ body {
 }
 
 .tag {
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1.5rem;    /* Aumentado o padding */
     border-radius: 9999px;
-    font-size: 0.875rem;
+    font-size: 1.1rem;         /* Aumentado o tamanho da fonte */
+    font-weight: 500;          /* Adicionado peso da fonte */
 }
 
 .tag-blue {
     background: var(--primary-color);
     color: white;
+    box-shadow: 0 2px 4px rgba(3, 4, 94, 0.2);  /* Adicionado sombra sutil */
 }
 
 .tag-green {
     background: var(--success-color);
     color: white;
+    box-shadow: 0 2px 4px rgba(12, 206, 107, 0.2);  /* Adicionado sombra sutil */
 }
 
 .description-box {
@@ -284,9 +286,7 @@ body {
 }
 
 .button-blue {
-    background: var(--info-color);
-    width: 100%;
-    margin-top: 1rem;
+    background:  #03045E;
 }
 
 @media (min-width: 768px) {
@@ -298,5 +298,3 @@ body {
     }
 }
 
-/* Rest of your CSS styles... */
-/* Copy all the remaining styles from your original file */

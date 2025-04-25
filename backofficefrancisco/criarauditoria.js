@@ -1,4 +1,4 @@
-        // Exibir/ocultar a lista de materiais ao clicar no ícone
+// Exibir/ocultar a lista de materiais ao clicar no ícone
         const materialsSearchInput = document.getElementById('materialsSearchInput');
         const materialsList = document.getElementById('materialsList');
         const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
@@ -773,11 +773,22 @@ function saveAuditToLocalStorage() {
     
     // Salvar no localStorage
     localStorage.setItem('auditorias', JSON.stringify(auditorias));
+
+    // Atualizar o status da ocorrência para "Aceite"
+    const occurrenceId = localStorage.getItem('occurrenceForAudit');
+    if (occurrenceId) {
+        const occurrences = JSON.parse(localStorage.getItem('occurrences')) || [];
+        const occurrenceIndex = occurrences.findIndex(o => o.id === occurrenceId);
+        
+        if (occurrenceIndex !== -1) {
+            occurrences[occurrenceIndex].status = 'Aceite';
+            localStorage.setItem('occurrences', JSON.stringify(occurrences));
+        }
+    }
 }
 
-// Função para mostrar o toast de sucesso
+// Atualizar a função showSuccessToast
 function showSuccessToast(message) {
-    // Criar elemento do toast
     const toast = document.createElement('div');
     toast.className = 'success-toast';
     toast.innerHTML = `
@@ -787,19 +798,19 @@ function showSuccessToast(message) {
         </div>
     `;
     
-    // Adicionar ao body
     document.body.appendChild(toast);
     
-    // Aplicar animação de entrada
     setTimeout(() => {
         toast.classList.add('show');
     }, 10);
     
-    // Remover toast após alguns segundos
+    // Remover toast e redirecionar após 3 segundos
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => {
             document.body.removeChild(toast);
+            // Redirecionar para ocorrencia.html
+            window.location.href = 'ocorrencia.html';
         }, 300);
     }, 3000);
 }
