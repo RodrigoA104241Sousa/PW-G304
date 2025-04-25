@@ -56,7 +56,6 @@ body {
     cursor: pointer;
     font-size: 25px;
 }
-
 .back-button:hover {
     transform: translateY(-5px);
 }
