@@ -199,37 +199,58 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Script para upload de foto
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.photo-upload').addEventListener('click', function(event) {
-        event.preventDefault(); // Previne qualquer comportamento padrão
-        document.querySelector('#file-input').click();
-    });
+    const photoUpload = document.querySelector('.photo-upload');
+    const fileInput = document.querySelector('#file-input');
 
-    document.querySelector('#file-input').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const image = document.createElement('img');
-                image.src = e.target.result;
-                image.classList.add('loaded-image');
-                const photoUpload = document.querySelector('.photo-upload');
-                photoUpload.innerHTML = '';
-                photoUpload.appendChild(image);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    console.log('photoUpload:', photoUpload); // Debug
+    console.log('fileInput:', fileInput); // Debug
 
-    // Script para upload de documentos
-    document.getElementById('pdf-upload').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            if (file.type !== "application/pdf") {
-                alert("Por favor, selecione um arquivo PDF.");
-                this.value = "";
-            } else {
-                document.getElementById('file-name').textContent = "Arquivo selecionado: " + file.name;
+    if (photoUpload && fileInput) {
+        photoUpload.addEventListener('click', function(event) {
+            console.log('Photo upload clicked'); // Debug
+            event.preventDefault();
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function(event) {
+            console.log('File selected'); // Debug
+            const file = event.target.files[0];
+            if (file) {
+                console.log('File type:', file.type); // Debug
+                // Verificar se é uma imagem
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor, selecione apenas arquivos de imagem.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('File loaded'); // Debug
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.classList.add('loaded-image');
+                    
+                    // Limpar conteúdo anterior e adicionar nova imagem
+                    photoUpload.innerHTML = '';
+                    photoUpload.appendChild(image);
+                };
+                reader.readAsDataURL(file);
             }
+        });
+    } else {
+        console.error('Elements not found'); // Debug
+    }
+});
+
+// Script para upload de documentos
+document.getElementById('pdf-upload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (file.type !== "application/pdf") {
+            alert("Por favor, selecione um arquivo PDF.");
+            this.value = "";
+        } else {
+            document.getElementById('file-name').textContent = "Arquivo selecionado: " + file.name;
         }
-    });
+    }
 });
