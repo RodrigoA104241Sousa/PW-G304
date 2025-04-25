@@ -1,236 +1,130 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #ffffff; /* fundo branco puro para combinar com o logo */
-    padding: 20px;
-  }
-  
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-  
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-  
-  .voltar {
-    background-color: #001f5c;
-    color: white;
-    border: none;
-    font-size: 24px;
-    padding: 10px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .logo img {
-    width: 70px;
-    height: 70px;
-  }
-  
-  h1 {
-    font-size: 2.2em;
-    color: #001f5c;
-    text-align: center;
-    flex: 1;
-  }
-  
-  /* Fundo com cards */
-.ocorrencias-fundo {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-  justify-content: center;
-  align-content: center;
-  gap: 25px;
-  padding: 40px 80px 80px 225px; /* aumentamos os lados */
-  z-index: 0;
-  opacity: 0.25;
-  filter: none;
-  transform: translateY(0px); /* sobe um pouco para aparecer acima também */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-  
-  .card-fundo {
-    width: 250px;
-    height: 150px;
-    border-radius: 15px;
-    object-fit: cover;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  
-  /* Painel principal */
-  .painel-detalhes {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    display: flex;
-    padding: 25px;
-    gap: 25px;
-    z-index: 2;
-    max-width: 90%;
-    margin: 0 auto;
-  }
-  
-  /* Parte esquerda */
-  .painel-esquerda {
-    flex: 1;
-    position: relative;
-  }
-  
-  .fechar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #001f5c;
-  }
-  
-  .painel-esquerda h2 {
-    color: #001f5c;
-    margin-left: 30px;
-    margin-bottom: 15px;
-  }
-  
-  .subtitulo {
-    background-color: #e6f2ff;
-    color: #ff8c00;
-    padding: 12px;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: 600;
-    margin: 10px 30px 25px 30px;
-  }
-  
-  .info-bloco {
-    margin: 10px 30px;
-  }
-  
-  .info-bloco h3 {
-    font-size: 1em;
-    color: #555;
-    margin-bottom: 6px;
-  }
-  
-  .info-bloco p {
-    font-size: 0.95em;
-    line-height: 1.5;
-  }
-  
-  .icone {
-    margin-right: 8px;
-  }
-  
-  .cod-postal,
-  .email {
-    color: #888;
-    font-size: 0.9em;
-  }
-  
-  .status {
-    background-color: #ffc107;
-    color: #fff;
-    font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 30px;
-    display: inline-block;
-    margin: 20px auto 0 auto;
-    text-align: center;
-    display: block;
-    width: fit-content;
-  }
-  
-  /* Parte direita */
-  .painel-direita {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: space-between;
-  }
-  
-  .painel-direita .mapa {
-    width: 100%;
-    height: 250px;
-    border-radius: 12px;
-    object-fit: cover;
-  }
-  
-  .painel-direita h4 {
-    font-size: 1em;
-    font-weight: 600;
-    color: #4b4b4b;
-    margin-top: 10px;
-    margin-bottom: -10px;
-  }
-  
-  .painel-direita .dupla-imagem {
-    display: flex;
-    gap: 15px;
-    justify-content: space-between;
-  }
-  
-  .dupla-imagem .imagem-item {
-    flex: 1;
-    display: block;
-  }
-  
-  .imagem-item img {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-  
-  .imagem-item p {
-    display: none;
-  }
-  
-  /* Paginação */
-  .paginacao {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 40px;
-  }
-  
-  .paginacao button {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #001f5c;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .paginacao .active {
-    background-color: #001f5c;
-    color: white;
-  }
-  
-  .paginacao button:hover:not(:disabled) {
-    background-color: #e6f2ff;
-  }
-  
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff; /* fundo branco puro para combinar com o logo */
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.voltar {
+  background-color: #001f5c;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2.2em;
+  color: #001f5c;
+  text-align: center;
+  flex: 1;
+}
+
+.logo img {
+  width: 70px;
+  height: 70px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background-color: #cce6ff;
+  padding: 15px;
+  border-radius: 20px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.card.vazio {
+  visibility: hidden;
+}
+
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.info h2 {
+  font-size: 1em;
+  color: #001f5c;
+}
+
+.info button {
+  background-color: #001f5c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.paginacao button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #001f5c;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.paginacao .active {
+  background-color: #001f5c;
+  color: white;
+}
+
+.paginacao button:hover {
+  background-color: #cce6ff;
+}

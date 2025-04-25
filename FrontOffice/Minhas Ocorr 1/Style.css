@@ -72,6 +72,11 @@
     object-fit: cover;
     border-radius: 15px;
   }
+
+  .card.vazio {
+    visibility: hidden;
+  }
+  
   
   .info {
     display: flex;

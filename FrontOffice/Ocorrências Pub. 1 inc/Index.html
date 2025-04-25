@@ -2,80 +2,21 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Detalhes da Ocorrência</title>
-  <link rel="stylesheet" href="style.css">
+  <title>EyesEveryWhere</title>
+  <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-
-  <!-- Fundo com cards de ocorrência -->
-  <div class="ocorrencias-fundo">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-    <img src="Passeio.png" class="card-fundo" alt="Ocorrência">
-  </div>
-
-  <!-- Conteúdo principal -->
   <div class="container">
     <header>
-      <button class="voltar">←</button>
-      <h1>Minhas Ocorrências</h1>
+      <button class="voltar" onclick="history.back()">←</button>
+      <h1>Ocorrências</h1>
       <div class="logo">
-        <img src="logo.png" alt="Logo">
+        <img src="../imagens/logo.png" alt="Logo">
       </div>
     </header>
 
-    <main class="painel-detalhes">
-      <div class="painel-esquerda">
-        <button class="fechar">×</button>
-        <h2>Detalhes da Ocorrência</h2>
-        <div class="subtitulo">Buraco na estrada</div>
+    <section class="grid" id="lista-ocorrencias"></section>
 
-        <div class="info-bloco">
-          <h3>Localização</h3>
-          <p><span class="icone">📍</span> Rua Dr. Augusto Ferreira , Guimarães <span class="cod-postal">4800-039</span></p>
-        </div>
-
-        <div class="info-bloco">
-          <h3>Denunciante</h3>
-          <p><span class="icone">📧</span> Rodrigo Sousa <span class="email">(rodrigomsousa1922@gmail.com)</span></p>
-        </div>
-
-        <div class="info-bloco">
-          <h3>Descrição</h3>
-          <p><span class="icone">📝</span> Perto da passadeira, existe um buraco de grandes dimensões que representa um perigo para os condutores e peões. O buraco está localizado na faixa de rodagem, e tem aproximadamente 50 metros de diâmetro e 15 profundidade. A sua presença tem causado dificuldades no trânsito, especialmente para veículos de duas rodas, que têm de desviar-se para a faixa oposta, colocando em risco a segurança de todos.</p>
-        </div>
-
-        <div class="status">Em Análise</div>
-      </div>
-
-      <div class="painel-direita">
-        <img class="mapa" src="mapa.png" alt="Mapa">
-        <h4>Registos pelo denunciante</h4>
-        <div class="dupla-imagem">
-          <div class="imagem-item">
-            <img src="buraco 1.png" alt="buraco 1">
-            <p>Buraco 1</p>
-          </div>
-          <div class="imagem-item">
-            <img src="buraco 2.png" alt="buraco 2">
-            <p>Buraco 2</p>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <footer class="paginacao">
-      <button disabled>←</button>
-      <button class="active">1</button>
-      <button>2</button>
-      <button>...</button>
-      <button>9</button>
-      <button>10</button>
-      <button>→</button>
-    </footer>
+    <footer class="paginacao" id="paginacao"></footer>
+    <script src="script.js"></script>
   </div>
-</body>
-</html>
