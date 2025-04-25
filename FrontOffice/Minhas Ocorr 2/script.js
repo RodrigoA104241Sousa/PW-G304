@@ -13,6 +13,7 @@ if (ocorrencia) {
   document.getElementById("codigo-postal").textContent = ocorrencia.codigoPostal;
   document.getElementById("email").textContent = ocorrencia.email;
   document.getElementById("descricao").textContent = ocorrencia.descricao;
+  document.getElementById("estado").textContent = ocorrencia.estado;
 
   // Preencher imagens
   const galeria = document.getElementById("galeria-imagens");

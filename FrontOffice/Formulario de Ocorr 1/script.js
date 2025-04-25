@@ -51,7 +51,8 @@ form.addEventListener('submit', async (e) => {
     morada: document.getElementById('morada').value,
     codigoPostal: document.getElementById('codigo-postal').value,
     descricao: document.getElementById('descricao').value,
-    imagens: imagensBase64
+    imagens: imagensBase64,
+    estado: "Em espera"
   };
 
   // Adicionar e guardar no localStorage
