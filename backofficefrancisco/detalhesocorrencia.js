@@ -53,8 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle approve/reject buttons
     document.querySelector('.button-green').addEventListener('click', () => {
-        occurrence.status = 'Aceite';
-        updateOccurrenceStatus(occurrence);
+        // Store the current occurrence ID for use in criarauditoria.html
+        localStorage.setItem('occurrenceForAudit', occurrenceId);
+        // Redirect to criarauditoria.html
+        window.location.href = 'criarauditoria.html';
     });
 
     document.querySelector('.button-red').addEventListener('click', () => {
