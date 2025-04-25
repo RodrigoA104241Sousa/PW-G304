@@ -1,131 +1,16 @@
 // Initialize occurrences data with a complete example
-const defaultOccurrences = [
-    {
-        id: 1,
-        userName: "João Silva",
-        userEmail: "joao.silva@email.com",
-        date: "2024-04-17",
-        type: "Buraco na Estrada",
-        status: "Em Espera",
-        description: "Buraco grande na Rua Principal",
-        location: "Rua da Universidade, Braga",
-        images: ["icon.png", "buraco2.jpg"],
-        priority: "Alta",
-        reportTime: "14:30",
-        coordinates: {
-            latitude: 41.5518,
-            longitude: -8.4229
-        },
-        contactPhone: "912345678",
-        lastUpdate: "2024-04-17T14:30:00",
-        comments: [
-            {
-                user: "admin",
-                text: "Ocorrência registrada com sucesso",
-                date: "2024-04-17T14:35:00"
-            }
-        ]
-    },
-    {
-        id: 2,
-        userName: "Carlos Mendes",
-        userEmail: "carlos.mendes@email.com",
-        date: "2024-04-17",
-        type: "Passeio Danificado",
-        status: "Aceite",
-        description: "Buraco grande na Rua Principal",
-        location: "Rua da Universidade, Braga",
-        images: ["buraco1.jpg", "buraco2.jpg"],
-        priority: "Alta",
-        reportTime: "14:30",
-        coordinates: {
-            latitude: 41.5518,
-            longitude: -8.4229
-        },
-        contactPhone: "912345678",
-        lastUpdate: "2024-04-17T14:30:00",
-        comments: [
-            {
-                user: "admin",
-                text: "Ocorrência registrada com sucesso",
-                date: "2024-04-17T14:35:00"
-            }
-        ]
-    },
-    {
-        id: 3,
-        userName: "Francisco Machado",
-        userEmail: "francisco.ccc@email.com",
-        date: "2024-04-17",
-        type: "Falta de Sinalização",
-        status: "Não Aceite",
-        description: "Buraco grande na Rua Principal",
-        location: "Rua da Universidade, Braga",
-        images: ["buraco1.jpg", "buraco2.jpg"],
-        priority: "Alta",
-        reportTime: "14:30",
-        coordinates: {
-            latitude: 41.5518,
-            longitude: -8.4229
-        },
-        contactPhone: "912345678",
-        lastUpdate: "2024-04-17T14:30:00",
-        comments: [
-            {
-                user: "admin",
-                text: "Ocorrência registrada com sucesso",
-                date: "2024-04-17T14:35:00"
-            }
-        ]
-    },
-    {
-        id: 4,
-        userName: "Rui Freitas",
-        userEmail: "ruifreitas@email.com",
-        date: "2024-04-17",
-        type: "Iluminação Pública",
-        status: "Aceite",
-        description: "Buraco grande na Rua Principal",
-        location: "Rua da Universidade, Braga",
-        images: ["buraco1.jpg", "buraco2.jpg"],
-        priority: "Alta",
-        reportTime: "14:30",
-        coordinates: {
-            latitude: 41.5518,
-            longitude: -8.4229
-        },
-        contactPhone: "912345678",
-        lastUpdate: "2024-04-17T14:30:00",
-        comments: [
-            {
-                user: "admin",
-                text: "Ocorrência registrada com sucesso",
-                date: "2024-04-17T14:35:00"
-            }
-        ]
-    }
-];
 
-// Check if data exists in localStorage, if not, use default data
-if (!localStorage.getItem('occurrencesData')) {
-    localStorage.setItem('occurrencesData', JSON.stringify(defaultOccurrences));
-}
 
 // Initialize occurrences data with localStorage or default
-let occurrencesData = JSON.parse(localStorage.getItem('occurrencesData')) || defaultOccurrences;
+let occurrencesData = JSON.parse(localStorage.getItem('ocorrencias')) || defaultOccurrences;
 
-// Function to save occurrences data to localStorage
-function saveOccurrencesData() {
-    localStorage.setItem('occurrencesData', JSON.stringify(occurrencesData));
-}
-
-function getStatusClass(status) {
-    switch (status) {
+function getStatusClass(estado) {
+    switch (estado) {
         case "Aceite":
             return "status-available";
         case "Não Aceite":
             return "status-unavailable";
-        case "Em Espera":
+        case "Em espera":
             return "status-audit";
         default:
             return "";
@@ -150,7 +35,7 @@ let currentTypeFilter = null;
 
 // Function to update pagination
 function updatePagination() {
-    const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
     const totalOccurrences = occurrences.length;
     const totalPages = Math.ceil(totalOccurrences / itemsPerPage);
     
@@ -242,62 +127,29 @@ function populateTable() {
         console.error("Table body not found!");
         return;
     }
-    
-    // Get fresh data from localStorage
-    let occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+
+    // Obter os dados das ocorrências do localStorage
+    let occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
     console.log('Number of occurrences:', occurrences.length);
-    
-    tbody.innerHTML = ""; // Clear the table
-    
-    // Apply filters if they exist
-    if (currentFilter) {
-        occurrences = occurrences.filter(occ => occ.status === currentFilter);
-    }
-    if (currentSpecialtyFilter) {
-        occurrences = occurrences.filter(occ => occ.type === currentSpecialtyFilter);
-    }
-    
-    // Aplica o filtro de busca
-    if (searchTerm) {
-        occurrences = occurrences.filter(occ => 
-            occ.userName.toLowerCase().includes(searchTerm) ||
-            occ.userEmail.toLowerCase().includes(searchTerm)
-        );
-    }
-    
-    // Aplica o filtro de data
-    if (dateFilter) {
-        occurrences = occurrences.filter(occ => {
-            const occDate = new Date(occ.date);
-            const filterDate = new Date(dateFilter);
-            return occDate >= filterDate;
-        });
-    }
-    
-    // Apply type filter
-    if (currentTypeFilter) {
-        occurrences = occurrences.filter(occ => occ.type === currentTypeFilter);
-    }
-    
-    // Calculate slice indexes for current page
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const pageOccurrences = occurrences.slice(start, end);
-    
-    // Create table rows
-    pageOccurrences.forEach(occ => {
+
+    tbody.innerHTML = ""; // Limpar a tabela antes de preencher
+
+    // Forçar o estado de todas as ocorrências para "Em Espera"
+   
+    // Preencher a tabela com os dados das ocorrências
+    occurrences.forEach(occ => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="checkbox" class="occurrence-checkbox" data-id="${occ.id}"></td>
             <td>
                 <div class="user-info">
-                    <div class="user-name">${occ.userName}</div>
-                    <div class="user-email">${occ.userEmail}</div>
+                    
+                    <div class="user-email">${occ.email || 'N/A'}</div>
                 </div>
             </td>
             <td>${new Date(occ.date).toLocaleDateString('pt-PT')}</td>
-            <td>${occ.type}</td>
-            <td><span class="status-badge ${getStatusClass(occ.status)}">${occ.status}</span></td>
+            <td>${occ.tipo || 'N/A'}</td>
+            <td><span class="status-badge ${getStatusClass(occ.estado)}">${occ.estado}</span></td>
             <td>
                 <button class="btn-icon details-btn" data-id="${occ.id}">
                     <i data-lucide="more-vertical"></i>
@@ -305,17 +157,16 @@ function populateTable() {
             </td>
         `;
         tbody.appendChild(row);
-        
-        // Add click handler for the details button
+
+        // Adicionar evento ao botão de detalhes
         const detailsBtn = row.querySelector('.details-btn');
         detailsBtn.addEventListener('click', () => {
-            // Store the selected occurrence ID in localStorage
             localStorage.setItem('selectedOccurrenceId', occ.id);
-            // Navigate to details page
             window.location.href = 'detalhesocorrencia.html';
         });
     });
 
+    // Atualizar ícones (se estiver usando Lucide ou similar)
     lucide.createIcons();
 }
 
@@ -334,7 +185,7 @@ function saveOccurrence(newOccurrence) {
         id: occurrencesData.length + 1,
         ...newOccurrence
     });
-    localStorage.setItem('occurrencesData', JSON.stringify(occurrencesData));
+    localStorage.setItem('ocorrencias', JSON.stringify(occurrencesData));
     populateTable();
     updatePagination();
 }
@@ -350,13 +201,13 @@ document.querySelector('.pagination-controls select').addEventListener('change',
 // First, simplify the initialization
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize localStorage if empty
-    if (!localStorage.getItem('occurrencesData')) {
+    if (!localStorage.getItem('ocorrencias')) {
         console.log('Initializing localStorage with default data');
-        localStorage.setItem('occurrencesData', JSON.stringify(defaultOccurrences));
+        localStorage.setItem('ocorrencias', JSON.stringify(defaultOccurrences));
     }
     
     // Log the current state
-    console.log('Current localStorage data:', localStorage.getItem('occurrencesData'));
+    console.log('Current localStorage data:', localStorage.getItem('ocorrencias'));
 
     // Initialize the page
     lucide.createIcons();
@@ -365,16 +216,59 @@ document.addEventListener("DOMContentLoaded", () => {
     updatePagination();
 });
 
+// Função para preencher os campos do formulário com base no ID da ocorrência
+function preencherFormularioComOcorrencia(id) {
+    // Obter as ocorrências do localStorage
+    const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+
+    // Encontrar a ocorrência com o ID correspondente
+    const ocorrencia = ocorrencias.find(occ => occ.id === id);
+
+    if (!ocorrencia) {
+        console.error(`Ocorrência com ID ${id} não encontrada.`);
+        return;
+    }
+
+    // Preencher os campos do formulário
+    document.getElementById('codigo-postal').value = ocorrencia.codigoPostal || '';
+    document.getElementById('descricao').value = ocorrencia.descricao || '';
+    document.getElementById('email').value = ocorrencia.email || '';
+    document.getElementById('morada').value = ocorrencia.morada || '';
+    document.getElementById('tipo-ocorrencia').value = ocorrencia.tipo || '';
+
+    // Exibir imagens, se existirem
+    const imagensContainer = document.getElementById('imagens-container');
+    imagensContainer.innerHTML = ''; // Limpar imagens existentes
+    if (ocorrencia.imagens && ocorrencia.imagens.length > 0) {
+        ocorrencia.imagens.forEach(imagemBase64 => {
+            const img = document.createElement('img');
+            img.src = imagemBase64;
+            img.alt = 'Imagem da ocorrência';
+            img.style.width = '100px';
+            img.style.marginRight = '10px';
+            imagensContainer.appendChild(img);
+        });
+    }
+}
+
+// Exemplo de uso: preencher o formulário com a ocorrência de ID armazenado no localStorage
+document.addEventListener('DOMContentLoaded', () => {
+    const selectedOccurrenceId = parseInt(localStorage.getItem('selectedOccurrenceId'), 10);
+    if (selectedOccurrenceId) {
+        preencherFormularioComOcorrencia(selectedOccurrenceId);
+    }
+});
+
 // Remove duplicate event listeners and use this simplified version
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize localStorage if empty
-    if (!localStorage.getItem('occurrencesData')) {
+    if (!localStorage.getItem('ocorrencias')) {
         console.log('Initializing localStorage with default data');
-        localStorage.setItem('occurrencesData', JSON.stringify(defaultOccurrences));
+        localStorage.setItem('ocorrencias', JSON.stringify(defaultOccurrences));
     }
     
     // Log the current state
-    console.log('Current localStorage data:', localStorage.getItem('occurrencesData'));
+    console.log('Current localStorage data:', localStorage.getItem('ocorrencias'));
 
     // Initialize the page
     lucide.createIcons();

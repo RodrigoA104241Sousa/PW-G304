@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Get occurrences from localStorage
-    const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
     const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
 
     if (!occurrence) {
@@ -16,29 +16,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Populate the page with occurrence details
-    document.querySelector('.tag-blue').textContent = occurrence.type;
-    document.querySelector('.tag-green').textContent = occurrence.status;
-    document.getElementById('occurrenceDescription').textContent = occurrence.description;
-    document.getElementById('reporterInfo').textContent = `${occurrence.userName} (${occurrence.userEmail})`;
-    document.getElementById('locationInfo').textContent = occurrence.location;
+    document.querySelector('.tag-blue').textContent = occurrence.tipo;
+    document.querySelector('.tag-green').textContent = occurrence.estado;
+    document.getElementById('occurrenceDescription').textContent = occurrence.descricao;
+    document.getElementById('reporterInfo').textContent = `${occurrence.userName || 'N/A'} (${occurrence.email || 'N/A'})`;
+    document.getElementById('locationInfo').textContent = occurrence.location || 'N/A';
     document.getElementById('coordinates').textContent = 
-        `${occurrence.coordinates.latitude}, ${occurrence.coordinates.longitude}`;
+        occurrence.coordinates ? `${occurrence.coordinates.latitude}, ${occurrence.coordinates.longitude}` : 'N/A';
 
     // Display images in the images grid
     const imagesGrid = document.getElementById('imagesGrid');
-    if (imagesGrid && occurrence.images && occurrence.images.length > 0) {
-        occurrence.images.forEach(imagePath => {
+    if (imagesGrid && occurrence.imagens && occurrence.imagens.length > 0) {
+        occurrence.imagens.forEach(imageBase64 => {
             const imgContainer = document.createElement('div');
             imgContainer.className = 'image-container';
             
             const img = document.createElement('img');
-            img.src = `imagens/${imagePath}`; // Adjust path according to your images folder
+            img.src = imageBase64; // Use Base64 data directly
             img.alt = 'Imagem da ocorrência';
             img.className = 'occurrence-image';
             
             // Add click handler to show image in full size
             img.addEventListener('click', () => {
-                showImageFullsize(imagePath);
+                showImageFullsize(imageBase64);
             });
             
             imgContainer.appendChild(img);
@@ -49,7 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize map
-    initMap(occurrence.coordinates.latitude, occurrence.coordinates.longitude);
+    if (occurrence.coordinates) {
+        initMap(occurrence.coordinates.latitude, occurrence.coordinates.longitude);
+    }
 
     // Handle approve/reject buttons
     document.querySelector('.button-green').addEventListener('click', () => {
@@ -60,16 +62,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelector('.button-red').addEventListener('click', () => {
-        occurrence.status = 'Não Aceite';
+        occurrence.estado = 'Não Aceite';
         updateOccurrenceStatus(occurrence);
     });
 });
+
+
+
+// Add this function for fullsize image viewing
+function showImageFullsize(imageBase64) {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="${imageBase64}" alt="Imagem em tamanho completo">
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.close-modal').onclick = () => {
+        modal.remove();
+    };
+    
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    };
+}
 
 // Make initMap available globally
 window.initMap = function() {
     try {
         const occurrenceId = localStorage.getItem('selectedOccurrenceId');
-        const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
+        const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
         const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
 
         if (!occurrence) {
@@ -131,13 +159,13 @@ function updateOccurrenceStatus(updatedOccurrence) {
 }
 
 // Add this function for fullsize image viewing
-function showImageFullsize(imagePath) {
+function showImageFullsize(imageBase64) {
     const modal = document.createElement('div');
     modal.className = 'image-modal';
     modal.innerHTML = `
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <img src="imagens/${imagePath}" alt="Imagem em tamanho completo">
+            <img src="${imageBase64}" alt="Imagem em tamanho completo" class="fullsize-image">
         </div>
     `;
     
