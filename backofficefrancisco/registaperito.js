@@ -335,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function resetPhotoUpload() {
         // Restaurar o HTML original do elemento
         photoUploadContainer.innerHTML = `
-            <img src="camera.png" alt="Ícone de camera">
+            <img src="imagens/camera.png" alt="Ícone de camera">
             <div class="photo-text">Insira Aqui a Fotografia</div>
             <input type="file" id="file-input" accept="image/*" style="display: none;">
         `;
@@ -427,6 +427,262 @@ function removeFile(index) {
     updateFilesDisplay();
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Selecionar os elementos corretos
+    const dateInput = document.querySelector('input[placeholder="DD/MM/YYYY"]');
+    const calendarIcon = document.querySelector('img[alt="Ícone de data"]');
+    const calendar = document.getElementById('calendar');
+    const calendarClose = document.getElementById('calendarClose');
+    const calendarApply = document.getElementById('calendarApply');
+    const prevMonth = document.getElementById('prevMonth');
+    const nextMonth = document.getElementById('nextMonth');
+    const prevYear = document.getElementById('prevYear');
+    const nextYear = document.getElementById('nextYear');
+    const monthYearLabel = document.getElementById('monthYearLabel');
+    const calendarDays = document.getElementById('calendarDays');
+    const todayBtn = document.getElementById('todayBtn');
+    const yearInput = document.getElementById('yearInput');
+
+    // Verificar se os elementos principais existem
+    if (!dateInput || !calendar) {
+        console.error("Elementos essenciais do calendário não encontrados");
+        return;
+    }
+
+    // Data atual e selecionada
+    let currentDate = new Date();
+    let selectedDate = null;
+
+    // Nomes dos meses em português
+    const monthNames = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 
+        'Maio', 'Junho', 'Julho', 'Agosto', 
+        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    // Função para formatar data no formato DD/MM/YYYY
+    function formatDate(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    // Função para atualizar o label do mês e ano
+    function updateMonthYearLabel() {
+        monthYearLabel.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        yearInput.value = currentDate.getFullYear();
+    }
+
+    // Função para gerar os dias do calendário
+    function generateCalendarDays() {
+        calendarDays.innerHTML = '';
+        
+        // Determinar o primeiro dia do mês
+        const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+        
+        // Determinar o dia da semana do primeiro dia (0 = Domingo, 1 = Segunda, etc.)
+        const firstDayWeekday = firstDayOfMonth.getDay();
+        
+        // Adicionar dias do mês anterior para preencher a primeira semana
+        const lastDayPrevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+        for (let i = firstDayWeekday - 1; i >= 0; i--) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.textContent = lastDayPrevMonth.getDate() - i;
+            calendarDays.appendChild(dayElement);
+        }
+        
+        // Adicionar dias do mês atual
+        const today = new Date();
+        for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            dayElement.textContent = day;
+            
+            // Marcar o dia atual
+            if (
+                currentDate.getFullYear() === today.getFullYear() &&
+                currentDate.getMonth() === today.getMonth() &&
+                day === today.getDate()
+            ) {
+                dayElement.classList.add('today');
+            }
+            
+            // Marcar o dia selecionado
+            if (
+                selectedDate &&
+                currentDate.getFullYear() === selectedDate.getFullYear() &&
+                currentDate.getMonth() === selectedDate.getMonth() &&
+                day === selectedDate.getDate()
+            ) {
+                dayElement.classList.add('selected');
+            }
+            
+            // Adicionar evento de clique para selecionar o dia
+            dayElement.addEventListener('click', function() {
+                // Remover a classe 'selected' de qualquer dia previamente selecionado
+                document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+                
+                // Adicionar a classe 'selected' ao dia clicado
+                this.classList.add('selected');
+                
+                // Atualizar a data selecionada
+                selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(this.textContent));
+            });
+            
+            calendarDays.appendChild(dayElement);
+        }
+        
+        // Adicionar dias do próximo mês para completar a grade
+        const totalDaysShown = calendarDays.children.length;
+        const daysToAdd = 42 - totalDaysShown; // 6 semanas * 7 dias = 42 células no total
+        
+        for (let i = 1; i <= daysToAdd; i++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day other-month';
+            dayElement.textContent = i;
+            calendarDays.appendChild(dayElement);
+        }
+    }
+
+    // Atualizar todo o calendário
+    function updateCalendar() {
+        updateMonthYearLabel();
+        generateCalendarDays();
+    }
+
+    // Mostrar o calendário
+    function showCalendar() {
+        const inputRect = dateInput.getBoundingClientRect();
+        calendar.style.top = (inputRect.bottom + 5) + 'px';
+        calendar.style.left = inputRect.left + 'px';
+        calendar.style.display = 'block';
+        
+        // Se já houver uma data no input, usá-la como data selecionada
+        if (dateInput.value) {
+            const parts = dateInput.value.split('/');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0]);
+                const month = parseInt(parts[1]) - 1; // Mês é zero-indexed
+                const year = parseInt(parts[2]);
+                
+                // Verificar se a data é válida
+                if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                    selectedDate = new Date(year, month, day);
+                    currentDate = new Date(year, month, 1); // Primeiro dia do mês selecionado
+                }
+            }
+        }
+        
+        updateCalendar();
+    }
+
+    // Iniciar o calendário ao clicar no input ou no ícone
+    dateInput.addEventListener('click', showCalendar);
+    if (calendarIcon) {
+        calendarIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            showCalendar();
+        });
+    }
+
+    // Fechar o calendário ao clicar no X
+    if (calendarClose) {
+        calendarClose.addEventListener('click', function() {
+            calendar.style.display = 'none';
+        });
+    }
+
+    // Aplicar a data selecionada ao input
+    if (calendarApply) {
+        calendarApply.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevenir submissão do formulário
+            
+            if (selectedDate) {
+                dateInput.value = formatDate(selectedDate);
+                calendar.style.display = 'none';
+            } else {
+                alert('Por favor, selecione uma data no calendário.');
+            }
+        });
+    }
+
+    // Navegar para o mês anterior
+    if (prevMonth) {
+        prevMonth.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+        });
+    }
+
+    // Navegar para o próximo mês
+    if (nextMonth) {
+        nextMonth.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        });
+    }
+
+    // Navegar para o ano anterior
+    if (prevYear) {
+        prevYear.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentDate.setFullYear(currentDate.getFullYear() - 1);
+            updateCalendar();
+        });
+    }
+
+    // Navegar para o próximo ano
+    if (nextYear) {
+        nextYear.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentDate.setFullYear(currentDate.getFullYear() + 1);
+            updateCalendar();
+        });
+    }
+
+    // Ir para o dia atual
+    if (todayBtn) {
+        todayBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentDate = new Date();
+            selectedDate = new Date();
+            updateCalendar();
+        });
+    }
+
+    // Atualizar o ano quando o input de ano mudar
+    if (yearInput) {
+        yearInput.addEventListener('change', function() {
+            const year = parseInt(this.value);
+            if (!isNaN(year) && year >= 2000 && year <= 2100) {
+                currentDate.setFullYear(year);
+                updateCalendar();
+            } else {
+                alert('Por favor, insira um ano válido entre 2000 e 2100.');
+                this.value = currentDate.getFullYear();
+            }
+        });
+    }
+
+    // Fechar o calendário quando clicar fora dele
+    window.addEventListener('click', function(event) {
+        if (calendar.style.display === 'block' && 
+            !event.target.closest('#calendar') && 
+            !event.target.matches('input[placeholder="DD/MM/YYYY"]') && 
+            !event.target.matches('img[alt="Ícone de data"]')) {
+            calendar.style.display = 'none';
+        }
+    });
+
+    // Inicializar o calendário
+    updateCalendar();
+});
+    
 
     
 

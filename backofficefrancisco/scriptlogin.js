@@ -72,7 +72,7 @@ window.addEventListener('load', async function() {
         window.location.href = 'peritos.html';
       } else {
         // Redirecionar para página de usuário normal
-        window.location.href = 'user.html';
+        window.location.href = 'utilizador.html';
       }
     }
   }
