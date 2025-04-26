@@ -5,6 +5,10 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   background-color: #f5faff;
   scroll-behavior: smooth;
@@ -24,6 +28,8 @@ header.navbar {
   top: 0;
   z-index: 1000;
 }
+
+
 
 .menu-icon {
   background-color: #000052;
@@ -122,6 +128,27 @@ header.navbar {
 
 .auth-buttons button:hover {
   opacity: 0.9;
+}
+
+/* Estilo para o perfil do usuário */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #000052; /* Borda opcional */
+}
+
+.user-name {
+  font-size: 14px;
+  color: #000052;
+  font-weight: bold;
 }
 
 /* ------------------------- */

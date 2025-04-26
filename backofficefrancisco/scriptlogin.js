@@ -74,6 +74,9 @@ window.addEventListener('load', async function() {
       } else {
         // Redirecionar para página de usuário normal
         window.location.href = '../FrontOffice/Auditorias/index.html';
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        islogged = true;
+        localStorage.setItem('islogged', islogged);
       }
     }
   }
