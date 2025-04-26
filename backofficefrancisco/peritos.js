@@ -52,7 +52,7 @@ function updatePagination() {
     const start = (currentPage - 1) * itemsPerPage + 1;
     const end = Math.min(currentPage * itemsPerPage, totalExperts);
     document.querySelector('.pagination-info').textContent = 
-        `Mostrando ${start} - ${end} de ${totalExperts} peritos registrados`;
+        `Mostrando ${start} - ${end} de ${totalExperts} peritos registados`;
 
     // Update pagination buttons
     const paginationButtons = document.querySelector('.pagination-buttons');
