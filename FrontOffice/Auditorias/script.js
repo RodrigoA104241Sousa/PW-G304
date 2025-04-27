@@ -38,3 +38,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const islogged = localStorage.getItem('islogged') === 'true';
+
+  // Lista de opções a bloquear
+  const linksBloquear = [
+    "Perfil",
+    "Criar ocorrência",
+    "Minhas Ocorrências",
+    "Ver Ocorrências",
+    "Notificações",
+    "Auditorias"
+  ];
+
+  // Selecionar todos os itens da sidebar
+  document.querySelectorAll('.sidebar-list li').forEach(item => {
+    const label = item.querySelector('.label'); // Selecionar o texto do item
+    if (label && linksBloquear.includes(label.textContent.trim())) {
+      if (!islogged) {
+        // Bloquear o item se não estiver logado
+        item.style.pointerEvents = "none"; // Impede o clique
+        item.style.opacity = "0.5";        // Visualmente desativado
+      } else {
+        // Restaurar o item se estiver logado
+        item.style.pointerEvents = "auto";
+        item.style.opacity = "1";
+      }
+    }
+  });
+});

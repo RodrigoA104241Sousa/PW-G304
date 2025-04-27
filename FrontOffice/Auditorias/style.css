@@ -275,6 +275,11 @@ header.navbar {
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-list li[style*="pointer-events: none"] {
+  cursor: not-allowed;
 }
 
 .sidebar-list .icon {
