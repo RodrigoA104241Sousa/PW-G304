@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utilizadores - Eyes Everywhere</title>
-    <link rel="stylesheet" href="utilizador.css">
+    <title>Peritos - Eyes Everywhere</title>
+    <link rel="stylesheet" href="peritos.css">
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
 </head>
 <body>
@@ -28,39 +28,40 @@
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
-                        <span>Tipo de utilizador</span>
+                        <span>Especialidade</span>
                     </div>
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
 
-                <!-- Tipo de utilizador Submenu -->
+                <!-- Especialidade Submenu -->
                 <div class="submenu">
-                    <div class="submenu-item"><span class="dot"></span>Normal</div>
-                    <div class="submenu-item"><span class="dot"></span>Verificado</div>
-                    <div class="submenu-item"><span class="dot"></span>Anónimo</div>
+                    <div class="submenu-item"><span class="dot"></span>Buraco na Estrada</div>
+                    <div class="submenu-item"><span class="dot"></span>Passeio Danificado</div>
+                    <div class="submenu-item"><span class="dot"></span>Falta de Sinalização</div>
+                    <div class="submenu-item"><span class="dot"></span>Iluminação Pública</div>
                 </div>
 
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
-                        <span>Nº de Ocorrências</span>
+                        <span>Estado</span>
                     </div>
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
 
                 <!-- Estado Submenu -->
                 <div class="submenu">
-                    <button class="submenu-item" data-status="0-2">
+                    <button class="submenu-item" data-status="Disponível">
                         <span class="dot"></span>
-                        <span>0-2</span>
+                        <span>Disponível</span>
                     </button>
-                    <button class="submenu-item" data-status="3-5">
+                    <button class="submenu-item" data-status="Não Disponível">
                         <span class="dot"></span>
-                        <span>3-5</span>
+                        <span>Não Disponível</span>
                     </button>
-                    <button class="submenu-item" data-status="+5">
+                    <button class="submenu-item" data-status="Em Auditoria">
                         <span class="dot"></span>
-                        <span>+5</span>
+                        <span>Em Auditoria</span>
                     </button>
                 </div>
             </nav>
@@ -70,33 +71,43 @@
         <div class="main-content">
             <!-- Header -->
             <header>
+                <div class="header-left">
+                    <button id="addExpertBtn" class="btn btn-primary">
+                        <i data-lucide="plus"></i>
+                        <span>ADICIONAR</span>
+                    </button>
+                </div>
+
                 <div class="page-selector">
                     <button class="page-dropdown-btn">
-                        Utilizadores
+                        Peritos
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="page-dropdown-content">
-                        <a href="utilizador.html" class="active">Utilizadores</a>
-                        <a href="peritos.html">Peritos</a>
+                        <a href="peritos.html" class="active">Peritos</a>
                         <a href="ocorrencia.html">Ocorrências</a>
                         <a href="auditorias.html">Auditorias</a>
                         <a href="dashboard.html">Dashboard</a>
+                        <a href="utilizador.html">Utilizadores</a>
                     </div>
                 </div>
 
                 <div class="header-right">
+                    <button class="btn btn-danger">
+                        <i data-lucide="minus"></i>
+                        <span>REMOVER</span>
+                    </button>
+                    <i data-lucide="settings"></i>
                     <div class="avatar">
-                        <img src="imagens/logo.png" alt="Avatar" width="24" height="24">
+                        <img src="logo.png" alt="Avatar" width="24" height="24">
                     </div>
                 </div>
             </header>
 
             <!-- Filters -->
             <div class="filters">
-                <input type="text" id="searchInput" placeholder="Nome / Email Utilizador ...">
+                <input type="text" id="searchInput" placeholder="Nome / Email Perito ...">
                 <input type="date" id="dateInput" placeholder="Trabalha desde ...">
-                <input type="text" id="searchInput" placeholder="Tipo de utilizador...">
-                <input type="text" id="searchInput" placeholder="Nº de Ocorrências...">
                 <button class="search-button" id="searchButton">
                     <span>Procurar</span>
                     <i data-lucide="search"></i>
@@ -112,22 +123,22 @@
                                 <th><input type="checkbox" class="header-checkbox"></th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Nome / Email Utilizador</span>
+                                        <span>Nome / Email Perito</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Utilizador desde</span>
+                                        <span>Trabalha desde</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Tipo de Utilizador</span>
+                                        <span>ESPECIALIDADE</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Nº Total de Ocorrências</span>
+                                        <span>ESTADO</span>
                                     </div>
                                 </th>
                                 <th></th>
@@ -143,7 +154,7 @@
             <!-- Pagination -->
             <div class="pagination">
                 <div class="pagination-info">
-                    Mostrando 1 - 16 de 5.000 utilizadores registados
+                    Mostrando 1 - 16 de 5.000 peritos registradas
                 </div>
                 <div class="pagination-controls">
                     <select>
@@ -164,6 +175,6 @@
         </div>
     </div>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="utilizador.js"></script>
+    <script src="peritos.js"></script>
 </body>
 </html>
