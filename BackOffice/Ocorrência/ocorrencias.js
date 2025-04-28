@@ -162,7 +162,7 @@ function populateTable() {
         const detailsBtn = row.querySelector('.details-btn');
         detailsBtn.addEventListener('click', () => {
             localStorage.setItem('selectedOccurrenceId', occ.id);
-            window.location.href = 'detalhesocorrencia.html';
+            window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
         });
     });
 

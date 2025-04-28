@@ -3,7 +3,7 @@ document.getElementById("googleLoginBtn").addEventListener("click", function(eve
   
   // Parâmetros para autenticação OAuth2
   const clientId = "315984364753-t1pnd1ugsh9ig5f09kvv9aud6sj4erpa.apps.googleusercontent.com";
-  const redirectUri = "http://127.0.0.1:5501/backofficefrancisco/LoginEyesEverywhere.html"; // URL fixa
+  const redirectUri = "http://127.0.0.1:5501/BackOffice/Login/LoginEyesEverywhere.html"; // URL fixa
   const scope = "email profile openid";
   const responseType = "token";
   const prompt = "consent"; // Adiciona prompt para sempre pedir consentimento
@@ -70,10 +70,10 @@ window.addEventListener('load', async function() {
     if (userInfo) {
       if (isAdmin(userInfo.email)) {
         // Redirecionar para página de admin
-        window.location.href = 'peritos.html';
+        window.location.href = '../Peritos/peritos.html';
       } else {
         // Redirecionar para página de usuário normal
-        window.location.href = '../FrontOffice/Auditorias/index.html';
+        window.location.href = '../../FrontOffice/Auditorias/index.html';
         localStorage.setItem('user', JSON.stringify(userInfo));
         islogged = true;
         localStorage.setItem('islogged', islogged);

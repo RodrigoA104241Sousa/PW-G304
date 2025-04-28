@@ -62,3 +62,4 @@ form.addEventListener('submit', async (e) => {
   alert("Ocorrência registada com sucesso!");
   form.reset();
 });
+

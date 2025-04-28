@@ -6,7 +6,6 @@
   <title>EyesEveryWhere</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-</head>
 <body>
   <div class="formulario-container">
     <header>
@@ -64,13 +63,13 @@
       
         <button type="submit" class="registar-btn">Registar Ocorrência</button>
       </form>
-      
-
       <div class="mapa">
-        <img src="mapa.png" alt="Mapa">
+        <div id="map"></div>
       </div>
     </div>
   </div>
 </body>
-<script src="script.js"></script>
+  <script src="map.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1ldhr7kUyjyPpgnXcWUQFynuIl-OMUg&callback=initMap" async defer></script>
+  <script src="script.js"></script>
 </html>

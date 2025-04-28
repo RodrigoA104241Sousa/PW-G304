@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Substituir a foto de perfil pelo botão de login
       loginContainer.innerHTML = `
-        <a href="../../backofficefrancisco/LoginEyesEverywhere.html">
+        <a href="../../BackOffice/Login/LoginEyesEverywhere.html">
           <button class="sign-in">Login</button>
         </a>
       `;
