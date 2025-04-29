@@ -147,7 +147,7 @@ function populateTable() {
                     <div class="user-email">${occ.email || 'N/A'}</div>
                 </div>
             </td>
-            <td>${new Date(occ.date).toLocaleDateString('pt-PT')}</td>
+            <td>${(occ.data)}</td>
             <td>${occ.tipo || 'N/A'}</td>
             <td><span class="status-badge ${getStatusClass(occ.estado)}">${occ.estado}</span></td>
             <td>
@@ -162,7 +162,7 @@ function populateTable() {
         const detailsBtn = row.querySelector('.details-btn');
         detailsBtn.addEventListener('click', () => {
             localStorage.setItem('selectedOccurrenceId', occ.id);
-            window.location.href = 'detalhesocorrencia.html';
+            window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
         });
     });
 

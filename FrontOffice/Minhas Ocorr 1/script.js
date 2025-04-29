@@ -7,8 +7,20 @@ function mostrarOcorrencias(pagina) {
   container.innerHTML = '';
   const inicio = (pagina - 1) * ocorrenciasPorPagina;
   const fim = inicio + ocorrenciasPorPagina;
-  const paginaOcorrencias = ocorrencias.slice(inicio, fim);
 
+  let user = localStorage.getItem('user');
+  if (user) {
+    user = JSON.parse(user);
+  }
+  
+  // Filtrar apenas as ocorrências do usuário atual
+  const minhasOcorrencias = ocorrencias.filter(ocorrencia => ocorrencia.userid === user.id);
+  console.log(minhasOcorrencias);
+  const paginaOcorrencias = minhasOcorrencias.slice(inicio, fim);
+
+  
+
+  // Remover a condição if que estava aqui e mostrar as ocorrências filtradas
   paginaOcorrencias.forEach((ocorrencia) => {
     const imgSrc = ocorrencia.imagens && ocorrencia.imagens.length > 0
       ? ocorrencia.imagens[0]
