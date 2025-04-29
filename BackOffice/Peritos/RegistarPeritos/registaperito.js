@@ -335,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function resetPhotoUpload() {
         // Restaurar o HTML original do elemento
         photoUploadContainer.innerHTML = `
-            <img src="imagens/camera.png" alt="Ícone de camera">
+            <img src="camera.png" alt="Ícone de camera">
             <div class="photo-text">Insira Aqui a Fotografia</div>
             <input type="file" id="file-input" accept="image/*" style="display: none;">
         `;

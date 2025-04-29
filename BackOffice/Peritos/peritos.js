@@ -225,7 +225,7 @@ function setupRemoveButton() {
 
 // Add this to your existing JavaScript
 document.getElementById('addExpertBtn').addEventListener('click', () => {
-    window.location.href = 'registaperito.html';
+    window.location.href = './RegistarPeritos/registaperito.html';
 });
 
 // Add event listener for items per page select
