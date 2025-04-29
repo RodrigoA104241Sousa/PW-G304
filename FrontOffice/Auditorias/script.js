@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     "Minhas Ocorrências",
     "Ver Ocorrências",
     "Notificações",
-    "Auditorias"
   ];
 
   // Selecionar todos os itens da sidebar
