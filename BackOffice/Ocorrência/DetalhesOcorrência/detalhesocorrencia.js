@@ -17,10 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Populate the page with occurrence details
     document.querySelector('.tag-blue').textContent = occurrence.tipo;
-    document.querySelector('.tag-green').textContent = occurrence.estado;
     document.getElementById('occurrenceDescription').textContent = occurrence.descricao;
     document.getElementById('reporterInfo').textContent = `(${occurrence.email || 'N/A'})`;
-    document.getElementById('locationInfo').textContent = occurrence.location || 'N/A';
+    document.getElementById('locationInfo').textContent = occurrence.morada || 'N/A';
     document.getElementById('coordinates').textContent = 
         occurrence.coordinates ? `${occurrence.coordinates.latitude}, ${occurrence.coordinates.longitude}` : 'N/A';
 
@@ -61,30 +60,52 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'criarauditoria.html';
     });
 
-    document.querySelector('.button-red').addEventListener('click', () => {
-        // Encontrar e atualizar a ocorrência
-        const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-        const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
+    // Function to update status tag
+function updateStatusTag(status) {
+    const statusTag = document.querySelector('.tag-green');
+    statusTag.textContent = status;
+    
+    // Remove existing status classes
+    statusTag.classList.remove('status-aceite', 'status-espera', 'status-rejeitado');
+    
+    // Add appropriate class based on status
+    switch(status) {
+        case 'Aceite':
+            statusTag.classList.add('status-aceite');
+            break;
+        case 'Em Espera':
+            statusTag.classList.add('status-espera');
+            break;
+        case 'Não Aceite':
+            statusTag.classList.add('status-rejeitado');
+            break;
+    }
+}
+
+// Atualizar o status inicial
+const statusTag = document.querySelector('.tag-green');
+if (statusTag) {
+    statusTag.textContent = occurrence.estado || 'Em Espera';
+    updateStatusTag(occurrence.estado || 'Em Espera');
+}
+
+// Atualizar o botão vermelho
+document.querySelector('.button-red').addEventListener('click', () => {
+    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+    const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
+    
+    if (index !== -1) {
+        occurrences[index].estado = 'Não Aceite';
+        localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
         
-        if (index !== -1) {
-            // Atualizar o estado para "Não Aceite"
-            occurrences[index].estado = 'Não Aceite';
-            
-            // Atualizar no localStorage
-            localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
-            
-            // Atualizar a tag na interface
-            document.querySelector('.tag-green').textContent = 'Não Aceite';
-            
-            // Aguardar um momento para o usuário ver a atualização antes de voltar
-            setTimeout(() => {
-                history.back();
-            }, 500);
-        }
-    });
+        // Atualizar a tag com a nova cor
+        updateStatusTag('Não Aceite');
+        
+        setTimeout(() => {
+            history.back();
+        }, 500);
+    }
 });
-
-
 
 // Add this function for fullsize image viewing
 function showImageFullsize(imageBase64) {
@@ -123,8 +144,8 @@ window.initMap = function() {
         }
 
         const coordinates = {
-            lat: parseFloat(occurrence.coordinates.latitude),
-            lng: parseFloat(occurrence.coordinates.longitude)
+            lat: parseFloat(occurrence.latitude),
+            lng: parseFloat(occurrence.longitude)
         };
 
         const map = new google.maps.Map(document.getElementById("map"), {
@@ -164,3 +185,4 @@ function initMap(lat, lng) {
         title: "Local da Ocorrência"
     });
 }
+});
