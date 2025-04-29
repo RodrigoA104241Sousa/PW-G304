@@ -12,6 +12,11 @@ if (tipo) {
   }
 }
 
+let user = localStorage.getItem('user');
+if (user) {
+  user = JSON.parse(user);
+}
+
 const form = document.querySelector('.formulario');
 const uploadInput = document.getElementById('upload');
 
@@ -52,7 +57,9 @@ form.addEventListener('submit', async (e) => {
     codigoPostal: document.getElementById('codigo-postal').value,
     descricao: document.getElementById('descricao').value,
     imagens: imagensBase64,
-    estado: "Em espera"
+    estado: "Em espera",
+    data: new Date().toLocaleString('pt-PT'),
+    userid: user.id,
   };
 
   // Adicionar e guardar no localStorage
@@ -60,6 +67,10 @@ form.addEventListener('submit', async (e) => {
   localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
 
   alert("Ocorrência registada com sucesso!");
+  window.location.href = "../Auditorias/index.html"; // Redirecionar para a página inicial
+  // Limpar o formulário
   form.reset();
 });
+
+
 
