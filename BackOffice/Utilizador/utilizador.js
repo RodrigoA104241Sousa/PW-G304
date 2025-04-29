@@ -188,7 +188,6 @@ function populateTable() {
     pageUsers.forEach(user => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><input type="checkbox" class="user-checkbox" data-id="${user.id}"></td>
             <td>
                 <div class="expert-info">
                     <div class="expert-name">${user.name}</div>
