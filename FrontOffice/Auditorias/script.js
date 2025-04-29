@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     "Minhas Ocorrências",
     "Ver Ocorrências",
     "Notificações",
-    "Auditorias"
   ];
 
   // Selecionar todos os itens da sidebar
@@ -155,3 +154,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Botão Ver Mais do Sobre Nós
+    const verMaisBtn = document.querySelector('.card-sobre button');
+    const sobreNosModal = document.getElementById('sobreNosModal');
+    
+    if (verMaisBtn) {
+        verMaisBtn.addEventListener('click', () => {
+            sobreNosModal.style.display = 'block';
+        });
+    }
+
+    // Botões das Áreas de Atuação
+    const areaCards = document.querySelectorAll('.area-atuacao .card');
+    areaCards.forEach((card, index) => {
+        const verMaisBtn = card.querySelector('button');
+        if (verMaisBtn) {
+            verMaisBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const modalId = getModalId(index);
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'block';
+                }
+            });
+        }
+    });
+
+    // Fechar modais
+    const closeBtns = document.querySelectorAll('.close-btn');
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+
+    // Fechar modal quando clicar fora
+    window.addEventListener('click', (event) => {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    });
+});
+
+function getModalId(index) {
+    switch(index) {
+        case 0: return 'modalInfraestruturas';
+        case 1: return 'modalMonitorizacao';
+        case 2: return 'modalAuditorias';
+        default: return null;
+    }
+}
