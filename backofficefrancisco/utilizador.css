@@ -502,3 +502,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]:hover::-webkit-calendar-picker-indicator {
     opacity: 1;
 }
+
