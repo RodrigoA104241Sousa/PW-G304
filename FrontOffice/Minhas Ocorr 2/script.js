@@ -26,6 +26,30 @@ if (ocorrencia) {
     `;
     galeria.appendChild(div);
   });
+
+  // Inicializar o mapa
+  window.initMap = function () {
+    // Converte strings em números
+    const lat = parseFloat(ocorrencia.latitude);
+    const lng = parseFloat(ocorrencia.longitude);
+    if (isNaN(lat) || isNaN(lng)) {
+      console.error("Latitude ou longitude inválidas");
+      return;
+    }
+
+    const pos = { lat, lng };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: pos,
+      zoom: 15,
+      mapTypeControl: false,
+      streetViewControl: false,
+    });
+
+    new google.maps.Marker({
+      position: pos,
+      map: map,
+    });
+  };
 } else {
   // Se não encontrar a ocorrência
   alert("Ocorrência não encontrada.");

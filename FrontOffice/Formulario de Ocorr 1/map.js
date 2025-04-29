@@ -38,8 +38,6 @@ function initMap() {
 
     // Conectar input de morada com o mapa
     const moradaInput = document.getElementById('morada');
-    
-    // Criar searchBox
     searchBox = new google.maps.places.SearchBox(moradaInput);
 
     // Atualizar mapa quando uma localização é selecionada
@@ -54,24 +52,36 @@ function initMap() {
         map.setCenter(place.geometry.location);
         marker.setPosition(place.geometry.location);
         map.setZoom(16);
+
+        // Salvar latitude e longitude
+        latitudeInput.value = place.geometry.location.lat();
+        longitudeInput.value = place.geometry.location.lng();
     });
 
-    // Atualizar morada quando o marcador é movido
+    // Atualizar morada, latitude e longitude quando o marcador é movido
     marker.addListener('dragend', () => {
         const position = marker.getPosition();
         geocoder.geocode({ location: position }, (results, status) => {
             if (status === 'OK' && results[0]) {
                 moradaInput.value = results[0].formatted_address;
+
+                // Salvar latitude e longitude
+                latitudeInput.value = position.lat();
+                longitudeInput.value = position.lng();
             }
         });
     });
 
-    // Adicionar clique no mapa para mover marcador
+    // Adicionar clique no mapa para mover marcador e atualizar localização
     map.addListener("click", (e) => {
         marker.setPosition(e.latLng);
         geocoder.geocode({ location: e.latLng }, (results, status) => {
             if (status === 'OK' && results[0]) {
                 moradaInput.value = results[0].formatted_address;
+
+                // Salvar latitude e longitude
+                latitudeInput.value = e.latLng.lat();
+                longitudeInput.value = e.latLng.lng();
             }
         });
     });
