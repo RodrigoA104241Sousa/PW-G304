@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Store the current occurrence ID for use in criarauditoria.html
         localStorage.setItem('occurrenceForAudit', occurrenceId);
         // Redirect to criarauditoria.html
+        
         window.location.href = '../../Auditoria/criarauditoria.html';
     });
 
