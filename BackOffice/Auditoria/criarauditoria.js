@@ -771,30 +771,42 @@ function saveAuditToLocalStorage() {
     // Adicionar nova auditoria
     auditorias.push(auditoria);
     
-    // Salvar no localStorage
+    // Salvar auditoria no localStorage
     localStorage.setItem('auditorias', JSON.stringify(auditorias));
 
     // Atualizar o status da ocorrência para "Aceite"
     const occurrenceId = localStorage.getItem('occurrenceForAudit');
     if (occurrenceId) {
-        const occurrences = JSON.parse(localStorage.getItem('occurrences')) || [];
-        const occurrenceIndex = occurrences.findIndex(o => o.id === occurrenceId);
+        // Mudando de 'occurrences' para 'ocorrencias'
+        const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        const ocorrenciaIndex = ocorrencias.findIndex(o => o.id === occurrenceId);
         
-        if (occurrenceIndex !== -1) {
-            occurrences[occurrenceIndex].status = 'Aceite';
-            localStorage.setItem('occurrences', JSON.stringify(occurrences));
+        if (ocorrenciaIndex !== -1) {
+            // Atualizar o status para "Aceite"
+            ocorrencias[ocorrenciaIndex].estado = 'Aceite';
+            ocorrencias[ocorrenciaIndex].auditId = auditoria.id;
+            ocorrencias[ocorrenciaIndex].lastUpdated = new Date().toISOString();
+            
+            // Salvar as alterações usando a chave correta 'ocorrencias'
+            localStorage.setItem('ocorrencias', JSON.stringify(ocorrencias));
+            
+            // Limpar o ID da ocorrência do localStorage após processar
+            localStorage.removeItem('occurrenceForAudit');
         }
     }
 }
 
-// Atualizar a função showSuccessToast
+// Atualizar a função showSuccessToast para mostrar mensagem mais específica
 function showSuccessToast(message) {
     const toast = document.createElement('div');
     toast.className = 'success-toast';
     toast.innerHTML = `
         <div class="toast-content">
             <div class="toast-icon">✓</div>
-            <div class="toast-message">${message}</div>
+            <div class="toast-message">
+                ${message}<br>
+                <small>Ocorrência atualizada para "Aceite"</small>
+            </div>
         </div>
     `;
     
@@ -810,6 +822,7 @@ function showSuccessToast(message) {
         setTimeout(() => {
             document.body.removeChild(toast);
             // Redirecionar para ocorrencia.html
+            
             window.location.href = 'ocorrencia.html';
         }, 300);
     }, 3000);
