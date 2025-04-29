@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize map
     if (occurrence.coordinates) {
-        initMap(occurrence.coordinates.latitude, occurrence.coordinates.longitude);
+        initMap(occurrence.latitude, occurrence.longitude);
     }
 
     // Handle approve/reject buttons
@@ -131,58 +131,77 @@ function showImageFullsize(imageBase64) {
     };
 }
 
-// Make initMap available globally
-window.initMap = function() {
-    try {
-        const occurrenceId = localStorage.getItem('selectedOccurrenceId');
-        const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-        const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
+const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+const ocorrencia = ocorrencias.find(o => o.id === id);
 
-        if (!occurrence) {
-            console.error('Occurrence not found');
-            return;
+if (ocorrencia){
+    window.initMap = function () {
+        // Converte strings em números
+        const lat = parseFloat(ocorrencia.latitude);
+        const lng = parseFloat(ocorrencia.longitude);
+        if (isNaN(lat) || isNaN(lng)) {
+          console.error("Latitude ou longitude inválidas");
+          return;
         }
-
-        const coordinates = {
-            lat: parseFloat(occurrence.latitude),
-            lng: parseFloat(occurrence.longitude)
-        };
-
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 15,
-            center: coordinates,
-        });
-
-        new google.maps.Marker({
-            position: coordinates,
-            map: map,
-            title: "Local da Ocorrência"
-        });
-    } catch (error) {
-        console.error('Error initializing map:', error);
-    }
-}
-
-// Add error handling
-function handleMapError() {
-    console.error('Google Maps failed to load');
-    document.getElementById('map').innerHTML = 
-        '<div style="padding: 1rem; text-align: center;">Error loading map</div>';
-}
-
-function initMap(lat, lng) {
-    const coordinates = { lat: parseFloat(lat), lng: parseFloat(lng) };
     
-    const map = new google.maps.Map(document.getElementById("map"), {
+        const pos = { lat, lng };
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: pos,
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: false,
+        });
+    
+        new google.maps.Marker({
+          position: pos,
+          map: map,
+        });
+      };
+    } else {
+      // Se não encontrar a ocorrência
+      alert("Ocorrência não encontrada.");
+      window.location.href = "index.html"; // ou outro caminho
+    }
+
+});
+
+// Inicializar o mapa
+function initMap() {
+    const occurrenceId = localStorage.getItem('selectedOccurrenceId');
+    if (!occurrenceId) {
+        console.error('Nenhum ID de ocorrência encontrado.');
+        return;
+    }
+
+    // Obter todas as ocorrências do localStorage
+    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+    const occurrence = occurrences.find(o => o.id === parseInt(occurrenceId));
+    console.log(occurrence);
+
+    if (!occurrence) {
+        console.error('Ocorrência não encontrada.');
+        return;
+    }
+
+    // Converte strings em números
+    const lat = parseFloat(occurrence.latitude);
+    const lng = parseFloat(occurrence.longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+        console.error('Latitude ou longitude inválidas.');
+        return;
+    }
+
+    const pos = { lat, lng };
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: pos,
         zoom: 15,
-        center: coordinates,
+        mapTypeControl: false,
+        streetViewControl: false,
     });
 
-    // Add a marker
     new google.maps.Marker({
-        position: coordinates,
+        position: pos,
         map: map,
-        title: "Local da Ocorrência"
     });
 }
-});
