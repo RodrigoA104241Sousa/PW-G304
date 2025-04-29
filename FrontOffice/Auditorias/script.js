@@ -1,3 +1,4 @@
+// Menu toggle
 const menuIcon = document.querySelector('.menu-icon');
 const sidebar = document.getElementById('sidebar');
 
@@ -7,6 +8,25 @@ menuIcon.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Botão "Saber Mais" - Redirecionar para a seção "Sobre Nós"
+  const saberMaisBtn = document.querySelector('.saber-mais');
+  if (saberMaisBtn) {
+    saberMaisBtn.addEventListener('click', () => {
+      const sobreNosSection = document.getElementById('sobre-nos');
+      if (sobreNosSection) {
+        sobreNosSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+  
+  // Botão de Login no rodapé - Redirecionar para a página de login
+  const footerLoginBtn = document.querySelector('.footer-login .login-btn');
+  if (footerLoginBtn) {
+    footerLoginBtn.addEventListener('click', () => {
+      window.location.href = "../../BackOffice/Login/LoginEyesEverywhere.html";
+    });
+  }
+
   const islogged = localStorage.getItem('islogged') === 'true';
   const user = JSON.parse(localStorage.getItem('user'));
   const loginContainer = document.getElementById('loginContainer'); // Container do botão de login
@@ -37,10 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const islogged = localStorage.getItem('islogged') === 'true';
 
   // Lista de opções a bloquear
   const linksBloquear = [
@@ -66,5 +82,76 @@ document.addEventListener('DOMContentLoaded', () => {
         item.style.opacity = "1";
       }
     }
+  });
+
+  // Funcionalidade do Modal "Sobre Nós"
+  const verMaisBtn = document.querySelector('.card-sobre button');
+  const modal = document.getElementById('sobreNosModal');
+  const closeBtn = document.querySelector('.close-btn');
+
+  // Abrir o modal quando o botão "Ver Mais" for clicado
+  if (verMaisBtn) {
+    verMaisBtn.addEventListener('click', () => {
+      modal.style.display = 'block';
+    });
+  }
+
+  // Fechar o modal quando o botão de fechar for clicado
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  }
+
+  // Fechar o modal ao clicar fora dele
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Selecionando todos os cards da área de atuação
+  const cards = document.querySelectorAll('.area-atuacao .card');
+  
+  // Adicionando event listeners para cada card
+  cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      // Determinando qual modal abrir com base no índice do card
+      let modalId;
+      switch(index) {
+        case 0:
+          modalId = 'modalInfraestruturas';
+          break;
+        case 1:
+          modalId = 'modalMonitorizacao';
+          break;
+        case 2:
+          modalId = 'modalAuditorias';
+          break;
+      }
+      
+      // Abrindo o modal correspondente
+      if (modalId) {
+        document.getElementById(modalId).style.display = 'block';
+      }
+    });
+  });
+  
+  // Adicionar funcionalidade de fechar para todos os botões de fechar nos modais
+  document.querySelectorAll('.area-modal .close-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.closest('.modal').style.display = 'none';
+    });
+  });
+  
+  // Fechar modais ao clicar fora deles
+  window.addEventListener('click', function(event) {
+    document.querySelectorAll('.area-modal').forEach(modal => {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
   });
 });
