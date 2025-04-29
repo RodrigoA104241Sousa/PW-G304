@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.tag-blue').textContent = occurrence.tipo;
     document.querySelector('.tag-green').textContent = occurrence.estado;
     document.getElementById('occurrenceDescription').textContent = occurrence.descricao;
-    document.getElementById('reporterInfo').textContent = `${occurrence.userName || 'N/A'} (${occurrence.email || 'N/A'})`;
+    document.getElementById('reporterInfo').textContent = `(${occurrence.email || 'N/A'})`;
     document.getElementById('locationInfo').textContent = occurrence.location || 'N/A';
     document.getElementById('coordinates').textContent = 
         occurrence.coordinates ? `${occurrence.coordinates.latitude}, ${occurrence.coordinates.longitude}` : 'N/A';
@@ -62,8 +62,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelector('.button-red').addEventListener('click', () => {
-        occurrence.estado = 'Não Aceite';
-        updateOccurrenceStatus(occurrence);
+        // Encontrar e atualizar a ocorrência
+        const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
+        
+        if (index !== -1) {
+            // Atualizar o estado para "Não Aceite"
+            occurrences[index].estado = 'Não Aceite';
+            
+            // Atualizar no localStorage
+            localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
+            
+            // Atualizar a tag na interface
+            document.querySelector('.tag-green').textContent = 'Não Aceite';
+            
+            // Aguardar um momento para o usuário ver a atualização antes de voltar
+            setTimeout(() => {
+                history.back();
+            }, 500);
+        }
     });
 });
 
@@ -146,38 +163,4 @@ function initMap(lat, lng) {
         map: map,
         title: "Local da Ocorrência"
     });
-}
-
-function updateOccurrenceStatus(updatedOccurrence) {
-    const occurrences = JSON.parse(localStorage.getItem('occurrencesData')) || [];
-    const index = occurrences.findIndex(o => o.id === updatedOccurrence.id);
-    if (index !== -1) {
-        occurrences[index] = updatedOccurrence;
-        localStorage.setItem('occurrencesData', JSON.stringify(occurrences));
-        window.location.href = 'ocorrencia.html';
-    }
-}
-
-// Add this function for fullsize image viewing
-function showImageFullsize(imageBase64) {
-    const modal = document.createElement('div');
-    modal.className = 'image-modal';
-    modal.innerHTML = `
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <img src="${imageBase64}" alt="Imagem em tamanho completo" class="fullsize-image">
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    modal.querySelector('.close-modal').onclick = () => {
-        modal.remove();
-    };
-    
-    modal.onclick = (e) => {
-        if (e.target === modal) {
-            modal.remove();
-        }
-    };
 }
