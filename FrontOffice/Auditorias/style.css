@@ -24,8 +24,12 @@ header.navbar {
   padding: 0;
   height: 80px;
   border-bottom: 1px solid #eee;
-  position: sticky;
+
+  /* estes são os novos */
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1000;
 }
 
@@ -154,7 +158,7 @@ header.navbar {
 /* ------------------------- */
 /* Hero Section */
 .hero {
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   background-image: url('../imagens/imagemprincipal.png');
   background-size: cover;
   background-position: center;

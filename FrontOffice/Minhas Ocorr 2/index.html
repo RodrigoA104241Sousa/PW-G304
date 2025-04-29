@@ -52,24 +52,17 @@
       </div>
 
       <div class="painel-direita">
-        <img class="mapa" src="mapa.png" alt="Mapa">
+        <div id="map" class="mapa"></div>
         <h4>Registos pelo denunciante</h4>
         <div class="dupla-imagem" id="galeria-imagens"></div>
       </div>
     </main>
 
-    <footer class="paginacao">
-      <button disabled>←</button>
-      <button class="active">1</button>
-      <button>2</button>
-      <button>...</button>
-      <button>9</button>
-      <button>10</button>
-      <button>→</button>
-    </footer>
+  
   </div>
 
   <!-- Script para preencher os dados dinamicamente -->
   <script src="script.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1ldhr7kUyjyPpgnXcWUQFynuIl-OMUg&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>

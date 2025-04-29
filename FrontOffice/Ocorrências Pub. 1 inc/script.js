@@ -37,7 +37,7 @@ function mostrarOcorrencias(pagina) {
 }
 
 function verOcorrencia(id) {
-  window.location.href = `detalhes.html?id=${id}`;
+  window.location.href = `../Minhas Ocorr 2/index.html?id=${id}`;
 }
 
 function construirPaginacao() {
