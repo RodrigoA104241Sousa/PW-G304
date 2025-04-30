@@ -594,146 +594,67 @@
 
 // Adicionar validação ao envio do formulário
 document.getElementById('auditForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    let isValid = true;
-    let firstInvalidField = null;
-    
-    // Obter todos os campos obrigatórios
-    const requiredFields = {
-        'nome': document.querySelector('.form-group:nth-child(1) input'),
-        'duração': document.getElementById('durationInput'),
-        'data': document.getElementById('dateInput'),
-        'morada': document.querySelector('.form-group:nth-child(3) input'),
-        'código postal': document.getElementById('postalCode')
+    e.preventDefault(); // Impede envio automático
+  
+    // Lista de campos obrigatórios: mapeamos {nome-lógico: elemento}
+    const required = {
+      'Nome':       document.querySelector('.form-group:nth-child(1) input'),
+      'Descrição':  document.querySelector('.description-area'),
+      'Duração':    document.getElementById('durationInput'),
+      'Data':       document.getElementById('dateInput'),
+      'Morada':     document.querySelector('.form-group:nth-child(3) input'),
+      'Código Postal': document.getElementById('postalCode'),
     };
-    
-    // Verificar se os materiais foram selecionados
-    const materialsSelected = Array.from(document.querySelectorAll('input[name="materials"]'))
-        .some(checkbox => checkbox.checked);
-    
-    if (!materialsSelected) {
-        document.querySelector('.materials-search').classList.add('invalid');
-        document.querySelector('.materials-search').insertAdjacentHTML('afterend', 
-            '<div class="error-message">Por favor, selecione pelo menos um material</div>');
-        isValid = false;
-        if (!firstInvalidField) firstInvalidField = document.getElementById('materialsSearchInput');
-    } else {
-        document.querySelector('.materials-search').classList.remove('invalid');
-        const errorMsg = document.querySelector('.materials-search + .error-message');
-        if (errorMsg) errorMsg.remove();
+  
+    let firstError = null;
+    let valid = true;
+  
+    // Limpar mensagens anteriores
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+    Object.values(required).forEach(field => field.classList.remove('invalid'));
+  
+    // Verificar cada campo
+    for (const [label, field] of Object.entries(required)) {
+      if (!field.value.trim()) {
+        valid = false;
+        field.classList.add('invalid');
+  
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = `Por favor, preencha o campo ${label}.`;
+        field.parentNode.insertAdjacentElement('afterend', msg);
+  
+        if (!firstError) firstError = field;
+      }
     }
-    
-    // Verificar descrição
-    const descricao = document.querySelector('textarea.description-area');
-    if (!descricao.value.trim()) {
-        descricao.classList.add('invalid');
-        descricao.insertAdjacentHTML('afterend', 
-            '<div class="error-message">Por favor, preencha a descrição</div>');
-        isValid = false;
-        if (!firstInvalidField) firstInvalidField = descricao;
-    } else {
-        descricao.classList.remove('invalid');
-        const errorMsg = descricao.parentElement.querySelector('.error-message');
-        if (errorMsg) errorMsg.remove();
+  
+    // Verificar materiais selecionados
+    const materiaisSelecionados = 
+      Array.from(document.querySelectorAll('input[name="materials"]:checked')).length;
+    if (materiaisSelecionados === 0) {
+      valid = false;
+      const cont = document.getElementById('materialsSearchInput');
+      cont.classList.add('invalid');
+      const msg = document.createElement('div');
+      msg.className = 'error-message';
+      msg.textContent = 'Selecione pelo menos um material.';
+      cont.parentNode.insertAdjacentElement('afterend', msg);
+  
+      if (!firstError) firstError = cont;
     }
-
-       // Verificar nível de urgência
-       const urgencySelected = document.querySelector('input[name="urgency"]:checked');
-       if (!urgencySelected) {
-           document.querySelector('.urgency-options').classList.add('invalid-urgency');
-           document.querySelector('.urgency-options').insertAdjacentHTML('afterend', 
-               '<div class="error-message">Por favor, selecione o nível de urgência</div>');
-           isValid = false;
-           if (!firstInvalidField) firstInvalidField = document.querySelector('.urgency-options');
-       } else {
-           document.querySelector('.urgency-options').classList.remove('invalid-urgency');
-           const errorMsg = document.querySelector('.urgency-options + .error-message');
-           if (errorMsg) errorMsg.remove();
-       }
-
-    
-    // Verificar se pelo menos um perito foi selecionado
-    if (selectedPeritosArray.length === 0) {
-        document.querySelector('.peritos-button').classList.add('invalid');
-        document.querySelector('.peritos-button').insertAdjacentHTML('afterend', 
-            '<div class="error-message">Por favor, selecione pelo menos um perito</div>');
-        isValid = false;
-        if (!firstInvalidField) firstInvalidField = document.getElementById('openPeritosModal');
-    } else {
-        document.querySelector('.peritos-button').classList.remove('invalid');
-        const errorMsg = document.querySelector('.peritos-button + .error-message');
-        if (errorMsg) errorMsg.remove();
+  
+    // Se algo inválido, foca e aborta
+    if (!valid) {
+      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
     }
-    
-    // Validar cada campo obrigatório
-    for (const [fieldName, field] of Object.entries(requiredFields)) {
-        // Remover mensagens de erro anteriores
-        const parentNode = field.parentElement.tagName === 'DIV' ? field.parentElement : field.parentElement;
-        const existingError = parentNode.nextElementSibling;
-        if (existingError && existingError.className === 'error-message') {
-            existingError.remove();
-        }
-        
-        // Verificar se o campo está vazio
-        if (!field.value.trim()) {
-            field.classList.add('invalid');
-            field.parentElement.insertAdjacentHTML('afterend', 
-                `<div class="error-message">Por favor, preencha o campo ${fieldName}</div>`);
-            isValid = false;
-            if (!firstInvalidField) firstInvalidField = field;
-        } else {
-            field.classList.remove('invalid');
-        }
-        
-        // Validações específicas
-        if (field.id === 'postalCode' && field.value.trim() && !/^\d{4}-\d{3}$/.test(field.value)) {
-            field.classList.add('invalid');
-            field.parentElement.insertAdjacentHTML('afterend', 
-                '<div class="error-message">Código postal deve estar no formato XXXX-XXX</div>');
-            isValid = false;
-            if (!firstInvalidField) firstInvalidField = field;
-        }
-        
-        if (field.id === 'durationInput' && field.value.trim() && !/^\d{2}:\d{2}:\d{2}$/.test(field.value)) {
-            field.classList.add('invalid');
-            field.parentElement.insertAdjacentHTML('afterend', 
-                '<div class="error-message">Duração deve estar no formato HH:MM:SS</div>');
-            isValid = false;
-            if (!firstInvalidField) firstInvalidField = field;
-        }
-        
-        if (field.id === 'dateInput' && field.value.trim() && !/^\d{2}\/\d{2}\/\d{4}$/.test(field.value)) {
-            field.classList.add('invalid');
-            field.parentElement.insertAdjacentHTML('afterend', 
-                '<div class="error-message">Data deve estar no formato DD/MM/YYYY</div>');
-            isValid = false;
-            if (!firstInvalidField) firstInvalidField = field;
-        }
-    }
-    
-    // Se houver campos inválidos, rolar até o primeiro campo com erro
-    if (!isValid && firstInvalidField) {
-        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-    }
-    
-    // Se tudo estiver válido, salvar no localStorage e mostrar mensagem de sucesso
-    if (isValid) {
-        saveAuditToLocalStorage();
-        showSuccessToast('Auditoria criada com sucesso!');
-        
-        // Opcional: Limpar formulário após salvar
-        setTimeout(() => {
-            document.getElementById('auditForm').reset();
-            // Limpar seleções
-            checkboxes.forEach(checkbox => checkbox.checked = false);
-            updateSelectedMaterials();
-            selectedPeritosArray = [];
-            updateSelectedPeritosDisplay();
-        }, 2000);
-    }
-});
+  
+    // — Tudo ok! Chama a tua função de “save” ou simplesmente:
+    saveAuditToLocalStorage();
+    showSuccessToast('Auditoria criada com sucesso!');
+  
+    // (se quiseres dar um delay antes de reset/redirect, como já tinhas)
+  });
 
 // Função para salvar a auditoria no localStorage
 function saveAuditToLocalStorage() {
@@ -747,9 +668,10 @@ function saveAuditToLocalStorage() {
     const nivelUrgencia = document.querySelector('input[name="urgency"]:checked')?.value || '';
 
     // Obter materiais selecionados
-    const materiaisSelecionados = Array.from(document.querySelectorAll('input[name="materials"]:checked'))
-        .map(checkbox => checkbox.value);
-    
+    const materiaisSelecionados = Array.from(document.querySelectorAll('input[name="materials"]:checked')).map(
+        checkbox => checkbox.value
+    );
+
     // Criar objeto da auditoria
     const auditoria = {
         id: Date.now().toString(), // ID único baseado no timestamp
@@ -762,35 +684,33 @@ function saveAuditToLocalStorage() {
         nivelUrgencia: nivelUrgencia,
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,
-        dataCriacao: new Date().toISOString()
+        dataCriacao: new Date().toISOString(),
     };
-    
+
     // Obter auditorias existentes do localStorage ou criar array vazio
     const auditorias = JSON.parse(localStorage.getItem('auditorias')) || [];
-    
+
     // Adicionar nova auditoria
     auditorias.push(auditoria);
-    
+
     // Salvar auditoria no localStorage
     localStorage.setItem('auditorias', JSON.stringify(auditorias));
+    
 
     // Atualizar o status da ocorrência para "Aceite"
-    const occurrenceId = localStorage.getItem('occurrenceForAudit');
+    const occurrenceId = parseInt(localStorage.getItem('occurrenceForAudit'), 10);
     if (occurrenceId) {
-        // Mudando de 'occurrences' para 'ocorrencias'
         const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        console.log("ocorrencia",ocorrencias); // Debug: Verificar o conteúdo de ocorrencias
         const ocorrenciaIndex = ocorrencias.findIndex(o => o.id === occurrenceId);
-        
+        console.log("ocorrenciaIndex",ocorrenciaIndex); // Debug: Verificar o índice da ocorrência encontrada
+
         if (ocorrenciaIndex !== -1) {
-            // Atualizar o status para "Aceite"
             ocorrencias[ocorrenciaIndex].estado = 'Aceite';
             ocorrencias[ocorrenciaIndex].auditId = auditoria.id;
             ocorrencias[ocorrenciaIndex].lastUpdated = new Date().toISOString();
-            
-            // Salvar as alterações usando a chave correta 'ocorrencias'
+
             localStorage.setItem('ocorrencias', JSON.stringify(ocorrencias));
-            
-            // Limpar o ID da ocorrência do localStorage após processar
             localStorage.removeItem('occurrenceForAudit');
         }
     }
@@ -823,7 +743,7 @@ function showSuccessToast(message) {
             document.body.removeChild(toast);
             // Redirecionar para ocorrencia.html
             
-            window.location.href = 'ocorrencia.html';
+            window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
         }, 300);
     }, 3000);
 }
