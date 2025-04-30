@@ -1,5 +1,6 @@
 const container = document.getElementById('lista-ocorrencias');
 const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+const ocorrenciasAceites = ocorrencias.filter(ocorrencia => ocorrencia.estado === "Aceite");
 const ocorrenciasPorPagina = 6;
 let paginaAtual = 1;
 
@@ -7,7 +8,7 @@ function mostrarOcorrencias(pagina) {
   container.innerHTML = '';
   const inicio = (pagina - 1) * ocorrenciasPorPagina;
   const fim = inicio + ocorrenciasPorPagina;
-  const paginaOcorrencias = ocorrencias.slice(inicio, fim);
+  const paginaOcorrencias = ocorrenciasAceites.slice(inicio, fim);
 
   // Criar os cards reais
   paginaOcorrencias.forEach((ocorrencia) => {

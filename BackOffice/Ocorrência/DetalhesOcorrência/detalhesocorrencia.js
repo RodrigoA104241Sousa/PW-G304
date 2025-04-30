@@ -74,7 +74,7 @@ function updateStatusTag(status) {
         case 'Aceite':
             statusTag.classList.add('status-aceite');
             break;
-        case 'Em Espera':
+        case 'Em espera':
             statusTag.classList.add('status-espera');
             break;
         case 'Não Aceite':

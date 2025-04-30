@@ -241,4 +241,31 @@
   .paginacao button:hover:not(:disabled) {
     background-color: #e6f2ff;
   }
+
+/* Status tags styling */
+.status {
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 30px;
+  display: block;
+  width: fit-content;
+  margin: 20px auto 0 auto;
+  text-align: center;
+}
+
+/* Status-specific colors */
+.status[data-estado="Aceite"] {
+  background-color: #28a745;
+  color: white;
+}
+
+.status[data-estado="Em espera"] {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.status[data-estado="Não Aceite"] {
+  background-color: #dc3545;
+  color: white;
+}
   

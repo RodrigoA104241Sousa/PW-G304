@@ -14,7 +14,10 @@ if (ocorrencia) {
   document.getElementById("codigo-postal").textContent = ocorrencia.codigoPostal;
   document.getElementById("email").textContent = ocorrencia.email;
   document.getElementById("descricao").textContent = ocorrencia.descricao;
-  document.getElementById("estado").textContent = ocorrencia.estado;
+  const estadoElement = document.getElementById("estado");
+  estadoElement.textContent = ocorrencia.estado;
+  estadoElement.className = 'status';
+  estadoElement.setAttribute('data-estado', ocorrencia.estado);
 
   // Preencher imagens
   const galeria = document.getElementById("galeria-imagens");
@@ -65,33 +68,14 @@ if (ocorrencia) {
         window.location.href = '../../Auditoria/criarauditoria.html';
     });
 
-    // Function to update status tag
+// Update the status tag function
 function updateStatusTag(status) {
-    const statusTag = document.querySelector('.tag-green');
-    statusTag.textContent = status;
-    
-    // Remove existing status classes
-    statusTag.classList.remove('status-aceite', 'status-espera', 'status-rejeitado');
-    
-    // Add appropriate class based on status
-    switch(status) {
-        case 'Aceite':
-            statusTag.classList.add('status-aceite');
-            break;
-        case 'Em Espera':
-            statusTag.classList.add('status-espera');
-            break;
-        case 'Não Aceite':
-            statusTag.classList.add('status-rejeitado');
-            break;
+    const estadoElement = document.getElementById("estado");
+    if (estadoElement) {
+        estadoElement.textContent = status;
+        estadoElement.className = 'status';
+        estadoElement.setAttribute('data-estado', status);
     }
-}
-
-// Atualizar o status inicial
-const statusTag = document.querySelector('.tag-green');
-if (statusTag) {
-    statusTag.textContent = occurrence.estado || 'Em Espera';
-    updateStatusTag(occurrence.estado || 'Em Espera');
 }
 
 // Atualizar o botão vermelho
