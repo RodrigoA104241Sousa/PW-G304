@@ -48,6 +48,22 @@ async function getCoordinatesFromAddress(address) {
   });
 }
 
+const popup = document.getElementById('popup');
+const popupMessage = document.getElementById('popup-message');
+const popupClose = document.getElementById('popup-close');
+
+// Função para exibir o popup
+function showPopup(message, isSuccess = true) {
+  popupMessage.textContent = message;
+  popupMessage.style.color = isSuccess ? '#155724' : '#721c24'; // Verde para sucesso, vermelho para erro
+  popup.style.display = 'flex'; // Exibe o popup
+}
+
+// Fechar o popup ao clicar no botão
+popupClose.addEventListener('click', () => {
+  popup.style.display = 'none';
+});
+
 // Ao submeter o formulário
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -93,11 +109,18 @@ form.addEventListener('submit', async (e) => {
     ocorrenciasGuardadas.push(ocorrencia);
     localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
 
-    alert("Ocorrência registada com sucesso!");
-    window.location.href = "../Auditorias/index.html"; // Redirecionar para a página inicial
+    // Exibir popup de sucesso
+    showPopup("Ocorrência registada com sucesso!");
+
+    // Redirecionar após 2 segundos
+    setTimeout(() => {
+      window.location.href = "../Auditorias/index.html";
+    }, 2000);
+
     // Limpar o formulário
     form.reset();
   } catch (error) {
-    alert(error); // Exibir erro caso não seja possível obter as coordenadas
+    // Exibir popup de erro
+    showPopup("Erro ao registar a ocorrência. Por favor, tente novamente.", false);
   }
 });
