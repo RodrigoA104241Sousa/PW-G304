@@ -165,10 +165,8 @@ header.navbar {
   position: relative;
   display: flex;
   flex-direction: column; /* Alinha os elementos verticalmente */
-  justify-content: center; /* Centraliza verticalmente */
-  align-items: center; /* Centraliza horizontalmente */
-  text-align: center; /* Centraliza o texto */
-  padding: 20px; /* Adiciona espaçamento interno */
+  padding-left: 40px; /* Adiciona espaçamento interno */
+  padding-top: 20px;
   overflow: hidden; /* Evita que o conteúdo transborde */
 }
 .hero::before {
