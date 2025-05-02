@@ -158,11 +158,7 @@ header.navbar {
 /* ------------------------- */
 /* Hero Section */
 .hero {
-<<<<<<< Updated upstream
   min-height: 100vh;
-=======
-  height: 100vh; /* Garante que a seção ocupe exatamente a altura da tela */
->>>>>>> Stashed changes
   background-image: url('../imagens/imagemprincipal.png');
   background-size: cover;
   background-position: center;
@@ -236,13 +232,10 @@ header.navbar {
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
-<<<<<<< Updated upstream
   position: absolute;
   bottom: 50px;
   right: 90px;
   z-index: 2;
-=======
->>>>>>> Stashed changes
 }
 
 
