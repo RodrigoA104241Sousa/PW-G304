@@ -158,16 +158,23 @@ header.navbar {
 /* ------------------------- */
 /* Hero Section */
 .hero {
+<<<<<<< Updated upstream
   min-height: 100vh;
+=======
+  height: 100vh; /* Garante que a seção ocupe exatamente a altura da tela */
+>>>>>>> Stashed changes
   background-image: url('../imagens/imagemprincipal.png');
   background-size: cover;
   background-position: center;
   position: relative;
   display: flex;
-  align-items: center;
-  padding-left: 5%;
+  flex-direction: column; /* Alinha os elementos verticalmente */
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: center; /* Centraliza o texto */
+  padding: 20px; /* Adiciona espaçamento interno */
+  overflow: hidden; /* Evita que o conteúdo transborde */
 }
-
 .hero::before {
   content: '';
   position: absolute;
@@ -180,7 +187,6 @@ header.navbar {
 }
 
 .hero-content {
-  position: relative;
   z-index: 2;
   color: white;
   max-width: 600px;
@@ -188,9 +194,8 @@ header.navbar {
 }
 
 .hero-content h1 {
-  margin-top: -295px;
-  font-size: 85px;
-  margin-bottom: 10px;
+  font-size: 48px; /* Reduz o tamanho do título */
+  margin-bottom: 20px;
   font-weight: bold;
 }
 
@@ -204,34 +209,42 @@ header.navbar {
 }
 
 .hero-content p {
-  font-size: 35px;
-  margin-bottom: 10px;
+  font-size: 18px; /* Reduz o tamanho do texto */
+  margin-bottom: 20px;
   color: #e0f0ff;
 }
+
 .hero-content p:not(.hero-subtitle) {
   color: #76d3f5;
 }
 
 .hero-subtitle {
-  font-size: 25px !important;
-  margin-bottom: 30px !important;
+  font-size: 16px; /* Reduz o tamanho do subtítulo */
+  margin-bottom: 30px;
 }
 
 .saber-mais {
+  position: absolute; /* Posiciona o botão de forma absoluta */
+  bottom: 20px; /* Define a distância do botão em relação à parte inferior */
+  right: 20px; /* Define a distância do botão em relação à lateral direita */
   background-color: #000052;
   color: white;
-  padding: 15px 65px;
+  padding: 10px 30px;
   border: none;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
+<<<<<<< Updated upstream
   position: absolute;
   bottom: 50px;
   right: 90px;
   z-index: 2;
+=======
+>>>>>>> Stashed changes
 }
+
 
 .saber-mais:hover {
   background-color: #0000a0;
