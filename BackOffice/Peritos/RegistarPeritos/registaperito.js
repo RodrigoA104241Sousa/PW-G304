@@ -46,7 +46,7 @@ function showToast(message) {
     setTimeout(() => {
         toast.remove();
         // Redirecionar após o toast desaparecer
-        window.location.href = 'peritos.html';
+        window.location.href = '../peritos.html';
     }, 3000);
 }
 
