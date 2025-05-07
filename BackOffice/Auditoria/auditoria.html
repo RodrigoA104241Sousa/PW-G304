@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EyesEveryWhere</title>
-    <link rel="stylesheet" href="peritos.css">
+    <link rel="stylesheet" href="auditoria.css">
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
 </head>
 <body>
@@ -24,11 +24,26 @@
                     <span>Filtros</span>
                 </div>
 
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="filter"></i>
+                        <span>Mais Recente</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
 
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
-                        <span>Especialidade</span>
+                        <span>Mais Antiga</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="filter"></i>
+                        <span>Tipo de Auditoria</span>
                     </div>
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
@@ -51,17 +66,17 @@
 
                 <!-- Estado Submenu -->
                 <div class="submenu">
-                    <button class="submenu-item" data-status="Disponível">
+                    <button class="submenu-item" data-status="Concluída">
                         <span class="dot"></span>
-                        <span>Disponível</span>
+                        <span>Concluída</span>
                     </button>
-                    <button class="submenu-item" data-status="Não Disponível">
+                    <button class="submenu-item" data-status="Não Concluída">
                         <span class="dot"></span>
-                        <span>Não Disponível</span>
+                        <span>Não Concluída</span>
                     </button>
-                    <button class="submenu-item" data-status="Em Auditoria">
+                    <button class="submenu-item" data-status="Em Progresso">
                         <span class="dot"></span>
-                        <span>Em Auditoria</span>
+                        <span>Em Progresso</span>
                     </button>
                 </div>
             </nav>
@@ -80,13 +95,13 @@
 
                 <div class="page-selector">
                     <button class="page-dropdown-btn">
-                        Peritos
+                        Auditorias
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="page-dropdown-content">
-                        <a href="../Peritos/peritos.html" class="active">Peritos</a>
+                        <a href="auditoria.html" class="active">Auditorias</a>
                         <a href="../Ocorrência/ocorrencia.html">Ocorrências</a>
-                        <a href="../Auditoria/auditoria.html">Auditorias</a>
+                        <a href="../Peritos/peritos.html">Peritos</a>
                         <a href="dashboard.html">Dashboard</a>
                         <a href="../Utilizador/utilizador.html">Utilizadores</a>
                     </div>
@@ -105,8 +120,10 @@
 
             <!-- Filters -->
             <div class="filters">
-                <input type="text" id="searchInput" placeholder="Nome / Email Perito ...">
-                <input type="date" id="dateInput" placeholder="Trabalha desde ...">
+                <input type="text" id="searchInput" placeholder="Nome / Número Auditoria ...">
+                <input type="date" id="dateInput" placeholder="Data...">
+                <input type="text" id="searchInput" placeholder="Tipo de Auditoria...">
+                <input type="text" id="searchInput" placeholder="Estado...">
                 <button class="search-button" id="searchButton">
                     <span>Procurar</span>
                     <i data-lucide="search"></i>
@@ -119,25 +136,24 @@
                     <table>
                         <thead>
                             <tr class="table-header">
-                                <th><input type="checkbox" class="header-checkbox"></th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Nome / Email Perito</span>
+                                        <span>Nome / Número Auditoria</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Trabalha desde</span>
+                                        <span>Data</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>ESPECIALIDADE</span>
+                                        <span>Tipo de Auditoria</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>ESTADO</span>
+                                        <span>Estado</span>
                                     </div>
                                 </th>
                                 <th></th>
@@ -153,7 +169,7 @@
             <!-- Pagination -->
             <div class="pagination">
                 <div class="pagination-info">
-                    Mostrando 1 - 16 de 5.000 peritos registradas
+                    Mostrando 1 - 16 de 5.000 auditorias registradas
                 </div>
                 <div class="pagination-controls">
                     <select>
@@ -174,6 +190,6 @@
         </div>
     </div>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="peritos.js"></script>
+    <script src="auditoria.js"></script>
 </body>
 </html>
