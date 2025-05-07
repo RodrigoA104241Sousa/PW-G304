@@ -1,3 +1,31 @@
+// Adicione esta função no início do seu arquivo JS
+document.addEventListener('DOMContentLoaded', function() {
+    // Pegar o ID da ocorrência do localStorage
+    const occurrenceId = localStorage.getItem('occurrenceForAudit');
+    
+    if (occurrenceId) {
+        // Buscar ocorrências do localStorage
+        const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        
+        // Encontrar a ocorrência específica
+        const ocorrencia = ocorrencias.find(o => o.id === parseInt(occurrenceId));
+        
+        if (ocorrencia) {
+            // Preencher o campo de morada
+            const moradaInput = document.querySelector('.form-group:nth-child(3) input');
+            moradaInput.value = ocorrencia.morada || '';
+            
+            // Preencher o código postal se existir
+            const codigoPostalInput = document.getElementById('postalCode');
+            codigoPostalInput.value = ocorrencia.codigoPostal || '';
+            
+            // Opcional: tornar os campos readonly se você não quiser que sejam editados
+            moradaInput.setAttribute('readonly', true);
+            codigoPostalInput.setAttribute('readonly', true);
+        }
+    }
+});
+
 // Exibir/ocultar a lista de materiais ao clicar no ícone
         const materialsSearchInput = document.getElementById('materialsSearchInput');
         const materialsList = document.getElementById('materialsList');

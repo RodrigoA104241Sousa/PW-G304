@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
+  
   // Botão de Login no rodapé - Redirecionar para a página de login
   const footerLoginBtn = document.querySelector('.footer-login .login-btn');
   if (footerLoginBtn) {

@@ -130,20 +130,25 @@ function populateTable() {
 
     // Obter os dados das ocorrências do localStorage
     let occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-    console.log('Number of occurrences:', occurrences.length);
+
+    // Aplicar filtro por estado
+    if (currentFilter) {
+        occurrences = occurrences.filter(occ => occ.estado === currentFilter);
+    }
+    
+    if (currentSpecialtyFilter) {
+        occurrences = occurrences.filter(occ => occ.tipo === currentSpecialtyFilter);
+    }
 
     tbody.innerHTML = ""; // Limpar a tabela antes de preencher
 
-    // Forçar o estado de todas as ocorrências para "Em Espera"
-   
-    // Preencher a tabela com os dados das ocorrências
+    // Preencher a tabela com os dados filtrados
     occurrences.forEach(occ => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="checkbox" class="occurrence-checkbox" data-id="${occ.id}"></td>
             <td>
                 <div class="user-info">
-                    
                     <div class="user-email">${occ.email || 'N/A'}</div>
                 </div>
             </td>
@@ -166,7 +171,7 @@ function populateTable() {
         });
     });
 
-    // Atualizar ícones (se estiver usando Lucide ou similar)
+    // Atualizar ícones
     lucide.createIcons();
 }
 
@@ -290,19 +295,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Adicione os event listeners para os itens de especialidade
-    document.querySelectorAll('.submenu-item').forEach(item => {
-        const specialtyText = item.textContent.trim();
-        if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(specialtyText)) {
-            item.addEventListener('click', (e) => {
-                filterBySpecialty(specialtyText);
-                
-                // Atualiza o estado ativo
-                document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-            });
-        }
-    });
+// Event listeners para os itens de especialidade
+document.querySelectorAll('.submenu-item').forEach(item => {
+    const specialtyText = item.textContent.trim();
+    if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(specialtyText)) {
+        item.addEventListener('click', (e) => {
+            filterBySpecialty(specialtyText);
+            
+            // Atualiza o estado ativo
+            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+        });
+    }
+});
 
     // Adiciona evento de click no botão de busca
     const searchButton = document.getElementById('searchButton');
