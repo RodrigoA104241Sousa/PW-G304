@@ -136,14 +136,14 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5rem; /* espaçamento do cabeçalho */
+        padding: 1.5rem; /* altura do cabeçalho */
         border-bottom: 1px solid var(--border-color);
     }
     /* espaço para os Botões Adicionar e Remover */
     .header-left, .header-right {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 2rem;
     }
 /* Botões Adicionar e Remover*/
 .btn {
@@ -165,7 +165,7 @@ body {
 /* filtros */    
 .filters {
     display: flex;
-    gap: 3rem; /* espaço entre os filtros */
+    gap: 5rem; /* espaço entre os filtros */
     align-items: center;
     max-width: 1600px; /* largura máxima dos filtros */ 
     margin: 1.5rem auto; /* margem superior */
@@ -204,43 +204,43 @@ body {
         filter: grayscale(0%) opacity(1);
     }
 
-
-
+/* permitir icones/setas ao lado do titulo */
 .header-cell {
     display: flex;
     align-items: center;
 }
 
-
-
+/* tabela */
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
 }
+    /* cabeçalho e células da tabela */
+    th, td {
+        padding: 0.75rem;
+        text-align: left;
+    }
+        /* cabeçalho da tabela */
+        th {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        /* linha divisoria entre células */
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+        /* mais espaçamento entre as células */
+        tbody td {
+            padding: 1.5rem; 
+        }
+        /* ao passar o mouse por cima da linha da tabela */
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
 
-th, td {
-    padding: 0.75rem;
-    text-align: left;
-}
-
-th {
-    font-weight: bold;
-    color: var(--primary-color);
-}
-
-tbody tr {
-    border-bottom: 1px solid var(--border-color);
-}
-
-tbody td {
-    padding: 1.5rem; /* Increased padding for better spacing */
-}
-
-tbody tr:hover {
-    background-color: #f9fafb;
-}
-
+/* ESTADO */
+/* estilo geral */
 .status-badge {
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
@@ -249,69 +249,74 @@ tbody tr:hover {
     color: white;
     display: inline-block;
 }
+    /* concluída */
+    .status-available {
+        background-color: #dcfce7;
+        color: #166534;
+    }
 
-.status-available {
-    background-color: #dcfce7;
-    color: #166534;
-}
+    /* não concluída*/
+    .status-unavailable {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
 
-.status-unavailable {
-    background-color: #fee2e2;
-    color: #991b1b;
-}
+    /* em progresso */
+    .status-audit {
+        background-color: #fef9c3;
+        color: #854d0e;
+    }
+/* RODAPÉ */
+/* paginação */
+    /* estilo geral */
+    .pagination {
+        margin-top: auto;
+        padding: 1rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 600px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        position: sticky;
+        bottom: 0;
+        background-color: white;
+    }
+    /* elementos da paginação (16 e pagina) */
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-.status-audit {
-    background-color: #fef9c3;
-    color: #854d0e;
-}
+/* botões de paginação */
+    /* estilo geral */
+    .pagination-buttons {
+        display: flex;
+    }
+    .pagination-buttons button {
+        border: 1px solid var(--border-color);
+        padding: 0.25rem 0.5rem;
+        background: white;
+        cursor: pointer;
+        min-width: 28px;
+        text-align: center;
+    }
+    /* botões desativados não clicáveis */
+    .pagination-buttons button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    /* botão da página ativa*/
+    .pagination-buttons button.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
 
-.pagination {
-    margin-top: auto;
-    padding: 1rem;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 600px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    position: sticky;
-    bottom: 0;
-    background-color: white;
-}
-
-.pagination-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.pagination-buttons {
-    display: flex;
-}
-
-.pagination-buttons button {
-    border: 1px solid var(--border-color);
-    padding: 0.25rem 0.5rem;
-    background: white;
-    cursor: pointer;
-    min-width: 28px;
-    text-align: center;
-}
-
-.pagination-buttons button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.pagination-buttons button.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-/* Make select more compact */
+/* estilo do nº de auditorias que aparecem */
 .pagination-controls select {
     padding: 0.25rem;
     border: 1px solid var(--border-color);
@@ -417,37 +422,50 @@ tbody tr:hover {
     display: block;
 }
 
-/* Card Container Styles */
-.card-container {
-    margin: 1rem 2rem;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    max-width: 1600px; /* Increased from 1400px */
-    margin-left: auto;
-    margin-right: auto;
-    height: calc(100vh - 250px); /* Add fixed height based on viewport */
-    overflow: auto; /* Add scroll if content overflows */
-}
+/* CAIXA DA CÉLULA DA TABELA*/
+    /* Estilo geral da célula da tabela */
+    .card-container {
+        margin: 1rem 2rem;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        max-width: 1600px; /* Increased from 1400px */
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100vh - 250px); /* Add fixed height based on viewport */
+        overflow: auto; /* Add scroll if content overflows */
+    }
 
-/* Estilo para o input de data */
-input[type="date"] {
-    padding: 0.5rem 1.25rem;
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    color: var(--text-gray);
-    transition: border-color 0.2s ease;
-    width: 200px;
-    cursor: pointer;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    opacity: 0.6;
-}
-
-input[type="date"]:hover::-webkit-calendar-picker-indicator {
-    opacity: 1;
-}
+    /* Estilo da data */
+    input[type="date"] {
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        color: var(--text-gray);
+        transition: border-color 0.2s ease;
+        width: 200px;
+        cursor: pointer;
+    }
+/* calendário */
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+    /* estilo do calendário */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        padding: 0.25rem;
+        color: white;
+    }	
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.6;
+    }
+        /* ao passar o mouse por cima do calendário */
+        input[type="date"]:hover::-webkit-calendar-picker-indicator {
+            opacity: 1;
+        }
