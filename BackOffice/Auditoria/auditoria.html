@@ -30,12 +30,12 @@
                 </div>
 
                 <!-- + Recente -->
-                <div class="menu-item" id="filtroMaisRecente">
+                <div class="menu-item" data-sort="recente">
                     <span>Mais Recente</span>
                 </div>
 
                 <!-- + Antiga -->
-                <div class="menu-item" id="filtroMaisAntiga">
+                <div class="menu-item" data-sort="antiga">
                     <span>Mais Antiga</span>
                 </div>
 
@@ -77,15 +77,15 @@
                 </div>
                     <!-- Submenu do Estado -->
                     <div class="submenu">
-                        <button class="submenu-item" data-status="Concluída">
+                        <button class="submenu-item" data-estado="Concluída">
                             <span class="dot"></span>
                             <span>Concluída</span>
                         </button>
-                        <button class="submenu-item" data-status="Não Concluída">
+                        <button class="submenu-item" data-estado="Não Iniciada">
                             <span class="dot"></span>
-                            <span>Não Concluída</span>
+                            <span>Não Iniciada</span>
                         </button>
-                        <button class="submenu-item" data-status="Em Progresso">
+                        <button class="submenu-item" data-estado="Em Progresso">
                             <span class="dot"></span>
                             <span>Em Progresso</span>
                         </button>
@@ -101,7 +101,7 @@
             <header>
                 <!-- Botão Adicionar -->
                 <div class="header-left">
-                    <button id="addExpertBtn" class="btn btn-primary">
+                    <button id="addAuditoriaBtn" class="btn btn-primary"> <!--CORRIGIR PARA addAuditoriaBtn-->
                         <i data-lucide="plus"></i>
                         <span>ADICIONAR</span>
                     </button>
@@ -137,7 +137,7 @@
 
             <!-- Filtros -->
             <div class="filters">
-                <input type="number" id="searchInput" placeholder="Nº da Auditoria ...">
+                <input type="number" id="searchInput" placeholder="ID Auditoria ...">
                 <input type="date" id="dateInput" placeholder="Data...">
                 <input type="text" id="searchInput" placeholder="Tipo de Auditoria...">
                 <input type="text" id="searchInput" placeholder="Estado...">
@@ -153,20 +153,31 @@
                         <!-- Cabeçalho da tabela-->
                         <thead>
                             <tr class="table-header">
+                                <th><input type="checkbox" class="header-checkbox"></th>
                                 <th>
                                     <div class="header-cell">
-                                        <span>Número Auditoria</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Data</span>
+                                        <span>ID Auditoria</span>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="header-cell">
                                         <span>Tipo de Auditoria</span>
                                     </div>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>Data de criação</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>Perito Associado</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="header-cell">
+                                        <span>Ocorrência Associada </span>
+                                    </div>
+                                </th>
                                 </th>
                                 <th>
                                     <div class="header-cell">
@@ -176,8 +187,8 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <!-- corpo da tabela, preenchido automaticamente JS-->
-                        <tbody id="expertsTableBody">
+                        <!-- corpo da tabela, preenchido automaticamente JS -->
+                        <tbody id="auditoriasTableBody"> <!-- CORRIGIR PARA auditoriasTableBody-->
                         </tbody>
                     </table>
                 </div>
@@ -213,6 +224,6 @@
     <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- JavaScript -->
-    <script src="auditoria.js"></script> 
+    <script src="auditoriasLista.js"></script> 
 </body>
 </html>

@@ -171,43 +171,44 @@ body {
     margin: 1.5rem auto; /* margem superior */
     padding: 0 2rem;
 }
-/* texto dos filtros */
-.filters input {
-    padding: 0.5rem 1.25rem;
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    font-size: 1rem; /* tamanho do texto */
-    color: var(--text-gray);
-    transition: border-color 0.2s ease;
-    width: 200px; /* largura do input */
-}
+    /* texto dos filtros */
+    .filters input {
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 9999px;
+        font-size: 1rem; /* tamanho do texto */
+        color: var(--text-gray);
+        transition: border-color 0.2s ease;
+        width: 200px; /* largura do input */
+    }
 
-/* botão pesquisa */
-.search-icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-    /* estilo */
-    .search-icon-btn img {
-        width: 30px; /* ou 20px se quiseres mais pequeno */
-        height: 30px;
-        filter: grayscale(100%) opacity(0.6);
-        transition: filter 0.2s ease;
+    /* botão pesquisa */
+    .search-icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    /* ao passar o mouse por cima */
-    .search-icon-btn:hover img {
-        filter: grayscale(0%) opacity(1);
-    }
+        /* estilo */
+        .search-icon-btn img {
+            width: 30px; /* ou 20px se quiseres mais pequeno */
+            height: 30px;
+            filter: grayscale(100%) opacity(0.6);
+            transition: filter 0.2s ease;
+        }
+        /* ao passar o mouse por cima */
+        .search-icon-btn:hover img {
+            filter: grayscale(0%) opacity(1);
+        }
 
 /* permitir icones/setas ao lado do titulo */
 .header-cell {
+    text-align: center;
+    justify-content: center;
     display: flex;
-    align-items: center;
 }
 
 /* tabela */
@@ -219,7 +220,7 @@ table {
     /* cabeçalho e células da tabela */
     th, td {
         padding: 0.75rem;
-        text-align: left;
+        text-align: center;
     }
         /* cabeçalho da tabela */
         th {

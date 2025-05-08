@@ -1,41 +1,75 @@
-// Inicialização dos dados de auditorias
+// Dados
 let auditoriasData = JSON.parse(localStorage.getItem('auditoriasData')) || [
     {
         id: 1,
-        nome: "a",
-        email: "antoniocorreiabusiness@gmail.com",
-        data: "2025-05-07", // formato compatível com Date()
-        tipo: "Buraco na Estrada",
-        estado: "Disponível"
+        dataCriacao: "2025-05-08", // data da criação da auditoria
+        tipo: "Buraco na Estrada", // tipo de auditoria
+        estado: "Em Progresso",    // estado atual da auditoria
+        perito: "João Silva",      // nome do perito associado (estático para já)
+        ocorrencia: "1" // id da ocorrência (estático para já)
     }
 ];
 
-// Guardar no localStorage
+// Gravar os dados da auditoria no localStorage
 function saveAuditoriasData() {
     localStorage.setItem('auditoriasData', JSON.stringify(auditoriasData));
 }
 
-// Estado dos filtros
-let currentPage = 1;
-let itemsPerPage = 16;
-let auditoriaEstadoFiltro = null;
-let auditoriaTipoFiltro = null;
-let termoPesquisaNome = '';
-let termoPesquisaTipo = '';
-let termoPesquisaEstado = '';
-let dataFiltroAuditoria = null;
+    // Id do perito associado (estático para já)
+    function getNomePeritoPorId(idPerito) {
+        const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+        const perito = experts.find(expert => expert.id === idPerito);
+        return perito ? perito.name : "X";
+    }
+    // Id da ocorrência associada (estático para já)
+    function getDescricaoOcorrenciaPorId(idOcorrencia) {
+        const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        const ocorrencia = ocorrencias.find(o => o.id === idOcorrencia);
+        return ocorrencia ? ocorrencia.designacao : "X";
+    }
 
-// Atualizar paginação
+// Obter conforme Estado da auditoria
+function getStatusClass(status) {
+    switch (status) {
+        case "Concluída":
+            return "status-available";
+        case "Não Iniciada":
+            return "status-unavailable";
+        case "Em Progresso":
+            return "status-audit";
+        default:
+            return "";
+    }
+}
+
+// Variaveis globais
+    // Página atual 
+    let currentPage = 1;
+    // nº auditorias por página
+    let itemsPerPage = 16;
+
+// Filtro de tipo de auditoria
+let currentSpecialtyFilter = null;
+
+// Termo d pesquisa
+let searchTerm = '';
+
+// Filtro de
+let dateFilter = null;
+
+// Function to update pagination
 function updatePagination() {
-    const auditorias = filtrarAuditorias();
-    const total = auditorias.length;
-    const totalPages = Math.ceil(total / itemsPerPage);
+    const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+    const totalExperts = experts.length;
+    const totalPages = Math.ceil(totalExperts / itemsPerPage);
     
+    // Update info text
     const start = (currentPage - 1) * itemsPerPage + 1;
-    const end = Math.min(currentPage * itemsPerPage, total);
+    const end = Math.min(currentPage * itemsPerPage, totalExperts);
     document.querySelector('.pagination-info').textContent = 
-        `Mostrando ${start} - ${end} de ${total} auditorias registadas`;
+        `Mostrando ${start} - ${end} de ${totalExperts} peritos registados`;
 
+    // Update pagination buttons
     const paginationButtons = document.querySelector('.pagination-buttons');
     paginationButtons.innerHTML = `
         <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&lt;</button>
@@ -43,110 +77,115 @@ function updatePagination() {
         <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">&gt;</button>
     `;
 
-    document.querySelector('.pagination-controls select').value = itemsPerPage;
+    // Update items per page select
+    const select = document.querySelector('.pagination-controls select');
+    select.value = itemsPerPage;
 }
 
+// Function to generate pagination buttons
 function getPaginationButtons(current, total) {
     let buttons = '';
     for (let i = 1; i <= total; i++) {
-        buttons += `<button ${i === current ? 'class="active"' : `onclick="changePage(${i})"`}>${i}</button>`;
+        if (i === current) {
+            buttons += `<button class="active">${i}</button>`;
+        } else {
+            buttons += `<button onclick="changePage(${i})">${i}</button>`;
+        }
     }
     return buttons;
 }
 
+// Function to change page
 function changePage(page) {
     currentPage = page;
-    atualizarTabelaAuditorias();
+    updatePagination();
+    populateTable();
+}
+
+let currentFilter = null;
+
+function filterByStatus(status) {
+    currentFilter = status;
+    currentPage = 1; // Reset to first page when filtering
+    populateTable();
     updatePagination();
 }
 
-// Funções de filtro
-function filtrarPorEstadoAuditoria(estado) {
-    auditoriaEstadoFiltro = estado;
-    currentPage = 1;
-    atualizarTabelaAuditorias();
+// Adicione esta função nova
+function filterBySpecialty(specialty) {
+    currentSpecialtyFilter = specialty;
+    currentPage = 1; // Reset para a primeira página ao filtrar
+    populateTable();
     updatePagination();
 }
 
-function filtrarPorTipoAuditoria(tipo) {
-    auditoriaTipoFiltro = tipo;
-    currentPage = 1;
-    atualizarTabelaAuditorias();
+// Adicione esta nova função
+function searchExperts() {
+    const searchInput = document.getElementById('searchInput');
+    searchTerm = searchInput.value.toLowerCase().trim();
+    currentPage = 1; // Reset para primeira página
+    populateTable();
     updatePagination();
 }
 
-function procurarAuditorias() {
-    termoPesquisaNome = document.getElementById('searchNome').value.toLowerCase().trim();
-    termoPesquisaTipo = document.getElementById('searchTipo').value.toLowerCase().trim();
-    termoPesquisaEstado = document.getElementById('searchEstado').value.toLowerCase().trim();
-    currentPage = 1;
-    atualizarTabelaAuditorias();
+// Adicione esta nova função
+function filterByDate(date) {
+    dateFilter = date;
+    currentPage = 1; // Reset para primeira página
+    populateTable();
     updatePagination();
 }
 
-function filtrarPorDataAuditoria(data) {
-    dataFiltroAuditoria = data;
-    currentPage = 1;
-    atualizarTabelaAuditorias();
-    updatePagination();
-}
-
-// Filtrar auditorias segundo critérios
-function filtrarAuditorias() {
-    let auditorias = JSON.parse(localStorage.getItem('auditoriasData')) || [];
-
-    if (auditoriaEstadoFiltro) {
-        auditorias = auditorias.filter(a => a.estado === auditoriaEstadoFiltro);
-    }
-    if (auditoriaTipoFiltro) {
-        auditorias = auditorias.filter(a => a.tipo === auditoriaTipoFiltro);
-    }
-    if (termoPesquisaNome) {
-        auditorias = auditorias.filter(a =>
-            a.nome.toLowerCase().includes(termoPesquisaNome) ||
-            a.email.toLowerCase().includes(termoPesquisaNome)
-        );
-    }
-    if (termoPesquisaTipo) {
-        auditorias = auditorias.filter(a =>
-            a.tipo.toLowerCase().includes(termoPesquisaTipo)
-        );
-    }
-    if (termoPesquisaEstado) {
-        auditorias = auditorias.filter(a =>
-            a.estado.toLowerCase().includes(termoPesquisaEstado)
-        );
-    }
-    if (dataFiltroAuditoria) {
-        const filtro = new Date(dataFiltroAuditoria);
-        auditorias = auditorias.filter(a => new Date(a.data) >= filtro);
-    }
-
-    return auditorias;
-}
-
-// Atualizar tabela
-function atualizarTabelaAuditorias() {
+// Modifique a função populateTable existente
+function populateTable() {
     const tbody = document.getElementById("expertsTableBody");
-    let auditorias = filtrarAuditorias();
+    let experts = JSON.parse(localStorage.getItem('expertsData')) || [];
     
+    // Aplica os filtros
+    if (currentFilter) {
+        experts = experts.filter(expert => expert.status === currentFilter);
+    }
+    if (currentSpecialtyFilter) {
+        experts = experts.filter(expert => expert.specialty === currentSpecialtyFilter);
+    }
+    
+    // Aplica o filtro de busca
+    if (searchTerm) {
+        experts = experts.filter(expert => 
+            expert.name.toLowerCase().includes(searchTerm) ||
+            expert.email.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    // Aplica o filtro de data
+    if (dateFilter) {
+        experts = experts.filter(expert => {
+            const expertDate = new Date(expert.startDate);
+            const filterDate = new Date(dateFilter);
+            return expertDate >= filterDate;
+        });
+    }
+    
+    // Calculate slice indexes for current page
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const pageAuditorias = auditorias.slice(start, end);
-
+    const pageExperts = experts.slice(start, end);
+    
     tbody.innerHTML = "";
     
-    pageAuditorias.forEach(auditoria => {
+    pageExperts.forEach(expert => {
         const row = document.createElement("tr");
         row.innerHTML = `
+            <td><input type="checkbox" class="expert-checkbox" data-id="${expert.id}"></td>
             <td>
-                <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}">
-                <div>${auditoria.nome}</div>
-                <div class="expert-email">${auditoria.email}</div>
+                <div class="expert-info">
+                    <div class="expert-name">${expert.name}</div>
+                    <div class="expert-email">${expert.email}</div>
+                </div>
             </td>
-            <td>${auditoria.data}</td>
-            <td>${auditoria.tipo}</td>
-            <td><span class="status-badge">${auditoria.estado}</span></td>
+            <td>${expert.startDate}</td>
+            <td>${expert.specialty}</td>
+            <td><span class="status-badge ${getStatusClass(expert.status)}">${expert.status}</span></td>
             <td>
                 <button class="btn-icon">
                     <i data-lucide="more-vertical"></i>
@@ -159,66 +198,120 @@ function atualizarTabelaAuditorias() {
     lucide.createIcons();
 }
 
-// Remover auditorias selecionadas
+// Add header checkbox functionality
+function setupHeaderCheckbox() {
+    const headerCheckbox = document.querySelector('.header-checkbox');
+    headerCheckbox.addEventListener('change', (e) => {
+        const checkboxes = document.querySelectorAll('.expert-checkbox');
+        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+    });
+}
+
+// Update setupRemoveButton function
 function setupRemoveButton() {
     const removeButton = document.querySelector('.btn-danger');
     removeButton.addEventListener('click', () => {
-        const selected = document.querySelectorAll('.auditoria-checkbox:checked');
-        if (selected.length === 0) {
-            alert('Selecione pelo menos uma auditoria para remover.');
+        const selectedCheckboxes = document.querySelectorAll('.expert-checkbox:checked');
+        
+        if (selectedCheckboxes.length === 0) {
+            alert('Selecione pelo menos um perito para remover');
             return;
         }
 
-        if (confirm('Tem certeza que deseja remover as auditorias selecionadas?')) {
-            const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
-            auditoriasData = auditoriasData.filter(a => !ids.includes(a.id));
-            saveAuditoriasData();
-            document.querySelector('.header-checkbox')?.checked = false;
-            atualizarTabelaAuditorias();
-            updatePagination();
+        if (confirm('Tem certeza que deseja remover os peritos selecionados?')) {
+            const selectedIds = Array.from(selectedCheckboxes).map(checkbox => 
+                parseInt(checkbox.getAttribute('data-id'))
+            );
+
+            // Remove selected experts from the data
+            expertsData = expertsData.filter(expert => !selectedIds.includes(expert.id));
+            
+            // Save updated data to localStorage
+            saveExpertsData();
+            
+            // Clear header checkbox
+            document.querySelector('.header-checkbox').checked = false;
+            
+            // Refresh the table
+            populateTable();
         }
     });
 }
 
-// Inicializar tudo ao carregar
+// Add this to your existing JavaScript
+document.getElementById('addExpertBtn').addEventListener('click', () => {
+    window.location.href = './RegistarPeritos/registaperito.html';
+});
+
+// Add event listener for items per page select
+document.querySelector('.pagination-controls select').addEventListener('change', (e) => {
+    itemsPerPage = parseInt(e.target.value);
+    currentPage = 1; // Reset to first page
+    updatePagination();
+    populateTable();
+});
+
+// Initialize everything when page loads
 document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
-    atualizarTabelaAuditorias();
+    populateTable();
+    setupHeaderCheckbox();
     setupRemoveButton();
     updatePagination();
 
-    // Eventos de filtro por estado
-    document.querySelectorAll('.submenu-item[data-status]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const estado = btn.getAttribute('data-status');
-            filtrarPorEstadoAuditoria(estado);
+    // Add click handlers for status filters
+    document.querySelectorAll('.submenu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const status = e.target.closest('.submenu-item').querySelector('span:last-child').textContent;
+            filterByStatus(status);
+            
+            // Update active state
+            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
         });
     });
 
-    // Eventos de filtro por tipo
+    // Add click handlers for status filter buttons
+    document.querySelectorAll('.submenu-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const status = button.getAttribute('data-status');
+            filterByStatus(status);
+            
+            // Update active state
+            document.querySelectorAll('.submenu-item').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
+
+    // Adicione os event listeners para os itens de especialidade
     document.querySelectorAll('.submenu-item').forEach(item => {
-        const tipo = item.textContent.trim();
-        if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(tipo)) {
-            item.addEventListener('click', () => {
-                filtrarPorTipoAuditoria(tipo);
+        const specialtyText = item.textContent.trim();
+        if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(specialtyText)) {
+            item.addEventListener('click', (e) => {
+                filterBySpecialty(specialtyText);
+                
+                // Atualiza o estado ativo
+                document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
             });
         }
     });
 
-    document.getElementById('searchButton').addEventListener('click', procurarAuditorias);
-    document.getElementById('dateInput').addEventListener('change', (e) => {
-        filtrarPorDataAuditoria(e.target.value);
+    // Adiciona evento de click no botão de busca
+    const searchButton = document.getElementById('searchButton');
+    searchButton.addEventListener('click', searchExperts);
+
+    // Adiciona evento de pressionar Enter no campo de busca
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchExperts();
+        }
     });
 
-    document.querySelector('.pagination-controls select').addEventListener('change', (e) => {
-        itemsPerPage = parseInt(e.target.value);
-        currentPage = 1;
-        atualizarTabelaAuditorias();
-        updatePagination();
-    });
-
-    // ✅ Corrigido: garantir que o botão existe no momento certo
-    document.getElementById('addExpertBtn').addEventListener('click', () => {
-        window.location.href = 'criarauditoria.html';
+    // Adiciona evento de mudança no input de data
+    const dateInput = document.getElementById('dateInput');
+    dateInput.addEventListener('change', (e) => {
+        filterByDate(e.target.value);
     });
 });
