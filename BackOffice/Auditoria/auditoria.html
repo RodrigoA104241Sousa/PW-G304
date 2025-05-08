@@ -120,14 +120,13 @@
 
             <!-- Filters -->
             <div class="filters">
-                <input type="text" id="searchInput" placeholder="Nome / Número Auditoria ...">
+                <input type="number" id="searchInput" placeholder="Nº da Auditoria ...">
                 <input type="date" id="dateInput" placeholder="Data...">
                 <input type="text" id="searchInput" placeholder="Tipo de Auditoria...">
                 <input type="text" id="searchInput" placeholder="Estado...">
-                <button class="search-button" id="searchButton">
-                    <span>Procurar</span>
-                    <i data-lucide="search"></i>
-                </button>
+                <button id="searchButton" class="search-icon-btn">
+                    <img src="pesquisa.png" alt="Pesquisar" />
+                  </button>
             </div>
 
             <!-- Table -->
@@ -138,7 +137,7 @@
                             <tr class="table-header">
                                 <th>
                                     <div class="header-cell">
-                                        <span>Nome / Número Auditoria</span>
+                                        <span>Número Auditoria</span>
                                     </div>
                                 </th>
                                 <th>
