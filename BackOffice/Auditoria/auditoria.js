@@ -1,60 +1,41 @@
-// Replace or update the expertsData initialization
-let expertsData = JSON.parse(localStorage.getItem('expertsData')) || [
+// Inicialização dos dados de auditorias
+let auditoriasData = JSON.parse(localStorage.getItem('auditoriasData')) || [
     {
         id: 1,
-        name: "João Silva",
-        email: "joao.silva@email.com",
-        startDate: "01/01/2023",
-        specialty: "Buraco na Estrada",
-        status: "Disponível"
+        nome: "a",
+        email: "antoniocorreiabusiness@gmail.com",
+        data: "2025-05-07", // formato compatível com Date()
+        tipo: "Buraco na Estrada",
+        estado: "Disponível"
     }
-    // ...other default experts if needed
 ];
 
-// Function to save experts data to localStorage
-function saveExpertsData() {
-    localStorage.setItem('expertsData', JSON.stringify(expertsData));
+// Guardar no localStorage
+function saveAuditoriasData() {
+    localStorage.setItem('auditoriasData', JSON.stringify(auditoriasData));
 }
 
-function getStatusClass(status) {
-    switch (status) {
-        case "Disponível":
-            return "status-available";
-        case "Não Disponível":
-            return "status-unavailable";
-        case "Em Auditoria":
-            return "status-audit";
-        default:
-            return "";
-    }
-}
-
-// Add pagination state
+// Estado dos filtros
 let currentPage = 1;
 let itemsPerPage = 16;
+let auditoriaEstadoFiltro = null;
+let auditoriaTipoFiltro = null;
+let termoPesquisaNome = '';
+let termoPesquisaTipo = '';
+let termoPesquisaEstado = '';
+let dataFiltroAuditoria = null;
 
-// Adicione esta variável no topo do arquivo junto com as outras variáveis globais
-let currentSpecialtyFilter = null;
-
-// Adicione estas variáveis globais
-let searchTerm = '';
-
-// Adicione estas variáveis globais
-let dateFilter = null;
-
-// Function to update pagination
+// Atualizar paginação
 function updatePagination() {
-    const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-    const totalExperts = experts.length;
-    const totalPages = Math.ceil(totalExperts / itemsPerPage);
+    const auditorias = filtrarAuditorias();
+    const total = auditorias.length;
+    const totalPages = Math.ceil(total / itemsPerPage);
     
-    // Update info text
     const start = (currentPage - 1) * itemsPerPage + 1;
-    const end = Math.min(currentPage * itemsPerPage, totalExperts);
+    const end = Math.min(currentPage * itemsPerPage, total);
     document.querySelector('.pagination-info').textContent = 
-        `Mostrando ${start} - ${end} de ${totalExperts} peritos registados`;
+        `Mostrando ${start} - ${end} de ${total} auditorias registadas`;
 
-    // Update pagination buttons
     const paginationButtons = document.querySelector('.pagination-buttons');
     paginationButtons.innerHTML = `
         <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&lt;</button>
@@ -62,115 +43,110 @@ function updatePagination() {
         <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">&gt;</button>
     `;
 
-    // Update items per page select
-    const select = document.querySelector('.pagination-controls select');
-    select.value = itemsPerPage;
+    document.querySelector('.pagination-controls select').value = itemsPerPage;
 }
 
-// Function to generate pagination buttons
 function getPaginationButtons(current, total) {
     let buttons = '';
     for (let i = 1; i <= total; i++) {
-        if (i === current) {
-            buttons += `<button class="active">${i}</button>`;
-        } else {
-            buttons += `<button onclick="changePage(${i})">${i}</button>`;
-        }
+        buttons += `<button ${i === current ? 'class="active"' : `onclick="changePage(${i})"`}>${i}</button>`;
     }
     return buttons;
 }
 
-// Function to change page
 function changePage(page) {
     currentPage = page;
-    updatePagination();
-    populateTable();
-}
-
-let currentFilter = null;
-
-function filterByStatus(status) {
-    currentFilter = status;
-    currentPage = 1; // Reset to first page when filtering
-    populateTable();
+    atualizarTabelaAuditorias();
     updatePagination();
 }
 
-// Adicione esta função nova
-function filterBySpecialty(specialty) {
-    currentSpecialtyFilter = specialty;
-    currentPage = 1; // Reset para a primeira página ao filtrar
-    populateTable();
+// Funções de filtro
+function filtrarPorEstadoAuditoria(estado) {
+    auditoriaEstadoFiltro = estado;
+    currentPage = 1;
+    atualizarTabelaAuditorias();
     updatePagination();
 }
 
-// Adicione esta nova função
-function searchExperts() {
-    const searchInput = document.getElementById('searchInput');
-    searchTerm = searchInput.value.toLowerCase().trim();
-    currentPage = 1; // Reset para primeira página
-    populateTable();
+function filtrarPorTipoAuditoria(tipo) {
+    auditoriaTipoFiltro = tipo;
+    currentPage = 1;
+    atualizarTabelaAuditorias();
     updatePagination();
 }
 
-// Adicione esta nova função
-function filterByDate(date) {
-    dateFilter = date;
-    currentPage = 1; // Reset para primeira página
-    populateTable();
+function procurarAuditorias() {
+    termoPesquisaNome = document.getElementById('searchNome').value.toLowerCase().trim();
+    termoPesquisaTipo = document.getElementById('searchTipo').value.toLowerCase().trim();
+    termoPesquisaEstado = document.getElementById('searchEstado').value.toLowerCase().trim();
+    currentPage = 1;
+    atualizarTabelaAuditorias();
     updatePagination();
 }
 
-// Modifique a função populateTable existente
-function populateTable() {
-    const tbody = document.getElementById("expertsTableBody");
-    let experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-    
-    // Aplica os filtros
-    if (currentFilter) {
-        experts = experts.filter(expert => expert.status === currentFilter);
+function filtrarPorDataAuditoria(data) {
+    dataFiltroAuditoria = data;
+    currentPage = 1;
+    atualizarTabelaAuditorias();
+    updatePagination();
+}
+
+// Filtrar auditorias segundo critérios
+function filtrarAuditorias() {
+    let auditorias = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+
+    if (auditoriaEstadoFiltro) {
+        auditorias = auditorias.filter(a => a.estado === auditoriaEstadoFiltro);
     }
-    if (currentSpecialtyFilter) {
-        experts = experts.filter(expert => expert.specialty === currentSpecialtyFilter);
+    if (auditoriaTipoFiltro) {
+        auditorias = auditorias.filter(a => a.tipo === auditoriaTipoFiltro);
     }
-    
-    // Aplica o filtro de busca
-    if (searchTerm) {
-        experts = experts.filter(expert => 
-            expert.name.toLowerCase().includes(searchTerm) ||
-            expert.email.toLowerCase().includes(searchTerm)
+    if (termoPesquisaNome) {
+        auditorias = auditorias.filter(a =>
+            a.nome.toLowerCase().includes(termoPesquisaNome) ||
+            a.email.toLowerCase().includes(termoPesquisaNome)
         );
     }
-    
-    // Aplica o filtro de data
-    if (dateFilter) {
-        experts = experts.filter(expert => {
-            const expertDate = new Date(expert.startDate);
-            const filterDate = new Date(dateFilter);
-            return expertDate >= filterDate;
-        });
+    if (termoPesquisaTipo) {
+        auditorias = auditorias.filter(a =>
+            a.tipo.toLowerCase().includes(termoPesquisaTipo)
+        );
     }
+    if (termoPesquisaEstado) {
+        auditorias = auditorias.filter(a =>
+            a.estado.toLowerCase().includes(termoPesquisaEstado)
+        );
+    }
+    if (dataFiltroAuditoria) {
+        const filtro = new Date(dataFiltroAuditoria);
+        auditorias = auditorias.filter(a => new Date(a.data) >= filtro);
+    }
+
+    return auditorias;
+}
+
+// Atualizar tabela
+function atualizarTabelaAuditorias() {
+    const tbody = document.getElementById("expertsTableBody");
+    let auditorias = filtrarAuditorias();
     
-    // Calculate slice indexes for current page
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const pageExperts = experts.slice(start, end);
-    
+    const pageAuditorias = auditorias.slice(start, end);
+
     tbody.innerHTML = "";
     
-    pageExperts.forEach(expert => {
+    pageAuditorias.forEach(auditoria => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><input type="checkbox" class="expert-checkbox" data-id="${expert.id}"></td>
             <td>
-                <div class="expert-info">
-                    <div class="expert-name">${expert.name}</div>
-                    <div class="expert-email">${expert.email}</div>
-                </div>
+                <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}">
+                <div>${auditoria.nome}</div>
+                <div class="expert-email">${auditoria.email}</div>
             </td>
-            <td>${expert.startDate}</td>
-            <td>${expert.specialty}</td>
-            <td><span class="status-badge ${getStatusClass(expert.status)}">${expert.status}</span></td>
+            <td>${auditoria.data}</td>
+            <td>${auditoria.tipo}</td>
+            <td><span class="status-badge">${auditoria.estado}</span></td>
             <td>
                 <button class="btn-icon">
                     <i data-lucide="more-vertical"></i>
@@ -183,120 +159,66 @@ function populateTable() {
     lucide.createIcons();
 }
 
-// Add header checkbox functionality
-function setupHeaderCheckbox() {
-    const headerCheckbox = document.querySelector('.header-checkbox');
-    headerCheckbox.addEventListener('change', (e) => {
-        const checkboxes = document.querySelectorAll('.expert-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-    });
-}
-
-// Update setupRemoveButton function
+// Remover auditorias selecionadas
 function setupRemoveButton() {
     const removeButton = document.querySelector('.btn-danger');
     removeButton.addEventListener('click', () => {
-        const selectedCheckboxes = document.querySelectorAll('.expert-checkbox:checked');
-        
-        if (selectedCheckboxes.length === 0) {
-            alert('Selecione pelo menos um perito para remover');
+        const selected = document.querySelectorAll('.auditoria-checkbox:checked');
+        if (selected.length === 0) {
+            alert('Selecione pelo menos uma auditoria para remover.');
             return;
         }
 
-        if (confirm('Tem certeza que deseja remover os peritos selecionados?')) {
-            const selectedIds = Array.from(selectedCheckboxes).map(checkbox => 
-                parseInt(checkbox.getAttribute('data-id'))
-            );
-
-            // Remove selected experts from the data
-            expertsData = expertsData.filter(expert => !selectedIds.includes(expert.id));
-            
-            // Save updated data to localStorage
-            saveExpertsData();
-            
-            // Clear header checkbox
-            document.querySelector('.header-checkbox').checked = false;
-            
-            // Refresh the table
-            populateTable();
+        if (confirm('Tem certeza que deseja remover as auditorias selecionadas?')) {
+            const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
+            auditoriasData = auditoriasData.filter(a => !ids.includes(a.id));
+            saveAuditoriasData();
+            document.querySelector('.header-checkbox')?.checked = false;
+            atualizarTabelaAuditorias();
+            updatePagination();
         }
     });
 }
 
-// Add this to your existing JavaScript
-document.getElementById('addExpertBtn').addEventListener('click', () => {
-    window.location.href = './RegistarPeritos/registaperito.html';
-});
-
-// Add event listener for items per page select
-document.querySelector('.pagination-controls select').addEventListener('change', (e) => {
-    itemsPerPage = parseInt(e.target.value);
-    currentPage = 1; // Reset to first page
-    updatePagination();
-    populateTable();
-});
-
-// Initialize everything when page loads
+// Inicializar tudo ao carregar
 document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
-    populateTable();
-    setupHeaderCheckbox();
+    atualizarTabelaAuditorias();
     setupRemoveButton();
     updatePagination();
 
-    // Add click handlers for status filters
-    document.querySelectorAll('.submenu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            const status = e.target.closest('.submenu-item').querySelector('span:last-child').textContent;
-            filterByStatus(status);
-            
-            // Update active state
-            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+    // Eventos de filtro por estado
+    document.querySelectorAll('.submenu-item[data-status]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const estado = btn.getAttribute('data-status');
+            filtrarPorEstadoAuditoria(estado);
         });
     });
 
-    // Add click handlers for status filter buttons
-    document.querySelectorAll('.submenu-item').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const status = button.getAttribute('data-status');
-            filterByStatus(status);
-            
-            // Update active state
-            document.querySelectorAll('.submenu-item').forEach(b => b.classList.remove('active'));
-            button.classList.add('active');
-        });
-    });
-
-    // Adicione os event listeners para os itens de especialidade
+    // Eventos de filtro por tipo
     document.querySelectorAll('.submenu-item').forEach(item => {
-        const specialtyText = item.textContent.trim();
-        if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(specialtyText)) {
-            item.addEventListener('click', (e) => {
-                filterBySpecialty(specialtyText);
-                
-                // Atualiza o estado ativo
-                document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
+        const tipo = item.textContent.trim();
+        if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(tipo)) {
+            item.addEventListener('click', () => {
+                filtrarPorTipoAuditoria(tipo);
             });
         }
     });
 
-    // Adiciona evento de click no botão de busca
-    const searchButton = document.getElementById('searchButton');
-    searchButton.addEventListener('click', searchExperts);
-
-    // Adiciona evento de pressionar Enter no campo de busca
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            searchExperts();
-        }
+    document.getElementById('searchButton').addEventListener('click', procurarAuditorias);
+    document.getElementById('dateInput').addEventListener('change', (e) => {
+        filtrarPorDataAuditoria(e.target.value);
     });
 
-    // Adiciona evento de mudança no input de data
-    const dateInput = document.getElementById('dateInput');
-    dateInput.addEventListener('change', (e) => {
-        filterByDate(e.target.value);
+    document.querySelector('.pagination-controls select').addEventListener('change', (e) => {
+        itemsPerPage = parseInt(e.target.value);
+        currentPage = 1;
+        atualizarTabelaAuditorias();
+        updatePagination();
+    });
+
+    // ✅ Corrigido: garantir que o botão existe no momento certo
+    document.getElementById('addExpertBtn').addEventListener('click', () => {
+        window.location.href = 'criarauditoria.html';
     });
 });
