@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const islogged = localStorage.getItem('islogged') === 'true';
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('userfront'));
   const loginContainer = document.getElementById('loginContainer'); // Container do botão de login
   const logoutButton = document.getElementById('logoutButton'); // Botão de logout
 
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutButton.addEventListener('click', () => {
       // Definir islogged como falso e remover o usuário do localStorage
       localStorage.setItem('islogged', 'false');
-      localStorage.removeItem('user');
+      localStorage.removeItem('userfront');
 
       // Substituir a foto de perfil pelo botão de login
       loginContainer.innerHTML = `

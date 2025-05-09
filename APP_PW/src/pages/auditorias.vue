@@ -5,63 +5,9 @@ import Card from '../components/card.vue';
 import { ref, computed } from 'vue'
 
 
-const ocorrencias = [
-  {
-    id: 1,
-    tipo_de_problema: 'Buraco na estrada',
-    denunciante: 'Pedro',
-    localizacao: 'Rua Central',
-    codigoPostal: '4800-039',
-    descricao: 'Existe um buraco grande na estrada que pode causar acidentes.'
-  },
-  {
-    id: 2,
-    tipo_de_problema: 'Semáforo avariado',
-    denunciante: 'Joana',
-    localizacao: 'Av. das Flores',
-    codigoPostal: '4800-045',
-    descricao: 'O semáforo está apagado e causa confusão no trânsito.'
-  },
-  {
-    id: 3,
-    tipo_de_problema: 'Caixote do lixo partido',
-    denunciante: 'Rui',
-    localizacao: 'Rua do Lixo',
-    codigoPostal: '4800-051',
-    descricao: 'O caixote está partido e o lixo está a espalhar-se na rua.'
-  },
-  {
-    id: 4,
-    tipo_de_problema: 'Tampa de esgoto solta',
-    denunciante: 'Ana',
-    localizacao: 'Rua dos Gatos',
-    codigoPostal: '4800-062',
-    descricao: 'A tampa está fora do lugar e representa perigo para peões.'
-  },
-  {
-    id: 5,
-    tipo_de_problema: 'Luz pública apagada',
-    denunciante: 'Carlos',
-    localizacao: 'Travessa Escura',
-    codigoPostal: '4800-071',
-    descricao: 'A rua está completamente às escuras à noite.'
-  },
-  {
-    id: 6,
-    tipo_de_problema: 'Luz pública apagada',
-    denunciante: 'Marta',
-    localizacao: 'Travessa Escura',
-    codigoPostal: '4800-071',
-    descricao: 'A luz não funciona há vários dias.'
-  }
-]
 
 
-
-// 2. Guardar no localStorage
-localStorage.setItem('ocorrencias', JSON.stringify(ocorrencias))
-
-const todasOcorrencias = ref(JSON.parse(localStorage.getItem('ocorrencias') || '[]'))
+const todasOcorrencias = ref(JSON.parse(localStorage.getItem('auditorias') || '[]'))
 
 // 2. Lógica de paginação
 const paginaAtual = ref(1)
@@ -99,7 +45,7 @@ function paginaAnterior() {
       <Card
         v-for="ocorrencia in ocorrenciasVisiveis"
         :key="ocorrencia.id"
-        :nomeAuditoria="ocorrencia.tipo_de_problema"
+        :nomeAuditoria="ocorrencia.nome"
         textoBotao="Gerir Pedido"
         :id="ocorrencia.id"
         :tipo="'auditoria'"

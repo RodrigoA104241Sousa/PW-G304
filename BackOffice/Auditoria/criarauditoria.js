@@ -631,7 +631,6 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
       'Duração':    document.getElementById('durationInput'),
       'Data':       document.getElementById('dateInput'),
       'Morada':     document.querySelector('.form-group:nth-child(3) input'),
-      'Código Postal': document.getElementById('postalCode'),
     };
   
     let firstError = null;
@@ -692,7 +691,6 @@ function saveAuditToLocalStorage() {
     const duracao = document.getElementById('durationInput').value;
     const data = document.getElementById('dateInput').value;
     const morada = document.querySelector('.form-group:nth-child(3) input').value;
-    const codigoPostal = document.getElementById('postalCode').value;
     const nivelUrgencia = document.querySelector('input[name="urgency"]:checked')?.value || '';
 
     // Obter materiais selecionados
@@ -708,7 +706,6 @@ function saveAuditToLocalStorage() {
         duracao: duracao,
         data: data,
         morada: morada,
-        codigoPostal: codigoPostal,
         nivelUrgencia: nivelUrgencia,
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,

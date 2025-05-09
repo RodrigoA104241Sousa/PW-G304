@@ -7,7 +7,7 @@ export const useAuditoriaStore = defineStore('auditoria', {
     pagina2: JSON.parse(localStorage.getItem('pagina2')) || {},
     pagina3: JSON.parse(localStorage.getItem('pagina3')) || {},
     pagina4: JSON.parse(localStorage.getItem('pagina4')) || {},
-    auditorias: JSON.parse(localStorage.getItem('auditorias')) || [],
+    auditorias: JSON.parse(localStorage.getItem('auditoria_resolvida')) || [],
   }),
   actions: { 
     setDados(pagina, dados) {
@@ -35,7 +35,7 @@ export const useAuditoriaStore = defineStore('auditoria', {
           this.auditorias.push(nova)
         }
       
-        localStorage.setItem('auditorias', JSON.stringify(this.auditorias))
+        localStorage.setItem('auditoria_resolvida', JSON.stringify(this.auditorias))
         this.limparTudo()
       },
 
