@@ -2,7 +2,7 @@ document.getElementById("googleLoginBtn").addEventListener("click", function(eve
   event.preventDefault();
   
   // Parâmetros para autenticação OAuth2
-  const clientId = "315984364753-t1pnd1ugsh9ig5f09kvv9aud6sj4erpa.apps.googleusercontent.com";
+  const clientId = "638875266220-lc2qlih7bdm9igt63ti78vsjfb12qiub.apps.googleusercontent.com";
   const redirectUri = "http://localhost:3000/BackOffice/Login/LoginEyesEverywhere.html";
  // URL fixa
   const scope = "email profile openid";

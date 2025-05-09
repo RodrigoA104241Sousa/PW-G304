@@ -4,13 +4,13 @@ const app = express();
 
 // Redirecionar '/' para '/front'
 app.get('/', (req, res) => {
-  res.redirect('/front/Auditorias/index.html');
+  res.redirect('/FrontOffice/Auditorias/index.html');
 });
 
 
 
 // Servir FrontOffice (HTML/CSS/JS puro)
-app.use('/front', express.static(path.join(__dirname, 'FrontOffice')));
+app.use('/FrontOffice', express.static(path.join(__dirname, 'FrontOffice')));
 
 // Servir BackOffice (se tiveres)
 app.use('/BackOffice', express.static(path.join(__dirname, 'BackOffice')));
