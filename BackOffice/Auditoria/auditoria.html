@@ -137,13 +137,16 @@
 
             <!-- Filtros -->
             <div class="filters">
-                <input type="number" id="searchInput" placeholder="ID Auditoria ...">
-                <input type="date" id="dateInput" placeholder="Data...">
-                <input type="text" id="searchInput" placeholder="Tipo de Auditoria...">
-                <input type="text" id="searchInput" placeholder="Estado...">
+                <input type="number" id="searchId" placeholder="ID Auditoria ...">
+                <input type="date" id="searchData" placeholder="Data...">
+                <input type="text" id="searchPerito" placeholder="Nome do Perito...">
+                <input type="number" id="searchOcorrencia" placeholder="ID Ocorrência...">
                 <button id="searchButton" class="search-icon-btn">
                     <img src="pesquisa.png" alt="Pesquisar" />
                   </button>
+                <button id="clearFiltersBtn" class="search-icon-btn" title="Limpar Filtros">
+                    <img src="borracha.png" alt="Limpar" />
+                </button>
             </div>
 
             <!-- Tabela de Auditorias -->
@@ -152,40 +155,16 @@
                     <table>
                         <!-- Cabeçalho da tabela-->
                         <thead>
-                            <tr class="table-header">
-                                <th><input type="checkbox" class="header-checkbox"></th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>ID Auditoria</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Tipo de Auditoria</span>
-                                    </div>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Data de criação</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Perito Associado</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Ocorrência Associada </span>
-                                    </div>
-                                </th>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Estado</span>
-                                    </div>
-                                </th>
-                                <th></th>
-                            </tr>
+                        <tr class="table-header">
+                            <th><input type="checkbox" class="header-checkbox"></th>
+                            <th><div class="header-cell"><span>ID Auditoria</span></div></th>
+                            <th><div class="header-cell"><span>Tipo de Auditoria</span></div></th>
+                            <th><div class="header-cell"><span>Data de criação</span></div></th>
+                            <th><div class="header-cell"><span>Perito Associado</span></div></th>
+                            <th><div class="header-cell"><span>Ocorrência Associada</span></div></th>
+                            <th><div class="header-cell"><span>Estado</span></div></th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <!-- corpo da tabela, preenchido automaticamente JS -->
                         <tbody id="auditoriasTableBody"> <!-- CORRIGIR PARA auditoriasTableBody-->
@@ -224,6 +203,7 @@
     <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- JavaScript -->
-    <script src="auditoriasLista.js"></script> 
+    <script src="exemplosAuditorias.js"></script> 
+    <script src="ListaAuditorias.js"></script> 
 </body>
 </html>

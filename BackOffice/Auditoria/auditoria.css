@@ -165,7 +165,7 @@ body {
 /* filtros */    
 .filters {
     display: flex;
-    gap: 5rem; /* espaço entre os filtros */
+    gap: 3rem; /* espaço entre os filtros */
     align-items: center;
     max-width: 1600px; /* largura máxima dos filtros */ 
     margin: 1.5rem auto; /* margem superior */
