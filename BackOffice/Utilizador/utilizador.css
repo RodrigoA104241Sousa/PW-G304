@@ -67,6 +67,12 @@ body {
     transition: background-color 0.2s;
 }
 
+/* 3º coluna da tabela conteudo no alinhado ao meio */
+.table-container table td:nth-child(3),
+.table-container table th:nth-child(3) {
+    text-align: center;
+}
+
 .menu-item {
     display: flex;
     justify-content: space-between; /* Para alinhar o ícone de seta à direita */
@@ -88,6 +94,27 @@ body {
     width: 20px;
     min-width: 20px;
     text-align: center;
+}
+ /* botão pesquisa */
+.search-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* estilo */
+.search-icon-btn img {
+    width: 30px; /* ou 20px se quiseres mais pequeno */
+    height: 30px;
+    filter: grayscale(100%) opacity(0.6);
+    transition: filter 0.2s ease;
+}
+/* ao passar o mouse por cima */
+.search-icon-btn:hover img {
+    filter: grayscale(0%) opacity(1);
 }
 
 /* Submenu */
