@@ -13,11 +13,11 @@ function saveAuditoriasData() {
     let auditoriasFiltradasPesquisa = null;
     // Paginação
     let currentPage = 1; // Página atual 
-    let itemsPerPage = 16; // nº auditorias por página
+    let itemsPerPage = 5; // nº auditorias por página
 
     // Menu lateral
-    let currentTipoFiltro = null; // Filtro de tipo de auditoria
-    let currentEstadoFiltro = null; // Filtro de estado da auditoria
+    let currentTipoFiltro = []; // Filtro de tipo de auditoria
+    let currentEstadoFiltro = []; // Filtro de estado da auditoria
     let sortOrder = 'recente'; // filtro de ordenação
 
     // Pesquisa
@@ -91,8 +91,8 @@ function setupRemoveButton() {
 // ---------------------- MENU LATERAL ----------------------
 // + RECENTE / ANTIGA
 function ordenarPorData(criterio) {
-    // desativar se estiver ativo
-    sortOrder = (sortOrder === criterio) ? null : criterio;
+    if (sortOrder === criterio) return; 
+    sortOrder = criterio;
     currentPage = 1;
     atualizarTabelaAuditorias();
     updatePagination();
@@ -100,8 +100,12 @@ function ordenarPorData(criterio) {
 
 // TIPO DE AUDITORIA
 function filterByTipoAuditoria(tipo) {
-    // desativar se estiver ativo
-    currentTipoFiltro = (currentTipoFiltro === tipo) ? null : tipo;
+    const i = currentTipoFiltro.indexOf(tipo);
+    if (i >= 0) {
+        currentTipoFiltro.splice(i, 1);
+    } else {
+        currentTipoFiltro.push(tipo);
+    }
     currentPage = 1;
     atualizarTabelaAuditorias();
     updatePagination();
@@ -109,8 +113,12 @@ function filterByTipoAuditoria(tipo) {
 
 // ESTADO DA AUDITORIA
 function filterByEstado(estado) {
-    // desativar se estiver ativo
-    currentEstadoFiltro = (currentEstadoFiltro === estado) ? null : estado;
+    const i = currentEstadoFiltro.indexOf(estado);
+    if (i >= 0) {
+        currentEstadoFiltro.splice(i, 1);
+    } else {
+        currentEstadoFiltro.push(estado);
+    }
     currentPage = 1;
     atualizarTabelaAuditorias();
     updatePagination();
@@ -120,19 +128,16 @@ function filterByEstado(estado) {
 function filtrarAuditorias() {
     let auditorias = JSON.parse(localStorage.getItem('auditoriasData')) || [];
     // TIPO 
-    if (currentTipoFiltro) {
-        auditorias = auditorias.filter(a => a.tipo === currentTipoFiltro);
+    if (currentTipoFiltro.length > 0) {
+        auditorias = auditorias.filter(a => currentTipoFiltro.includes(a.tipo));
     }
     // ESTADO
-    if (currentEstadoFiltro) {
-        auditorias = auditorias.filter(a => a.estado === currentEstadoFiltro);
+    if (currentEstadoFiltro.length > 0) {
+        auditorias = auditorias.filter(a => currentEstadoFiltro.includes(a.estado));
     }
     // DATA
     if (filtroData) {
-        const filtro = new Date(filtroData);
-        if (!isNaN(filtro.getTime())) {
-            auditorias = auditorias.filter(a => new Date(a.dataCriacao) >= filtro);
-        }
+    auditorias = auditorias.filter(a => a.dataCriacao === filtroData);
     }
     return auditorias;
 }
@@ -151,9 +156,9 @@ function limparFiltros() {
     filtroData = null;
     filtroPerito = null;
     filtroOcorrencia = null;
-    currentTipoFiltro = null;
-    currentEstadoFiltro = null;
-    sortOrder = 'recente'; // ou null se quiseres sem ordenação
+    currentTipoFiltro = [];
+    currentEstadoFiltro = [];
+    sortOrder = 'recente'; 
 
     // Remover botões ativos do menu lateral
     document.querySelectorAll('[data-tipo], [data-estado], [data-sort]').forEach(btn => {
@@ -174,10 +179,9 @@ function atualizarTabelaAuditorias(lista = null) {
     const tbody = document.getElementById("auditoriasTableBody"); // Seleciona o corpo da tabela
     tbody.innerHTML = ""; // Limpa o conteúdo da tabela
 
-    // FILTROS
+    // --------------------- FILTROS ---------------------
     let auditoriasFiltradas = lista || filtrarAuditorias();
-
-    // ordenação por data
+    // DATA
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
             const dataA = new Date(a.dataCriacao);
@@ -185,24 +189,25 @@ function atualizarTabelaAuditorias(lista = null) {
             return sortOrder === 'recente' ? dataB - dataA : dataA - dataB;
         });
     }
-    
     // Calcula dados a mostrar na pagina 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-
     // extrai auditorias desta pagina (slice)
     const paginaAuditorias = auditoriasFiltradas.slice(start, end);
 
-    // preencher linhas da tabela
+    // --------------------- CRIAÇÃO DA TABELA ---------------------
     // Percorre auditorias da página atual
     paginaAuditorias.forEach(auditoria => {
         const row = document.createElement("tr"); // Cria nova linha
-        //conteúdo da linha (checkbox, data, tipo, estado, perito, ocorrencia, 3pontos)
+        //conteúdo da linha (checkbox, ID, tipo, data, perito, ocorrencia, estado,  3pontos)
         row.innerHTML = `
             <td>
                 <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}"> 
             </td>
             <td>${auditoria.id}</td>
+            <td>
+                <span class="${getUrgenciaBadgeClass(auditoria.urgencia)}">${auditoria.urgencia || "—"}</span>
+            </td>
             <td>${auditoria.tipo}</td>
             <td>${auditoria.dataCriacao}</td>
             <td>
@@ -211,17 +216,46 @@ function atualizarTabelaAuditorias(lista = null) {
             <td>
                 <div>${auditoria.ocorrencia || "—"}</div>
             </td>
-            <td>${auditoria.estado}</td>
             <td>
-                <button class="btn-icon">
-                    <i data-lucide="more-vertical"></i>
-                </button>
+                <span class="${getEstadoBadgeClass(auditoria.estado)}">${auditoria.estado}</span>
             </td>
         `;
         tbody.appendChild(row); //adiciona a linha
     });
 
     lucide.createIcons(); // ativa os 3 pontos 
+}
+
+// ---------------------- ESTILO ESTADO ----------------------
+function getEstadoBadgeClass(estado) {
+    switch (estado) {
+        case 'Concluída':
+            return 'status-badge status-available';
+        case 'Não Iniciada':
+            return 'status-badge status-unavailable';
+        case 'Em Progresso':
+            return 'status-badge status-audit';
+        default:
+            return 'status-badge';
+    }
+}
+
+// ---------------------- ESTILO URGÊNCIA ----------------------
+function getUrgenciaBadgeClass(nivel) {
+    switch (nivel) {
+        case 5:
+            return 'status-badge urgencia-5';
+        case 4:
+            return 'status-badge urgencia-4';
+        case 3:
+            return 'status-badge urgencia-3';
+        case 2:
+            return 'status-badge urgencia-2';
+        case 1:
+            return 'status-badge urgencia-1';
+        default:
+            return 'status-badge';
+    }
 }
 
 // ---------------------- ATUALIZAR PAGINAÇÃO ----------------------
@@ -275,6 +309,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------- ATUALIZAR TABELA / PAGINAÇÃO ---------
     atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
     updatePagination(auditoriasFiltradasPesquisa);
+
+    // Atualizar itemsPerPage com base no dropdown
+    const itemsPerPageSelect = document.getElementById("itemsPerPageSelect");
+    if (itemsPerPageSelect) {
+        itemsPerPageSelect.value = itemsPerPage;
+
+        itemsPerPageSelect.addEventListener("change", () => {
+            itemsPerPage = parseInt(itemsPerPageSelect.value);
+            currentPage = 1;
+            atualizarTabelaAuditorias();
+            updatePagination();
+        });
+    }
     // ======================== FILTROS ========================
     // -------------------- MENU LATERAL --------------------
     // Recente
@@ -300,10 +347,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const tipo = btn.getAttribute('data-tipo');
             filterByTipoAuditoria(tipo);
 
-            // Remover todos os ativos primeiro
-            document.querySelectorAll('[data-tipo]').forEach(b => b.classList.remove('active'));
-            // Ativar apenas se estiver realmente aplicado
-            if (currentTipoFiltro === tipo) btn.classList.add('active');
+            // Alternar visualmente a classe .active
+            btn.classList.toggle('active');
         });
     });
 
@@ -313,11 +358,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const estado = btn.getAttribute('data-estado');
             filterByEstado(estado);
 
-            document.querySelectorAll('[data-estado]').forEach(b => b.classList.remove('active'));
-            if (currentEstadoFiltro === estado) btn.classList.add('active');
+            // Alternar visualmente a classe .active
+            btn.classList.toggle('active');
         });
     });
-
     // -------------------- FILTROS DE PESQUISA --------------------
     document.getElementById('searchButton').addEventListener('click', () => {
         // ID auditoria

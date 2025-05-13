@@ -5,7 +5,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Buraco na Estrada",
     estado: "Em Progresso",
     perito: "João Silva",
-    ocorrencia: "101"
+    ocorrencia: "101",
+    urgencia: 5
   },
   {
     id: 2,
@@ -13,7 +14,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Passeio Danificado",
     estado: "Concluída",
     perito: "Maria Oliveira",
-    ocorrencia: "102"
+    ocorrencia: "102",
+    urgencia: 3
   },
   {
     id: 3,
@@ -21,7 +23,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Falta de Sinalização",
     estado: "Não Iniciada",
     perito: "António Correia",
-    ocorrencia: "103"
+    ocorrencia: "103",
+    urgencia: 2
   },
   {
     id: 4,
@@ -29,7 +32,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Iluminação Pública",
     estado: "Em Progresso",
     perito: "Rita Gomes",
-    ocorrencia: "104"
+    ocorrencia: "104",
+    urgencia: 4
   },
   {
     id: 5,
@@ -37,7 +41,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Buraco na Estrada",
     estado: "Concluída",
     perito: "Carlos Pereira",
-    ocorrencia: "105"
+    ocorrencia: "105",
+    urgencia: 1
   },
   {
     id: 6,
@@ -45,7 +50,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Passeio Danificado",
     estado: "Não Iniciada",
     perito: "Inês Costa",
-    ocorrencia: "106"
+    ocorrencia: "106",
+    urgencia: 3
   },
   {
     id: 7,
@@ -53,7 +59,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Falta de Sinalização",
     estado: "Em Progresso",
     perito: "Pedro Alves",
-    ocorrencia: "107"
+    ocorrencia: "107",
+    urgencia: 5
   },
   {
     id: 8,
@@ -61,7 +68,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Iluminação Pública",
     estado: "Concluída",
     perito: "Ana Martins",
-    ocorrencia: "108"
+    ocorrencia: "108",
+    urgencia: 2
   },
   {
     id: 9,
@@ -69,7 +77,8 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Buraco na Estrada",
     estado: "Não Iniciada",
     perito: "Bruno Rocha",
-    ocorrencia: "109"
+    ocorrencia: "109",
+    urgencia: 4
   },
   {
     id: 10,
@@ -77,6 +86,7 @@ localStorage.setItem('auditoriasData', JSON.stringify([
     tipo: "Passeio Danificado",
     estado: "Em Progresso",
     perito: "Cátia Mendes",
-    ocorrencia: "110"
+    ocorrencia: "110",
+    urgencia: 1
   }
 ]));

@@ -105,7 +105,7 @@ body {
     }
         /* ao passar o mouse por cima do submenu */
         .submenu-item:hover {
-            background-color: var(--bg-hover);
+            background-color: var(--bg-hover) !important;
         }
         /* ponto do submenu aberto */
         .submenu-item.active {
@@ -123,6 +123,11 @@ body {
             background-color: white;
             border-radius: 50%;
         }
+        
+        .menu-item.active {
+            background-color: var(--bg-hover);
+        }
+
 
 /* Parte Principal */
 .main-content {
@@ -256,7 +261,7 @@ table {
         color: #166534;
     }
 
-    /* não concluída*/
+    /* não iniciada*/
     .status-unavailable {
         background-color: #fee2e2;
         color: #991b1b;
@@ -267,6 +272,30 @@ table {
         background-color: #fef9c3;
         color: #854d0e;
     }
+
+/* URGENCIA */
+/* estilo geral */
+.urgencia-5 {
+    background-color: #f5b7b1;
+    color: #7b241c;
+}
+.urgencia-4 {
+    background-color: #ffddb3;
+    color: #935116;
+}
+.urgencia-3 {
+    background-color: #fff3b0;
+    color: #7d6608;
+}
+.urgencia-2 {
+    background-color: #c8f7c5;
+    color: #145a32;
+}
+.urgencia-1 {
+    background-color: #b3d9ff;
+    color: #003366;
+}
+
 /* RODAPÉ */
 /* paginação */
     /* estilo geral */
@@ -438,7 +467,7 @@ table {
         overflow: auto; /* Add scroll if content overflows */
     }
 
-    /* Estilo da data */
+    /* Estilo do input de data */
     input[type="date"] {
         padding: 0.5rem 1.25rem;
         border: 1px solid var(--border-color);
@@ -449,24 +478,19 @@ table {
         width: 200px;
         cursor: pointer;
     }
-/* calendário */
-    input[type="date"]::-webkit-inner-spin-button,
+
+    /* Ícone do calendário */
     input[type="date"]::-webkit-calendar-picker-indicator {
-        display: none;
-        -webkit-appearance: none;
-    }
-    /* estilo do calendário */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        background-color: var(--primary-color);
+        background-color: white;
         border-radius: 50%;
         padding: 0.25rem;
         color: white;
-    }	
-    input[type="date"]::-webkit-calendar-picker-indicator {
         cursor: pointer;
         opacity: 0.6;
+        margin-left: 0.5rem;
     }
-        /* ao passar o mouse por cima do calendário */
-        input[type="date"]:hover::-webkit-calendar-picker-indicator {
-            opacity: 1;
-        }
+
+    /* Ao passar o mouse por cima */
+    input[type="date"]:hover::-webkit-calendar-picker-indicator {
+        opacity: 1;
+    }

@@ -158,12 +158,12 @@
                         <tr class="table-header">
                             <th><input type="checkbox" class="header-checkbox"></th>
                             <th><div class="header-cell"><span>ID Auditoria</span></div></th>
+                            <th><div class="header-cell"><span>Nível de Urgência</span></div></th>
                             <th><div class="header-cell"><span>Tipo de Auditoria</span></div></th>
                             <th><div class="header-cell"><span>Data de criação</span></div></th>
                             <th><div class="header-cell"><span>Perito Associado</span></div></th>
                             <th><div class="header-cell"><span>Ocorrência Associada</span></div></th>
                             <th><div class="header-cell"><span>Estado</span></div></th>
-                            <th></th>
                         </tr>
                         </thead>
                         <!-- corpo da tabela, preenchido automaticamente JS -->
@@ -182,10 +182,10 @@
                 <!-- Controlos de página -->
                 <div class="pagination-controls">
                     <!-- Nº de Auditorias a aparecer -->
-                    <select>
-                        <option>16</option>
-                        <option>32</option>
-                        <option>64</option>
+                    <select id="itemsPerPageSelect">
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
                     </select>
                     <!-- Nº da página -->
                     <div class="pagination-buttons">
