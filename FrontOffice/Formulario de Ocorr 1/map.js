@@ -29,34 +29,51 @@ function initMap() {
         fullscreenControl: true // Permitir tela cheia
     });
 
-    // Criar marcador inicial
-    marker = new google.maps.Marker({
-        position: braga,
-        map: map,
-        draggable: true
-    });
 
     // Conectar input de morada com o mapa
     const moradaInput = document.getElementById('morada');
     searchBox = new google.maps.places.SearchBox(moradaInput);
 
     // Atualizar mapa quando uma localização é selecionada
-    searchBox.addListener('places_changed', () => {
-        const places = searchBox.getPlaces();
-        if (places.length === 0) return;
+   searchBox.addListener('places_changed', () => {
+    const places = searchBox.getPlaces();
+    if (places.length === 0) return;
 
-        const place = places[0];
-        if (!place.geometry || !place.geometry.location) return;
+    const place = places[0];
+    if (!place.geometry || !place.geometry.location) return;
 
-        // Atualizar mapa e marcador
-        map.setCenter(place.geometry.location);
-        marker.setPosition(place.geometry.location);
-        map.setZoom(16);
+    // Atualizar mapa
+    map.setCenter(place.geometry.location);
+    map.setZoom(16);
 
-        // Salvar latitude e longitude
-        latitudeInput.value = place.geometry.location.lat();
-        longitudeInput.value = place.geometry.location.lng();
-    });
+    // Criar o marcador se ainda não existir
+    if (!marker) {
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true
+        });
+
+        // Listener do marker para atualizar morada, lat e lng
+        marker.addListener('dragend', () => {
+            const position = marker.getPosition();
+            geocoder.geocode({ location: position }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    moradaInput.value = results[0].formatted_address;
+                    latitudeInput.value = position.lat();
+                    longitudeInput.value = position.lng();
+                }
+            });
+        });
+    }
+
+    // Atualizar posição do marcador
+    marker.setPosition(place.geometry.location);
+
+    // Atualizar latitude e longitude
+    latitudeInput.value = place.geometry.location.lat();
+    longitudeInput.value = place.geometry.location.lng();
+});
+
 
     // Atualizar morada, latitude e longitude quando o marcador é movido
     marker.addListener('dragend', () => {
