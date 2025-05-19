@@ -75,10 +75,11 @@ window.addEventListener('load', async function() {
         window.location.href = '../Peritos/peritos.html';
       } else {
         // Redirecionar para página de usuário normal
-        window.location.href = '../../FrontOffice/Auditorias/index.html';
         localStorage.setItem('userfront', JSON.stringify(userInfo));
         islogged = true;
         localStorage.setItem('islogged', islogged);
+        window.location.href = '../../FrontOffice/Auditorias/index.html';
+       
       }
     }
   }

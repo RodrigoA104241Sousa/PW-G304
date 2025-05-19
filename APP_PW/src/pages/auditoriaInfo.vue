@@ -70,6 +70,7 @@ function goDocumentar(id) {
             <div class="flex flex-col items-center border-2 border-[#03045E] rounded-xl mt-8">
                 <select
                     class="bg-[#03045E]/5 w-full h-10 pl-4 placeholder:font-semibold"
+                    v-model="auditoria.pagina1.especialidade"
                     >
                     <option value="juridico" class="py-1">Jurídico</option>
                     <option value="saude" class="py-1">Saúde</option>
@@ -82,6 +83,7 @@ function goDocumentar(id) {
             <textarea 
                 class="w-full h-36 bg-[#03045E]/5 border-2 border-[#03045E] rounded-xl px-4 py-2 placeholder:font-semibold placeholder:text-center align-top resize-none"
                 placeholder="Registo de Dados"
+                v-model="auditoria.pagina1.descricao"
             ></textarea>
 
             <div class="flex space-x-1 ">

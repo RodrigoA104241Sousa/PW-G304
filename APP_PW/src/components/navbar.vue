@@ -29,7 +29,7 @@ const router = useRouter() //
 </script>
 
 <template>
-    <div class="p-4 h-15 fixed bottom-0 w-full bg-[#03045E] flex items-center space-x-12">
+    <div class="p-4 h-15 fixed bottom-0 w-full bg-[#03045E] z-50 flex items-center space-x-12">
         <div class="flex items-center space-x-12">
             <button @click="goHome">
                 <img src="/icons/home.png" class="w-20 "></img>
@@ -40,7 +40,7 @@ const router = useRouter() //
         </div>
 
         <div class="absolute left-1/2 bottom-4 transform -translate-x-1/2">
-            <div class="bg-[#03045E] p-4 rounded-full shadow-lg">
+            <div class="bg-[#03045E] p-3 rounded-full shadow-lg">
                 <img class="" src="/icons/localizacaoicon.png"></img>
             </div>
         </div>

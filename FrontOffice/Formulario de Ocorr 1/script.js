@@ -109,6 +109,7 @@ form.addEventListener('submit', async (e) => {
     ocorrenciasGuardadas.push(ocorrencia);
     localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
 
+
     // Exibir popup de sucesso
     showPopup("Ocorrência registada com sucesso!");
 

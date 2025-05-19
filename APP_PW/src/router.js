@@ -10,7 +10,9 @@ import auditoriasresolvidas from './pages/auditoriasresolvidas.vue'
 import upload from './components/upload.vue'
 import registarlocalizacao from './pages/registarlocalizacao.vue'
 import verauditoria from './pages/verauditoria.vue'
-import verauditoriaresolvida from './pages/verauditoriaresolvida.vue'
+import verauditoriaresolvida from './pages/infoauditorias_resolvidas/auditoria_resolvida_info.vue'
+import auditoriaresolvidamaisdetalhes from './pages/infoauditorias_resolvidas/auditoria_resolvida_mais_detalhes.vue'
+
 
 const routes = [
   { path: '/', component: PaginaInicial }, 
@@ -25,6 +27,7 @@ const routes = [
   {path: '/registarlocalizacao/:id', component: registarlocalizacao, props: true},//botao guardar localização
   {path: '/verauditoria/:id', component: verauditoria, props: true},//botao ver auditoria
   {path: '/verauditoriaresolvida/:id', component: verauditoriaresolvida, props: true},//botao ver auditoria
+  {path: '/auditoriaresolvidamaisdetalhes/:id', component: auditoriaresolvidamaisdetalhes, props: true},//botao mais detalhes
 ]
 
 const router = createRouter({
