@@ -280,8 +280,9 @@ tbody tr:hover {
 }
 
 .status-unavailable {
-    background-color: #fee2e2;
-    color: #991b1b;
+    background-color: #fee2e2; /* já está vermelho claro */
+    color: #991b1b;            /* texto vermelho escuro */
+    border: 1px solid #f87171; /* opcional: borda vermelha para mais destaque */
 }
 
 .status-audit {
