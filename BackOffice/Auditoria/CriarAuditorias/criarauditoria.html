@@ -2,36 +2,42 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EyesEveryWhere</title>
-    <link rel="stylesheet" href="criarauditoria.css">
-    <link rel="icon" type="image/x-icon" href="minilogo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Responsivo para móvel-->
+    <title>EyesEveryWhere</title> <!-- Título da página -->
+    <link rel="stylesheet" href="criarauditoria.css"> <!-- Link para o CSS -->
+    <link rel="icon" type="image/x-icon" href="minilogo.png"> <!-- Favicon -->
 
 </head>
 <body>
+    <!-- ---------- ESTRUTURA PRINCIPAL ---------- -->
     <div class="container">
-        <!-- Header -->
+
+        <!-- ----- CABEÇALHO ----- -->
         <div class="header">
-            <button type="button" class="back-button" onclick="history.back()">
+            <button type="button" class="back-button" onclick="history.back()"> <!-- Botão de voltar -->
                 <span>←</span>
             </button>
-            <h1>Criar novo plano de auditoria</h1>
-            <img src="logo.png" alt="Logo" class="logo">
+            <h1>Criar novo plano de auditoria</h1> <!-- Título -->
+            <img src="logo.png" alt="Logo" class="logo"> 
         </div>
         
-        <!-- Form -->
+        <!-- ----- FORMULÁRIO ----- -->
         <form id="auditForm">
-            <div class="form-layout">
+            <div class="form-layout"> <!-- Layout em 2 colunas do formulário -->
+
+                <!-- -- Coluna da ESQUERDA -- -->
                 <div class="left-column">
+
+                    <!-- ID Auditoria -->
                     <div class="form-group">
-                        <label class="form-label">Nome</label>
+                        <label class="form-label">ID Auditoria</label>
                         <div class="form-control-icon">
-                            <input type="text" class="form-control" placeholder="Insira um nome para a auditoria" required>
+                            <input type="number" class="form-control" placeholder="Insira um ID para a auditoria" required>
                             <img src="auditoria.png" alt="Ícone de auditoria">
                         </div>
                     </div>
 
-                    <!-- Checklist para materiais e equipamentos -->
+                    <!-- Materiais e equipamentos -->
                     <div class="form-group">
                         <label class="form-label">Materiais e Equipamentos necessários</label>
                         <div class="materials-container">
@@ -55,6 +61,7 @@
                         </div>
                     </div>
                     
+                    <!-- Descrição -->
                     <div class="form-group">
                         <label class="form-label">Descrição</label>
                         <div class="form-control-icon description-container">
@@ -63,6 +70,7 @@
                         </div>
                     </div>
 
+                    <!-- Nível de Urgência -->
                     <div class="urgency-rating">
                         <label class="urgency-title">Nível de Urgência</label>
                         <div class="urgency-options">
@@ -80,7 +88,10 @@
                     </div>
                 </div>
                 
+                <!-- -- Coluna da DIREITA -- -->
                 <div class="right-column">
+
+                    <!-- Duração Estimada -->
                     <div class="form-group">
                         <label class="form-label">Duração Estimada</label>
                         <div class="form-control-icon">
@@ -121,6 +132,7 @@
                         </div>
                     </div>
                     
+                    <!-- Data de Criação -->
                     <div class="form-group">
                         <label class="form-label">Data da Auditoria</label>
                         <div class="form-control-icon">
@@ -162,6 +174,7 @@
                         </div>
                     </div>
 
+                    <!-- Morada -->
                     <div class="form-group">
                         <label class="form-label">Morada</label>
                         <div class="form-control-icon">
@@ -170,7 +183,7 @@
                         </div>
                     </div>
 
-                    <!-- Botão e área de seleção de peritos -->
+                    <!-- Peritos -->
                     <div class="form-group">
                         <label class="form-label">Peritos</label>
                         <div class="peritos-container">
@@ -200,12 +213,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <button type="submit" class="criar-btn" >Criar</button>
+                    <button type="submit" class="criar-btn" >Criar</button> <!-- Botão de Criar Auditoria -->
                 </div>
             </div>
         </form>
     </div>
+
+    <!-- JavaScript -->
     <script src="criarauditoria.js"></script>
 </body>
 </html>
