@@ -235,12 +235,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = card.querySelector('.perito-name').textContent;
             const specialty = card.querySelector('.perito-specialty').textContent;
             const photoSrc = card.querySelector('.perito-photo').src;
+            const email = card.querySelector('.perito-email').textContent // <-- Adiciona o email aqui
             
             selectedPeritosArray.push({
                 id: id,
                 name: name,
                 specialty: specialty,
-                photo: photoSrc
+                photo: photoSrc,
+                email: email
             });
         });
         

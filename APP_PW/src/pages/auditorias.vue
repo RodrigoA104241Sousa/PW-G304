@@ -9,8 +9,11 @@ const user = JSON.parse(localStorage.getItem('user') || '{}')
 
 // Filtrar só as auditorias do perito logado
 const minhasOcorrencias = computed(() =>
-  todasOcorrencias.value.filter(ocorrencia => ocorrencia.peritos.email === user.email)
+  todasOcorrencias.value.filter(ocorrencia =>
+    ocorrencia.peritos.some(perito => perito.email === user.email)
+  )
 )
+
 
 // Paginação
 const paginaAtual = ref(1)
