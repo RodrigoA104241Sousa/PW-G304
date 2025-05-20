@@ -13,11 +13,19 @@ async function getUserInfo(token) {
       Authorization: `Bearer ${token}`
     }
   });
-  const data = await res.json();
-  console.log('User info:', data);
-  
-  localStorage.setItem('user', JSON.stringify(data));
-  
+  const user_data = await res.json();
+  console.log('User info:', user_data);
+  console.log('email', user_data.email);
+
+  const expertsData = JSON.parse(localStorage.getItem('expertsData')) || [];
+  const isExpert = expertsData.some(expert => expert.email === user_data.email);
+  if (isExpert) {
+    localStorage.setItem('user', JSON.stringify(user_data));
+    return true; // login bem-sucedido
+  } else {
+    alert('Não é perito');
+    return false; // login falhou
+  }
 }
 
 onMounted(() => {
@@ -27,23 +35,24 @@ onMounted(() => {
     scope: 'email profile openid',
     callback: async (tokenResponse) => {
       console.log('Token recebido:', tokenResponse);
-      await getUserInfo(tokenResponse.access_token);
-      router.push('/home'); // <-- MOVE para aqui
-      console.log('Redirecionando para home...');
+      const login = await getUserInfo(tokenResponse.access_token);
+      if (login) {
+        router.push('/home');
+        console.log('Redirecionando para home...');
+      }
+      // Se não for perito, fica na página
     }
   });
 });
 
-
 function loginWithGoogle() {
   console.log('Iniciando login com Google...');
   if (tokenClient) {
-    tokenClient.requestAccessToken(); // NÃO faças router.push aqui!
+    tokenClient.requestAccessToken();
   } else {
     console.error('Token client não inicializado!');
   }
 }
-
 </script>
 
 <template>

@@ -4,23 +4,26 @@ import Header from '../components/header.vue';
 import Card from '../components/card.vue';
 import { ref, computed } from 'vue'
 
-
-
-
 const todasOcorrencias = ref(JSON.parse(localStorage.getItem('auditorias') || '[]'))
+const user = JSON.parse(localStorage.getItem('user') || '{}')
 
-// 2. Lógica de paginação
+// Filtrar só as auditorias do perito logado
+const minhasOcorrencias = computed(() =>
+  todasOcorrencias.value.filter(ocorrencia => ocorrencia.peritos.email === user.email)
+)
+
+// Paginação
 const paginaAtual = ref(1)
 const ocorrenciasPorPagina = 5
 
 const totalPaginas = computed(() => {
-  return Math.ceil(todasOcorrencias.value.length / ocorrenciasPorPagina)
+  return Math.ceil(minhasOcorrencias.value.length / ocorrenciasPorPagina)
 })
 
 const ocorrenciasVisiveis = computed(() => {
   const inicio = (paginaAtual.value - 1) * ocorrenciasPorPagina
   const fim = inicio + ocorrenciasPorPagina
-  return todasOcorrencias.value.slice(inicio, fim)
+  return minhasOcorrencias.value.slice(inicio, fim)
 })
 
 function proximaPagina() {
@@ -34,7 +37,6 @@ function paginaAnterior() {
     paginaAtual.value--
   }
 }
-
 </script>
 
 <template>
