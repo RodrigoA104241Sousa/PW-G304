@@ -1,0 +1,131 @@
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7fa;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* CABEÇALHO */
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+    /* Título */
+    .titulo {
+    flex: 1;
+    text-align: center;
+    font-size: 2rem;
+    color: #1c1c4c;
+    }
+    /* botão de voltar */
+    .btn-voltar {
+    background-color: #0d0f47;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    width: 80px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    }
+    /* botao voltar expandido */
+    .btn-voltar:hover {
+        transform: scale(1.05);
+    }
+
+    /* LOGO */
+    .logo-detalhe {
+    width: 80px;
+    height: auto;
+    }
+
+/* FORMULÁRIO PRINCIPAL */
+.form-detalhe {
+    display: flex;
+    gap: 2rem;
+    height: calc(100vh - 200px);
+    align-items: stretch;
+}
+
+/* MAPA */
+.imagem-local-container {
+    flex: 1;
+    max-width: 45%;
+}
+
+.imagem-local {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: none;
+}
+
+
+/* FORMULÁRIO VISUAL */
+.conteudo-principal {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.campo label {
+    font-size: 1.1rem;
+    color: #6a6a6a;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+.campo input,
+.campo select {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 2px solid #0d0f47;
+    background-color: #e8ecf3;
+    font-size: 1rem;
+    color: #333;
+    pointer-events: none; /* apenas leitura */
+}
+
+/* ESTADO FINAL */
+.estado-final { /*ESTADO */
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #695C5C; /* cor do texto "Estado" */
+}
+
+/* Badge de estado (Concluida) */
+.estado-badge {
+    background-color: #00B087; /* fundo verde concluído */
+    color: white;
+    font-weight: bold;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    margin-left: 1rem;
+    display: inline-block;
+}

@@ -1,12 +1,7 @@
-// ================================ DADOS ================================
-let auditoriasData = JSON.parse(localStorage.getItem('auditoriasData')) || [];
 
-// Gravar os dados da auditoria no localStorage
-function saveAuditoriasData() {
-    localStorage.setItem('auditoriasData', JSON.stringify(auditoriasData));
-}
+// Initialize auditorias data with localStorage or default
+let auditoriasData = JSON.parse(localStorage.getItem('auditorias')) || defaultAuditorias;
 
-// =========================================================================
 // =========================== VARIÁVEIS GLOBAIS ===========================
 // =========================================================================
     // Exemplo de auditorias
@@ -41,7 +36,7 @@ function getNomePeritoPorId(idPerito) {
 
 // ----------------------  BOTÃO ADICIONAR ----------------------  
 document.getElementById('addAuditoriaBtn').addEventListener('click', () => {
-    window.location.href = 'criarauditoria.html';
+    window.location.href = '../CriarAuditorias/criarauditoria.html';
 });
 
 // ----------------------  BOTÃO REMOVER ----------------------  
@@ -126,20 +121,20 @@ function filterByEstado(estado) {
 
 // ---------------------- FILTRAR AUDITORIAS ----------------------
 function filtrarAuditorias() {
-    let auditorias = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+    let filtradas = [...auditoriasData];
     // TIPO 
     if (currentTipoFiltro.length > 0) {
-        auditorias = auditorias.filter(a => currentTipoFiltro.includes(a.tipo));
+        filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
     }
     // ESTADO
     if (currentEstadoFiltro.length > 0) {
-        auditorias = auditorias.filter(a => currentEstadoFiltro.includes(a.estado));
+        filtradas  = filtradas .filter(a => currentEstadoFiltro.includes(a.estado));
     }
     // DATA
     if (filtroData) {
-    auditorias = auditorias.filter(a => a.dataCriacao === filtroData);
+    filtradas  = filtradas .filter(a => a.dataCriacao === filtroData);
     }
-    return auditorias;
+    return filtradas;
 }
 
 // ---------------------- LIMPAR FILTROS ----------------------
@@ -176,12 +171,11 @@ function limparFiltros() {
 // =========================================================================
 
 function atualizarTabelaAuditorias(lista = null) {
-    const tbody = document.getElementById("auditoriasTableBody"); // Seleciona o corpo da tabela
-    tbody.innerHTML = ""; // Limpa o conteúdo da tabela
+    const tbody = document.getElementById("auditoriasTableBody");
+    tbody.innerHTML = "";
 
-    // --------------------- FILTROS ---------------------
     let auditoriasFiltradas = lista || filtrarAuditorias();
-    // DATA
+
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
             const dataA = new Date(a.dataCriacao);
@@ -189,43 +183,38 @@ function atualizarTabelaAuditorias(lista = null) {
             return sortOrder === 'recente' ? dataB - dataA : dataA - dataB;
         });
     }
-    // Calcula dados a mostrar na pagina 
+
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    // extrai auditorias desta pagina (slice)
     const paginaAuditorias = auditoriasFiltradas.slice(start, end);
 
-    // --------------------- CRIAÇÃO DA TABELA ---------------------
-    // Percorre auditorias da página atual
     paginaAuditorias.forEach(auditoria => {
-        const row = document.createElement("tr"); // Cria nova linha
-        //conteúdo da linha (checkbox, ID, tipo, data, perito, ocorrencia, estado,  3pontos)
+        const row = document.createElement("tr");
         row.innerHTML = `
             <td>
                 <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}"> 
             </td>
             <td>${auditoria.id}</td>
             <td>
-                <span class="${getUrgenciaBadgeClass(auditoria.urgencia)}">${auditoria.urgencia || "—"}</span>
+                <span class="${getUrgenciaBadgeClass(parseInt(auditoria.nivelUrgencia))}">${auditoria.nivelUrgencia || "—"}</span>
             </td>
-            <td>${auditoria.tipo}</td>
-            <td>${auditoria.dataCriacao}</td>
+            <td>${auditoria.descricao || auditoria.nome || "—"}</td>
+            <td>${auditoria.dataCriacao || auditoria.data || "—"}</td>
             <td>
-                <div>${auditoria.perito || "—"}</div>
+                <div>${auditoria.peritos?.[0]?.name || "—"}</div>
             </td>
             <td>
                 <div>${auditoria.ocorrencia || "—"}</div>
             </td>
             <td>
-                <span class="${getEstadoBadgeClass(auditoria.estado)}">${auditoria.estado}</span>
+                <span class="${getEstadoBadgeClass(auditoria.estado)}">${auditoria.estado || "—"}</span>
             </td>
         `;
-        tbody.appendChild(row); //adiciona a linha
+        tbody.appendChild(row);
     });
 
-    lucide.createIcons(); // ativa os 3 pontos 
+    lucide.createIcons();
 }
-
 // ---------------------- ESTILO ESTADO ----------------------
 function getEstadoBadgeClass(estado) {
     switch (estado) {
@@ -373,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ID Ocorrência
         const ocorrencia = document.getElementById('searchOcorrencia').value.trim();
 
-        let filtradas = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+        let filtradas = [...auditoriasData];
 
         if (id) filtradas = filtradas.filter(a => a.id.toString() === id);
         if (data) filtradas = filtradas.filter(a => new Date(a.dataCriacao) >= new Date(data));
@@ -398,3 +387,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Limpar filtros
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
     });
+
+// Update the saveAuditoriasData function to save to localStorage:
+function saveAuditoriasData() {
+    try {
+        localStorage.setItem('auditorias', JSON.stringify(auditoriasData));
+    } catch (error) {
+        console.error('Erro ao salvar auditorias:', error);
+    }
+}

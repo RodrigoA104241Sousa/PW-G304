@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- adaptado a dispositivos móveis -->
+  <title>EyesEveryWhere</title>
+  <link rel="stylesheet" href="LocalAuditado.css"> <!-- Link para o CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Importa a fonte Inter -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> <!--Importa o Vue.js 2.7.14 -->
+
+</head>
+
+<body>
+  <div class="cabecalho">
+  <button class="btn-voltar" onclick="window.history.back()">←</button>
+  <h1 class="titulo">Local Auditado</h1>
+  <img src="icon.png" alt="Logo EyesEverywhere" class="logo-detalhe">
+</div>
+
+<div class="form-detalhe">
+  <!-- Imagem -->
+  <div class="imagem-local-container">
+    <iframe id="mapa-local" class="imagem-local" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
+  <!-- Formulário -->
+  <div class="conteudo-principal">
+    <div class="campo">
+      <label for="data">Data</label>
+      <input type="text" id="data" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="tipo">Tipo</label>
+      <select id="tipo" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="morada">Morada</label>
+      <input type="text" id="morada" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="localizacao">Localização</label>
+      <input type="text" id="localizacao" readonly value="">
+    </div>
+
+    <div class="campo">
+      <label for="perito">Perito Supervisor</label>
+      <input type="text" id="perito" readonly value="">
+    </div>
+  </div>
+</div>
+
+<!-- Estado final -->
+<div class="estado-final">
+  Estado <span class="estado-badge">Concluída</span>
+</div>
+
+<script src="LocalAuditado.js"></script>
+</body>
+</html>

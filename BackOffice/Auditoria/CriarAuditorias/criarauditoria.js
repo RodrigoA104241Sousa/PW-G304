@@ -1,4 +1,4 @@
-// Adicione esta função no início do seu arquivo JS
+// ------- INICIO -------
 document.addEventListener('DOMContentLoaded', function() {
     // Pegar o ID da ocorrência do localStorage
     const occurrenceId = localStorage.getItem('occurrenceForAudit');
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ------- MATERIAIS -------
 // Exibir/ocultar a lista de materiais ao clicar no ícone
         const materialsSearchInput = document.getElementById('materialsSearchInput');
         const materialsList = document.getElementById('materialsList');
@@ -106,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         `${selected.length} item(ns) selecionado(s)` : 
                                         '';
         }
-
+    
+    // ------- PERITOS -------
     // Elementos para o modal de peritos
     const openPeritosModalBtn = document.getElementById('openPeritosModal');
     const peritosModal = document.getElementById('peritosModal');
@@ -281,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
+        // ------- TIME PICKER -------
         // Elementos do time picker
         const durationInput = document.getElementById('durationInput');
         const timePickerIcon = document.getElementById('timePickerIcon');
@@ -399,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+    // ------- CALENDARIO -------
         // Elementos do calendário
         const dateInput = document.getElementById('dateInput');
         const calendarIcon = document.getElementById('calendarIcon');
@@ -620,6 +623,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Inicializar o calendário
         updateCalendar();
 
+// ------- VALIDAÇÃO DO FORMULÁRIO -------
 // Adicionar validação ao envio do formulário
 document.getElementById('auditForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Impede envio automático
@@ -683,6 +687,7 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
     // (se quiseres dar um delay antes de reset/redirect, como já tinhas)
   });
 
+// ------- FIM: CRIAÇÃO DA AUDITORIA -------
 // Função para salvar a auditoria no localStorage
 function saveAuditToLocalStorage() {
     // Obter valores do formulário
@@ -768,7 +773,7 @@ function showSuccessToast(message) {
             document.body.removeChild(toast);
             // Redirecionar para ocorrencia.html
             
-            window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
+            window.location.href = '../../Ocorrência/ocorrencia.html';
         }, 300);
     }, 3000);
 }
