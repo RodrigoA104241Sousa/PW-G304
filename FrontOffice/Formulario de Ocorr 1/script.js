@@ -12,10 +12,12 @@ if (tipo) {
   }
 }
 
-let user = localStorage.getItem('user');
+let user = localStorage.getItem('userfront');
 if (user) {
   user = JSON.parse(user);
 }
+
+console.log(user);
 
 const form = document.querySelector('.formulario');
 const uploadInput = document.getElementById('upload');
@@ -68,6 +70,18 @@ popupClose.addEventListener('click', () => {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  // Verificar se todos os campos obrigatórios estão preenchidos
+  if (
+    !document.getElementById('tipo-ocorrencia').value ||
+    !document.getElementById('email').value ||
+    !document.getElementById('morada').value ||
+    !document.getElementById('codigo-postal').value ||
+    !document.getElementById('descricao').value
+  ) {
+    showPopup("Por favor, preencha todos os campos obrigatórios.", false);
+    return;
+  }
+
   // Converter imagens para Base64
   const imagensBase64 = await Promise.all(
     Array.from(uploadInput.files).map(file => fileToBase64(file))
@@ -75,6 +89,12 @@ form.addEventListener('submit', async (e) => {
 
   // Obter a morada do formulário
   const morada = document.getElementById('morada').value;
+
+  // Verificar se o utilizador está autenticado
+  if (!user || !user.id) {
+    showPopup("Utilizador não autenticado. Por favor, faça login novamente.", false);
+    return;
+  }
 
   try {
     // Obter latitude e longitude com base na morada
@@ -121,6 +141,7 @@ form.addEventListener('submit', async (e) => {
     // Limpar o formulário
     form.reset();
   } catch (error) {
+    console.error(error);
     // Exibir popup de erro
     showPopup("Erro ao registar a ocorrência. Por favor, tente novamente.", false);
   }
