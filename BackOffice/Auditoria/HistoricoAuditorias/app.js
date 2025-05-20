@@ -17,19 +17,21 @@ new Vue({ // Cria uma nova instância do Vue
       const termo = this.searchTerm.toLowerCase(); // converte o termo de pesquisa para minúsculas
 
       // Filtrar auditorias com base no termo pesquisado
-      let filtradas = this.auditorias.filter(a =>
-        Object.values(a).some(val =>     //object values obtem os valores de todos os campos
-          typeof val === 'string' && val.toLowerCase().includes(termo)
-        )
-      ); 
+      let filtradas = this.auditorias
+        .filter(a => a.estado === 'Concluída')  // filtra apenas as auditorias concluídas
+        .filter(a =>
+          Object.values(a).some(val =>     //object values obtem os valores de todos os campos
+            typeof val === 'string' && val.toLowerCase().includes(termo)
+          )
+        ); 
 
-      // Ordenar por data (recente ou mais antiga)
-      if (this.sortOption === 'recent') {
-        return filtradas.sort((a, b) => new Date(b.data) - new Date(a.data)); // ordena do mais recente para o mais antigo
-      } else {
-        return filtradas.sort((a, b) => new Date(a.data) - new Date(b.data)); // ordena do mais antigo para o mais recente
-      }
-    },
+        // Ordenar por data (recente ou mais antiga)
+        if (this.sortOption === 'recent') {
+          return filtradas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao)); // ordena do mais recente para o mais antigo
+        } else {
+          return filtradas.sort((a, b) => new Date(a.dataCriacao) - new Date(b.dataCriacao)); // ordena do mais antigo para o mais recente
+        }
+      },
 
     // Calcula Paginação total
     totalPaginas() {
@@ -76,7 +78,7 @@ new Vue({ // Cria uma nova instância do Vue
 
     // carregar dados de data.Json
     carregarDados() {
-      fetch("data.json")
+      fetch("../Dados/auditorias.json")
         .then((res) => res.json())
         .then((dados) => {
           this.auditorias = dados

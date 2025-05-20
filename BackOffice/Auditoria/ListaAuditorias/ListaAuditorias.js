@@ -1,10 +1,16 @@
 // ================================ DADOS ================================
-let auditoriasData = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+let auditoriasData = [];
 
-// Gravar os dados da auditoria no localStorage
-function saveAuditoriasData() {
-    localStorage.setItem('auditoriasData', JSON.stringify(auditoriasData));
-}
+fetch('../Dados/auditorias.json')
+  .then(response => response.json())
+  .then(data => {
+    auditoriasData = data;
+    atualizarTabelaAuditorias();
+    updatePagination();
+  })
+  .catch(error => {
+    console.error('Erro ao carregar auditorias:', error);
+  });
 
 // =========================================================================
 // =========================== VARIÁVEIS GLOBAIS ===========================
@@ -126,20 +132,20 @@ function filterByEstado(estado) {
 
 // ---------------------- FILTRAR AUDITORIAS ----------------------
 function filtrarAuditorias() {
-    let auditorias = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+    let filtradas = [...auditoriasData];
     // TIPO 
     if (currentTipoFiltro.length > 0) {
-        auditorias = auditorias.filter(a => currentTipoFiltro.includes(a.tipo));
+        filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
     }
     // ESTADO
     if (currentEstadoFiltro.length > 0) {
-        auditorias = auditorias.filter(a => currentEstadoFiltro.includes(a.estado));
+        filtradas  = filtradas .filter(a => currentEstadoFiltro.includes(a.estado));
     }
     // DATA
     if (filtroData) {
-    auditorias = auditorias.filter(a => a.dataCriacao === filtroData);
+    filtradas  = filtradas .filter(a => a.dataCriacao === filtroData);
     }
-    return auditorias;
+    return filtradas;
 }
 
 // ---------------------- LIMPAR FILTROS ----------------------
@@ -373,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ID Ocorrência
         const ocorrencia = document.getElementById('searchOcorrencia').value.trim();
 
-        let filtradas = JSON.parse(localStorage.getItem('auditoriasData')) || [];
+        let filtradas = [...auditoriasData];
 
         if (id) filtradas = filtradas.filter(a => a.id.toString() === id);
         if (data) filtradas = filtradas.filter(a => new Date(a.dataCriacao) >= new Date(data));

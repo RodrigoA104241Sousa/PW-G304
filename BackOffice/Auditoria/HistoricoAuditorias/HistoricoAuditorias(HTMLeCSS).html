@@ -319,10 +319,10 @@
             <tr v-for="auditoria in paginatedAuditorias" :key="auditoria.id" class="fade-item">
               <td>{{ auditoria.tipo }}</td>
               <td>{{ auditoria.perito }}</td>
-              <td>{{ auditoria.local }}</td>
+              <td>{{ auditoria.morada }}</td>
               <td>{{ auditoria.postal }}</td>
               <td>{{ auditoria.cidade }}</td>
-              <td>{{ formatarData(auditoria.data) }}</td>
+              <td>{{ formatarData(auditoria.dataCriacao) }}</td>
               <td><span class="estado-tag">{{ auditoria.estado }}</span></td>
               <td class="detalhes">
                 <!-- O evento de clique passa o ID da auditoria para o método -->
