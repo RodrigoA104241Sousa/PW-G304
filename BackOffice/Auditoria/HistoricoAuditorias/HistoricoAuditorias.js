@@ -99,7 +99,7 @@ new Vue({ // Cria uma nova instância do Vue
       localStorage.setItem('idAuditoria', id)
   
       // Redireciona para a página de Local Auditado
-      window.location.href = "LocalAuditado/LocalAuditado(HTMLeCSS).html";
+      window.location.href = "LocalAuditado/LocalAuditado.html";
     }
   },
   
