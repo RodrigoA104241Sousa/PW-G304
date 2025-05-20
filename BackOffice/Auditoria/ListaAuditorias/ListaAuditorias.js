@@ -41,7 +41,7 @@ function getNomePeritoPorId(idPerito) {
 
 // ----------------------  BOTÃO ADICIONAR ----------------------  
 document.getElementById('addAuditoriaBtn').addEventListener('click', () => {
-    window.location.href = 'criarauditoria.html';
+    window.location.href = '../CriarAuditorias/criarauditoria.html';
 });
 
 // ----------------------  BOTÃO REMOVER ----------------------  
