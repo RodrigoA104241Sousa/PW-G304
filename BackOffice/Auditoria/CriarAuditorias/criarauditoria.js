@@ -773,7 +773,7 @@ function showSuccessToast(message) {
             document.body.removeChild(toast);
             // Redirecionar para ocorrencia.html
             
-            window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
+            window.location.href = '../../Ocorrência/ocorrencia.html';
         }, 300);
     }, 3000);
 }
