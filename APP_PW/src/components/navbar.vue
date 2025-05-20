@@ -15,7 +15,7 @@ const router = useRouter() //
     }
 
     function goMapa() {
-    router.push('/mapa')
+    router.push('/mapageral')
     }
 
     function goAuditoriaResolvida() {
@@ -41,7 +41,9 @@ const router = useRouter() //
 
         <div class="absolute left-1/2 bottom-4 transform -translate-x-1/2">
             <div class="bg-[#03045E] p-3 rounded-full shadow-lg">
-                <img class="" src="/icons/localizacaoicon.png"></img>
+                <button @click="goMapa">
+                    <img class="" src="/icons/localizacaoicon.png" />
+                </button>
             </div>
         </div>
 
