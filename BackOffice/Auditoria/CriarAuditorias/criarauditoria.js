@@ -703,6 +703,17 @@ function saveAuditToLocalStorage() {
         checkbox => checkbox.value
     );
 
+        // Obter o tipo da ocorrência correspondente
+    let tipoOcorrencia = '';
+    const ocorrenciaID = parseInt(localStorage.getItem('occurrenceForAudit'), 10);
+    if (ocorrenciaID) {
+        const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        const ocorrencia = ocorrencias.find(o => o.id === ocorrenciaID);
+        if (ocorrencia && ocorrencia.tipo) {
+            tipoOcorrencia = ocorrencia.tipo;
+        }
+    }
+
     // Criar objeto da auditoria
     const auditoria = {
         id: Date.now().toString(), // ID único baseado no timestamp
@@ -715,6 +726,7 @@ function saveAuditToLocalStorage() {
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,
         dataCriacao: new Date().toISOString(),
+        tipoOcorrencia: tipoOcorrencia 
     };
 
     // Obter auditorias existentes do localStorage ou criar array vazio

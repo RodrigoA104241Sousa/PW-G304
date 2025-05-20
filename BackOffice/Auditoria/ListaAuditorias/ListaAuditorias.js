@@ -194,20 +194,14 @@ function atualizarTabelaAuditorias(lista = null) {
             <td>
                 <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}"> 
             </td>
-            <td>${auditoria.id}</td>
+            <td>${auditoria.nome}</td>
             <td>
                 <span class="${getUrgenciaBadgeClass(parseInt(auditoria.nivelUrgencia))}">${auditoria.nivelUrgencia || "—"}</span>
             </td>
-            <td>${auditoria.descricao || auditoria.nome || "—"}</td>
+            <td>${auditoria.tipoOcorrencia}</td>
             <td>${auditoria.dataCriacao || auditoria.data || "—"}</td>
             <td>
                 <div>${auditoria.peritos?.[0]?.name || "—"}</div>
-            </td>
-            <td>
-                <div>${auditoria.ocorrencia || "—"}</div>
-            </td>
-            <td>
-                <span class="${getEstadoBadgeClass(auditoria.estado)}">${auditoria.estado || "—"}</span>
             </td>
         `;
         tbody.appendChild(row);
