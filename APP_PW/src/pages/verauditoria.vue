@@ -82,6 +82,20 @@ function initMap() {
 
   window.initMap = initMap
 }
+
+onMounted(() => {
+  if (typeof google !== 'undefined' && google.maps) {
+    initMap()
+  } else {
+    // Espera até o script estar totalmente carregado
+    const checkInterval = setInterval(() => {
+      if (typeof google !== 'undefined' && google.maps) {
+        clearInterval(checkInterval)
+        initMap()
+      }
+    }, 200)
+  }
+})
 </script>
 
 <template>

@@ -1,100 +1,114 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import Navbar from '../components/navbar.vue'
 import Header from '../components/header.vue'
-import axios from 'axios'
-import '/leaflet-fix.js'
+import { useAuditoriaStore } from '../stores/auditoria'
 
 const route = useRoute()
 const id = route.params.id
-console.log('ID:', id)
+const auditoriaStore = useAuditoriaStore()
 
-// Token do MapTiler (podes pôr num .env com import.meta.env.VITE_MAPTILER_TOKEN)
-const MAPTILER_TOKEN = 'K5f6nm9wH1vXIXaoKcl5'
+let map
+let marker
+let geocoder
 
-const router = useRouter()
-const center = ref({ lat: 41.445833, lng: -8.301111 })
-localStorage.setItem('localizacao', JSON.stringify(center.value))
-const query = ref('')
-const suggestions = ref([])
-const showSuggestions = ref(false)
+const auditorias = JSON.parse(localStorage.getItem('auditorias') || '[]')
+const ocorrencia = auditorias.find(a => String(a.id) === String(id))
 
-const searchSuggestions = async () => {
-  if (query.value.length < 3) {
-    suggestions.value = []
+function initMap() {
+  const braga = { lat: 41.5454, lng: -8.4265 }
+  geocoder = new google.maps.Geocoder()
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 17,
+    center: braga,
+    mapTypeId: 'roadmap',
+    streetViewControl: true,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain']
+    },
+    zoomControl: true,
+    zoomControlOptions: {
+      position: google.maps.ControlPosition.RIGHT_CENTER
+    },
+    scaleControl: true,
+    fullscreenControl: true
+  })
+}
+
+function registarLocalizacaoAtual() {
+  if (!navigator.geolocation) {
+    alert('Geolocalização não é suportada pelo seu navegador.')
     return
   }
 
-  try {
-    const response = await axios.get(
-      `https://api.maptiler.com/geocoding/${encodeURIComponent(query.value)}.json`,
-      {
-        params: {
-          key: MAPTILER_TOKEN,
-          limit: 5,
-          language: 'pt'
-        }
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords
+      const local = { lat: latitude, lng: longitude }
+
+      // Atualizar mapa e marcador
+      map.setCenter(local)
+      if (!marker) {
+        marker = new google.maps.Marker({
+          map,
+          position: local
+        })
+      } else {
+        marker.setPosition(local)
       }
-    )
 
-    suggestions.value = response.data.features
-    showSuggestions.value = true
-  } catch (error) {
-    console.error('Erro ao procurar localidade:', error)
+      // Obter morada a partir das coordenadas
+      geocoder.geocode({ location: local }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const morada = results[0].formatted_address
+
+          // Guardar na store
+          auditoriaStore.setDados('pagina3', {
+            ...auditoriaStore.pagina3,
+            localizacao: {
+              morada,
+              latitude,
+              longitude
+            }
+          })
+
+          alert('Localização atual registada com sucesso!')
+        } else {
+          alert('Não foi possível obter a morada.')
+        }
+      })
+    },
+  )
+}
+
+onMounted(() => {
+  if (typeof google !== 'undefined' && google.maps) {
+    initMap()
+  } else {
+    const checkInterval = setInterval(() => {
+      if (typeof google !== 'undefined' && google.maps) {
+        clearInterval(checkInterval)
+        initMap()
+      }
+    }, 200)
   }
-}
-
-const selectSuggestion = (place) => {
-  const [lng, lat] = place.geometry.coordinates
-  center.value = { lat, lng }
-  query.value = place.place_name
-  suggestions.value = []
-  showSuggestions.value = false
-}
+})
 </script>
 
 <template>
   <div class="bg-[#E0F1FE] min-h-screen flex flex-col">
     <Header title="Mapa" :backRoute="`/auditoriasInfo/${id}`" />
-
-    <div class="flex flex-col items-center px-4 py-4 gap-4">
-      <!-- Mapa com tiles do MapTiler -->
-      <div class="w-full max-w-md h-[350px] rounded-xl overflow-hidden shadow">
-        <LMap :zoom="13" :center="center" style="height: 100%; width: 100%">
-          <LTileLayer
-            :url="`https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=${MAPTILER_TOKEN}`"
-            attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
-          />
-          <LMarker :lat-lng="center" />
-        </LMap>
-      </div>
-
-      <!-- Input com autocomplete -->
-      <div class="w-full max-w-md relative">
-        <input
-          v-model="query"
-          @input="searchSuggestions"
-          type="text"
-          placeholder="Pesquise aqui"
-          class="w-full p-3 rounded-xl border border-blue-500 text-center text-gray-700 placeholder-gray-500 shadow"
-        />
-
-        <!-- Sugestões -->
-        <ul
-          v-if="showSuggestions && suggestions.length"
-          class="absolute left-0 right-0 mt-1 bg-white rounded-xl shadow z-50 max-h-60 overflow-y-auto"
-        >
-          <li
-            v-for="(place, index) in suggestions"
-            :key="index"
-            @click="selectSuggestion(place)"
-            class="p-2 cursor-pointer hover:bg-blue-100 text-sm text-left"
-          >
-            {{ place.place_name }}
-          </li>
-        </ul>
+    <div class="flex-1 relative">
+      <div id="map" class="w-full h-[500px]"></div>
+      <div class="p-4 flex justify-center">
+        <button @click="registarLocalizacaoAtual"
+                class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+          Registar Localização Atual
+        </button>
       </div>
     </div>
     <Navbar />

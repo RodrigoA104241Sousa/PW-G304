@@ -16,6 +16,7 @@ if (user) {
 
 let image = user.picture;
 function logout() {
+    localStorage.removeItem('user')
     router.push('/')
     }
 </script>
