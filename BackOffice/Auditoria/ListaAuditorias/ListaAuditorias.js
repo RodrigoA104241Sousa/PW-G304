@@ -1,6 +1,14 @@
-
-// Initialize auditorias data with localStorage or default
+// auditorias data com localStorage ou default
 let auditoriasData = JSON.parse(localStorage.getItem('auditorias')) || defaultAuditorias;
+
+// Salvar Auditorias em localStorage
+function saveAuditoriasData() {
+    try {
+        localStorage.setItem('auditorias', JSON.stringify(auditoriasData));
+    } catch (error) {
+        console.error('Erro ao salvar auditorias:', error);
+    }
+}
 
 // =========================== VARIÁVEIS GLOBAIS ===========================
 // =========================================================================
@@ -241,7 +249,10 @@ function getUrgenciaBadgeClass(nivel) {
     }
 }
 
-// ---------------------- ATUALIZAR PAGINAÇÃO ----------------------
+// =========================================================================
+// =============================== PAGINAÇÃO ===============================
+// =========================================================================
+
 function updatePagination(lista = null) {
     const totalItems = (lista || filtrarAuditorias()).length; // total de auditorias 
     const totalPages = Math.ceil(totalItems / itemsPerPage); // total de páginas necessárias
@@ -382,11 +393,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
     });
 
-// Update the saveAuditoriasData function to save to localStorage:
-function saveAuditoriasData() {
-    try {
-        localStorage.setItem('auditorias', JSON.stringify(auditoriasData));
-    } catch (error) {
-        console.error('Erro ao salvar auditorias:', error);
-    }
-}

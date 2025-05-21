@@ -728,7 +728,8 @@ function saveAuditToLocalStorage() {
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,
         dataCriacao: new Date().toISOString(),
-        tipoOcorrencia: tipoOcorrencia 
+        tipoOcorrencia: tipoOcorrencia,
+        estado: selectedPeritosArray.length > 0 ? "Em Progresso" : "Não Iniciada"
     };
 
     // Obter auditorias existentes do localStorage ou criar array vazio
@@ -739,16 +740,7 @@ function saveAuditToLocalStorage() {
 
     // Salvar auditoria no localStorage
     localStorage.setItem('auditorias', JSON.stringify(auditorias));
-    
-    // Atualizar o estado dos peritos selecionados para "Não disponível"
-    let experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-    selectedPeritosArray.forEach(peritoSel => {
-        const idx = experts.findIndex(e => e.id == peritoSel.id);
-        if (idx !== -1) {
-            experts[idx].status = "Não Disponível";
-        }
-    });
-    localStorage.setItem('expertsData', JSON.stringify(experts));
+
 
     // Atualizar o status da ocorrência para "Aceite"
     const occurrenceId = parseInt(localStorage.getItem('occurrenceForAudit'), 10);

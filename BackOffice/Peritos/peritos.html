@@ -2,15 +2,17 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EyesEveryWhere</title>
-    <link rel="stylesheet" href="peritos.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Responsivo para móvel-->
+    <title>EyesEveryWhere</title> <!-- Título da página -->
+    <link rel="stylesheet" href="peritos.css"> <!-- Link para o CSS -->
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
-    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link rel="icon" type="image/ico" href="favicon.ico"> <!-- Favicon -->
 </head>
 <body>
+    <!-- Estrutura principal -->
     <div class="container">
-        <!-- Sidebar -->
+
+        <!-- Menu Lateral -->
         <div class="sidebar">
             <!-- Logo -->
             <div class="logo">
@@ -18,49 +20,75 @@
                 <div>EveryWhere</div>
             </div>
 
-            <!-- Sidebar Menu -->
+            <!-- Filtros do Menu Lateral-->
             <nav>
+                <!-- Filtros -->
                 <div class="menu-item">
+                    <!-- Icone do filtro -->
                     <i data-lucide="filter"></i>
                     <span>Filtros</span>
                 </div>
 
+                <!-- + Recente -->
+                <div class="menu-item" data-sort="recente">
+                    <span>Mais Recente</span>
+                </div>
 
+                <!-- + Antiga -->
+                <div class="menu-item" data-sort="antiga">
+                    <span>Mais Antigo</span>
+                </div>
+
+                <!-- Especialidade -->
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
                         <span>Especialidade</span>
                     </div>
+                    <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
-
-                <!-- Especialidade Submenu -->
+                <!-- Submenu da Especialidade -->
                 <div class="submenu">
-                    <div class="submenu-item"><span class="dot"></span>Buraco na Estrada</div>
-                    <div class="submenu-item"><span class="dot"></span>Passeio Danificado</div>
-                    <div class="submenu-item"><span class="dot"></span>Falta de Sinalização</div>
-                    <div class="submenu-item"><span class="dot"></span>Iluminação Pública</div>
+                    <button class="submenu-item" data-tipo="Buraco na Estrada">
+                            <span class="dot"></span>
+                            <span>Buraco na Estrada</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Passeio Danificado">
+                        <span class="dot"></span>
+                        <span>Passeio Danificado</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Falta de Sinalização">
+                        <span class="dot"></span>
+                        <span>Falta de Sinalização</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Iluminação Pública">
+                        <span class="dot"></span>
+                        <span>Iluminação Pública</span>
+                    </button>
                 </div>
 
+                <!-- Estado -->
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
                         <span>Estado</span>
                     </div>
+                    <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
 
-                <!-- Estado Submenu -->
+                <!-- Submenu do Estado -->
                 <div class="submenu">
-                    <button class="submenu-item" data-status="Disponível">
+                    <button class="submenu-item" data-estado="Disponível">
                         <span class="dot"></span>
                         <span>Disponível</span>
                     </button>
-                    <button class="submenu-item" data-status="Não Disponível">
+                    <button class="submenu-item" data-estado="Não Disponível">
                         <span class="dot"></span>
                         <span>Não Disponível</span>
                     </button>
-                    <button class="submenu-item" data-status="Em Auditoria">
+                    <button class="submenu-item" data-estado="Em Auditoria">
                         <span class="dot"></span>
                         <span>Em Auditoria</span>
                     </button>
@@ -68,10 +96,12 @@
             </nav>
         </div>
 
-        <!-- Main Content -->
+        <!-- Página Principal -->
         <div class="main-content">
-            <!-- Header -->
+
+            <!-- Cabeçalho -->
             <header>
+                <!-- Botão Adicionar -->
                 <div class="header-left">
                     <button id="addExpertBtn" class="btn btn-primary">
                         <i data-lucide="plus"></i>
@@ -79,6 +109,7 @@
                     </button>
                 </div>
 
+                <!-- Centro -->
                 <div class="page-selector">
                     <button class="page-dropdown-btn">
                         Peritos
@@ -92,75 +123,78 @@
                     </div>
                 </div>
 
+                <!-- Botão Remover -->
                 <div class="header-right">
                     <button class="btn btn-danger">
                         <i data-lucide="minus"></i>
                         <span>REMOVER</span>
                     </button>
+                    <!-- LOGO -->
                     <div class="avatar">
-                        <img src="logo.png" alt="Avatar" width="24" height="24">
+                        <img src="logo.png" alt="Avatar" width="60" height="60">
                     </div>
                 </div>
             </header>
 
-            <!-- Filters -->
+            <!-- Filtros -->
             <div class="filters">
-                <input type="text" id="searchInput" placeholder="Nome / Email Perito ...">
-                <input type="date" id="dateInput" placeholder="Trabalha desde ...">
-                <button class="search-button" id="searchButton">
-                    <span>Procurar</span>
-                    <i data-lucide="search"></i>
+                <input type="text" id="searchPerito" placeholder="Nome / Email Perito ...">
+                <input type="date" id="searchData" placeholder="Trabalha desde ...">
+                <button id="searchButton" class="search-icon-btn">
+                    <img src="pesquisa.png" alt="Pesquisar" />
+                  </button>
+                <button id="clearFiltersBtn" class="search-icon-btn" title="Limpar Filtros">
+                    <img src="borracha.png" alt="Limpar" />
                 </button>
             </div>
 
-            <!-- Table -->
+            <!-- Tabela de Peritos -->
             <div class="card-container">
                 <div class="table-container">
                     <table>
+                        <!-- Cabeçalho da tabela-->
                         <thead>
                             <tr class="table-header">
                                 <th><input type="checkbox" class="header-checkbox"></th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Nome / Email Perito</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>Trabalha desde</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>ESPECIALIDADE</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="header-cell">
-                                        <span>ESTADO</span>
-                                    </div>
-                                </th>
-                                <th></th>
+                                <th><div class="header-cell"><span>Nome / Email Perito</span></div></th>
+                                <th><div class="header-cell"><span>Trabalha desde</span></div></th>
+                                <th><div class="header-cell"><span>ESPECIALIDADE</span></div></th>
+                                <th><div class="header-cell"><span>ESTADO</span></div></th>
                             </tr>
                         </thead>
+                        <!-- corpo da tabela, preenchido automaticamente JS -->
                         <tbody id="expertsTableBody">
-                            <!-- Table rows will be inserted here via JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Pagination -->
-            <div class="pagination">
-                <div class="pagination-info">
-                    Mostrando 1 - 16 de 5.000 peritos registradas
+
+           <!-- 3 Pontos -->
+            <div id="detalhesModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <h2>Detalhes do Perito</h2> <!-- Título do modal -->
+                    <div id="detalhesPeritoContent">
+                        <!-- Conteúdo gerado dinamicamente -->
+                    </div>
                 </div>
+            </div>
+
+
+            <!-- Paginação -->
+            <div class="pagination">
+                <!-- Informação -->
+                <div class="pagination-info"> </div>
+                <!-- Controlos de página -->
                 <div class="pagination-controls">
-                    <select>
-                        <option>16</option>
-                        <option>32</option>
-                        <option>64</option>
+                    <!-- Nº de Peritos a aparecer -->
+                    <select id="itemsPerPageSelect">
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
                     </select>
+                    <!-- Nº da página -->
                     <div class="pagination-buttons">
                         <button>&lt;</button>
                         <button class="active">1</button>
@@ -173,7 +207,9 @@
             </div>
         </div>
     </div>
+    <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- JavaScript -->
     <script src="peritos.js"></script>
 </body>
 </html>
