@@ -8,7 +8,7 @@ function mostrarOcorrencias(pagina) {
   const inicio = (pagina - 1) * ocorrenciasPorPagina;
   const fim = inicio + ocorrenciasPorPagina;
 
-  let user = localStorage.getItem('user');
+  let user = localStorage.getItem('userfront');
   if (user) {
     user = JSON.parse(user);
   }

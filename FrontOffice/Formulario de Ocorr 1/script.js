@@ -34,7 +34,7 @@ function fileToBase64(file) {
 
 // Função para obter latitude e longitude com base na morada
 async function getCoordinatesFromAddress(address) {
-  const geocoder = new google.maps.Geocoder(); // Certifique-se de que o geocoder está inicializado aqui
+  const geocoder = new google.maps.Geocoder();
   return new Promise((resolve, reject) => {
     geocoder.geocode({ address: address }, (results, status) => {
       if (status === "OK" && results[0]) {
@@ -82,67 +82,77 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Converter imagens para Base64
-  const imagensBase64 = await Promise.all(
-    Array.from(uploadInput.files).map(file => fileToBase64(file))
-  );
-
   // Obter a morada do formulário
   const morada = document.getElementById('morada').value;
+  const geocoder = new google.maps.Geocoder();
 
-  // Verificar se o utilizador está autenticado
-  if (!user || !user.id) {
-    showPopup("Utilizador não autenticado. Por favor, faça login novamente.", false);
-    return;
-  }
+  // Validação do distrito de Braga
+  geocoder.geocode({ address: morada }, async function(results, status) {
+    if (status === 'OK' && results.length > 0) {
+      const addressComponents = results[0].address_components;
+      let distrito = '';
+      addressComponents.forEach(component => {
+        if (component.types.includes('administrative_area_level_2')) {
+          distrito = component.long_name;
+        }
+      });
 
-  try {
-    // Obter latitude e longitude com base na morada
-    const { latitude, longitude } = await getCoordinatesFromAddress(morada);
+      if (distrito.toLowerCase() !== 'braga') {
+        showPopup('A ocorrência deve estar localizada no distrito de Braga.', false);
+        return;
+      }
 
-    // Ir buscar ocorrências já guardadas
-    const ocorrenciasGuardadas = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+      // Só aqui continua o registo!
+      const imagensBase64 = await Promise.all(
+        Array.from(uploadInput.files).map(file => fileToBase64(file))
+      );
 
-    // Calcular o novo ID de forma segura
-    let novoId = 1;
-    if (ocorrenciasGuardadas.length > 0 && ocorrenciasGuardadas[ocorrenciasGuardadas.length - 1].id != null) {
-      novoId = ocorrenciasGuardadas[ocorrenciasGuardadas.length - 1].id + 1;
+      if (!user || !user.id) {
+        showPopup("Utilizador não autenticado. Por favor, faça login novamente.", false);
+        return;
+      }
+
+      try {
+        const { latitude, longitude } = await getCoordinatesFromAddress(morada);
+
+        const ocorrenciasGuardadas = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+
+        let novoId = 1;
+        if (ocorrenciasGuardadas.length > 0 && ocorrenciasGuardadas[ocorrenciasGuardadas.length - 1].id != null) {
+          novoId = ocorrenciasGuardadas[ocorrenciasGuardadas.length - 1].id + 1;
+        }
+
+        const ocorrencia = {
+          id: novoId,
+          tipo: document.getElementById('tipo-ocorrencia').value,
+          email: document.getElementById('email').value,
+          morada: morada,
+          codigoPostal: document.getElementById('codigo-postal').value,
+          descricao: document.getElementById('descricao').value,
+          imagens: imagensBase64,
+          estado: "Em espera",
+          data: new Date().toLocaleString('pt-PT'),
+          userid: user.id,
+          latitude: latitude,
+          longitude: longitude
+        };
+
+        ocorrenciasGuardadas.push(ocorrencia);
+        localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
+
+        showPopup("Ocorrência registada com sucesso!");
+
+        setTimeout(() => {
+          window.location.href = "../Auditorias/index.html";
+        }, 2000);
+
+        form.reset();
+      } catch (error) {
+        console.error(error);
+        showPopup("Erro ao registar a ocorrência. Por favor, tente novamente.", false);
+      }
+    } else {
+      showPopup('Morada inválida ou não encontrada.', false);
     }
-
-    // Criar objeto ocorrência com ID
-    const ocorrencia = {
-      id: novoId,
-      tipo: document.getElementById('tipo-ocorrencia').value,
-      email: document.getElementById('email').value,
-      morada: morada,
-      codigoPostal: document.getElementById('codigo-postal').value,
-      descricao: document.getElementById('descricao').value,
-      imagens: imagensBase64,
-      estado: "Em espera",
-      data: new Date().toLocaleString('pt-PT'),
-      userid: user.id,
-      latitude: latitude, 
-      longitude: longitude 
-    };
-
-    // Adicionar e guardar no localStorage
-    ocorrenciasGuardadas.push(ocorrencia);
-    localStorage.setItem('ocorrencias', JSON.stringify(ocorrenciasGuardadas));
-
-
-    // Exibir popup de sucesso
-    showPopup("Ocorrência registada com sucesso!");
-
-    // Redirecionar após 2 segundos
-    setTimeout(() => {
-      window.location.href = "../Auditorias/index.html";
-    }, 2000);
-
-    // Limpar o formulário
-    form.reset();
-  } catch (error) {
-    console.error(error);
-    // Exibir popup de erro
-    showPopup("Erro ao registar a ocorrência. Por favor, tente novamente.", false);
-  }
+  });
 });

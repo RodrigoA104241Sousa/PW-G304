@@ -8,6 +8,11 @@ const ocorrencias = useOcorrenciasStore()
 ocorrencias.carregarOcorrencias()
 const ocorrencias_lista = ocorrencias.getTodasOcorrencias()
 
+let user = null
+if (typeof window !== 'undefined') {
+  user = JSON.parse(localStorage.getItem('user') || '{}')
+}
+
 // Google Maps
 let map
 let geocoder
@@ -40,25 +45,41 @@ function initMap() {
     fullscreenControl: true
   })
 
-  const infoWindow = new google.maps.InfoWindow() // uma só janela reutilizada
+  const infoWindow = new google.maps.InfoWindow()
 
   ocorrencias_lista.forEach(ocorrencia => {
     if (ocorrencia.morada) {
       geocoder.geocode({ address: ocorrencia.morada }, (results, status) => {
         if (status === 'OK' && results[0]?.geometry?.location) {
+          const isDoPerito = Array.isArray(ocorrencia.peritos) &&
+              ocorrencia.peritos.some(perito =>
+              perito.email?.trim().toLowerCase() === user?.email?.trim().toLowerCase()
+            )
+
           const marker = new google.maps.Marker({
             map,
             position: results[0].geometry.location,
+            icon: isDoPerito
+              ? 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+              : 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
           })
 
-          const content = `
+          let content = `
             <div>
-              <strong>Tipo:</strong> ${ocorrencia.tipo || '—'}<br/>
+              <strong>Tipo:</strong> ${ocorrencia.tipoOcorrencia || '—'}<br/>
               <strong>Morada:</strong> ${ocorrencia.morada || '—'}<br/>
               <strong>Data:</strong> ${ocorrencia.data || '—'}<br/>
-              <strong>Urgencia:</strong> ${ocorrencia.nivelUrgencia || '—'}<br/>
+              <strong>Urgência:</strong> ${ocorrencia.nivelUrgencia || '—'}<br/>
             </div>
           `
+
+          if (isDoPerito) {
+              content += `<button onclick="window.location.href='/app/verauditoria/${ocorrencia.id}'" 
+                            style="margin-top:5px;padding:5px 10px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;">
+                            Ver Ocorrência
+                          </button>`
+            }
+            content += `</div>`
 
           marker.addListener('click', () => {
             infoWindow.setContent(content)
@@ -69,8 +90,8 @@ function initMap() {
     }
   })
 }
-
 </script>
+
 
 <template>
   <div class="h-screen w-screen flex flex-col">
