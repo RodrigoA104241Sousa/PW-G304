@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Responsivo para móvel-->
+    <title>EyesEveryWhere</title> <!-- Título da página -->
+    <link rel="stylesheet" href="dashboard.css"> <!-- Link para o CSS -->
+    <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
+    <link rel="icon" type="image/ico" href="favicon.ico"> <!-- Favicon -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Biblioteca para gráficos -->
+</head>
+<body>
+    <!-- Estrutura principal -->
+    <div class="container">
+
+        <!-- Menu Lateral -->
+        <div class="sidebar">
+            <!-- Logo -->
+            <div class="logo">
+                <div>Eyes</div>
+                <div>EveryWhere</div>
+            </div>
+
+            <!-- Filtros do Menu Lateral-->
+            <nav>
+                <!-- Filtros -->
+                <div class="menu-item">
+                    <!-- Icone do filtro -->
+                    <i data-lucide="filter"></i>
+                    <span>Filtros</span>
+                </div>
+
+                <!-- TIPO AUDITORIA-->
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="calendar"></i>
+                        <span>Tipo de auditoria</span>
+                    </div>
+                    <!-- seta à frente -->
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
+                <!-- Submenu do Período -->
+                <div class="submenu">
+                    <button class="submenu-item" data-periodo="Buraco na Estrada">
+                        <span class="dot"></span>
+                        <span>Buraco na Estrada</span>
+                    </button>
+                    <button class="submenu-item" data-periodo="Passeio Danificado">
+                        <span class="dot"></span>
+                        <span>Passeio Danificado</span>
+                    </button>
+                    <button class="submenu-item" data-periodo="Falta de Sinalização">
+                        <span class="dot"></span>
+                        <span>Falta de Sinalização</span>
+                    </button>
+                    <button class="submenu-item" data-periodo="Iluminação Pública">
+                        <span class="dot"></span>
+                        <span>Iluminação Pública</span>
+                    </button>
+                </div>
+
+                <!-- ESTADO -->
+                <div class="menu-item">
+                    <div class="menu-item-content">
+                        <i data-lucide="map-pin"></i>
+                        <span>Estado</span>
+                    </div>
+                    <!-- seta à frente -->
+                    <i data-lucide="chevron-down" class="rotate-180"></i>
+                </div>
+
+                <!-- Submenu de Área -->
+                <div class="submenu">
+                    <button class="submenu-item" data-area="Concluída">
+                        <span class="dot"></span>
+                        <span>Concluída</span>
+                    </button>
+                    <button class="submenu-item" data-area="Não Concluída">
+                        <span class="dot"></span>
+                        <span>Não Concluída</span>
+                    </button>
+                    <button class="submenu-item" data-area="Em Progresso">
+                        <span class="dot"></span>
+                        <span>Em Progresso</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Página Principal -->
+        <div class="main-content">
+
+            <!-- Cabeçalho -->
+            <header>
+            <div class="header-right">
+            </div>
+                <!-- Centro -->
+                <div class="page-selector">
+                    <button class="page-dropdown-btn">
+                        Dashboards
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="page-dropdown-content">
+                        <a href="dashboard.html" class="active">Dashboards</a>
+                        <a href="../Peritos/peritos.html">Peritos</a>
+                        <a href="../Ocorrência/ocorrencia.html">Ocorrências</a>
+                        <a href="../Auditoria/ListaAuditorias/ListaAuditorias.html">Auditorias</a>
+                    </div>
+                </div>
+
+                <!-- Perfil -->
+                <div class="header-right">
+                    <!-- LOGO -->
+                    <div class="avatar">
+                        <img src="../Login/logo.png" alt="Avatar" width="60" height="60">
+                    </div>
+                </div>
+            </header>
+
+
+            <!-- Dashboard Cards -->
+             <div class="dashboard-grid">
+            <!-- Auditorias realizadas por área -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Auditorias realizadas por área</div>
+                    <div class="card-action">View Report</div>
+                </div>
+                <div class="donut-chart">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="#e0e6ff" stroke-width="20" fill="none" />
+                        <circle cx="50" cy="50" r="40" stroke="#5664d2" stroke-width="20" fill="none" stroke-dasharray="251.2 150.8" transform="rotate(-90 50 50)" />
+                        <circle cx="50" cy="50" r="40" stroke="#abd2ff" stroke-width="20" fill="none" stroke-dasharray="75.36 326.64" transform="rotate(150 50 50)" />
+                        <circle cx="50" cy="50" r="40" stroke="#e0e6ff" stroke-width="20" fill="none" stroke-dasharray="50.24 351.76" transform="rotate(196 50 50)" />
+                        <circle cx="50" cy="50" r="30" fill="white" class="donut-hole" />
+                    </svg>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #5664d2;"></div>
+                        <div>Jardins 40%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #abd2ff;"></div>
+                        <div>Parques 32%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #e0e6ff;"></div>
+                        <div>Ruas 28%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ocorrências resolvidas -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Ocorrências resolvidas</div>
+                    <div class="card-action">View Report</div>
+                </div>
+                <div class="card-content">
+                    <div>Número de ocorrências resolvidas ao longo do tempo</div>
+                    <div class="line-chart">
+                        <svg viewBox="0 0 300 100">
+                            <polyline points="0,80 50,60 100,75 150,40 200,55 250,20 300,35" fill="none" stroke="#5664d2" stroke-width="3" />
+                            <line x1="0" y1="100" x2="300" y2="100" stroke="#eee" stroke-width="1" />
+                            <!-- x-axis ticks -->
+                            <line x1="0" y1="100" x2="0" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="50" y1="100" x2="50" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="100" y1="100" x2="100" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="150" y1="100" x2="150" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="200" y1="100" x2="200" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="250" y1="100" x2="250" y2="95" stroke="#ccc" stroke-width="1" />
+                            <line x1="300" y1="100" x2="300" y2="95" stroke="#ccc" stroke-width="1" />
+                        </svg>
+                    </div>
+                    <div class="legend" style="justify-content: flex-start; margin-top: 30px;">
+                        <div class="legend-item" style="margin-right: 20px;">
+                            <div class="legend-color" style="background-color: #5664d2;"></div>
+                            <div>Last 6 days</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #aaa;"></div>
+                            <div>Last week</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profissionais Disponíveis -->
+            <div class="card">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background-color: #f0f4ff;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">11k</div>
+                    <div class="stat-label">Profissionais Disponíveis</div>
+                </div>
+            </div>
+            
+            <!-- Auditorias Resolvidas -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Auditorias Resolvidas</div>
+                    <div class="card-action">Atualizar</div>
+                </div>
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-text">Lista</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Lista</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Lista</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Lista</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Materiais disponíveis em Armazém -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Materiais disponíveis em Armazém</div>
+                    <div class="card-action">Atualizar</div>
+                </div>
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-text">Nome do material</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Nome do material</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Nome do material</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-text">Nome do material</div>
+                        <div class="list-item-icon">〉</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custo de materiais usados -->
+            <div class="card">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background-color: #f0f4ff;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">13 €</div>
+                    <div class="stat-label">Custo de materiais usados</div>
+                </div>
+            </div>
+            
+            <!-- Materiais Usados -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <div class="card-title">Materiais Usados</div>
+                </div>
+                <div class="dropdown">Semanal</div>
+                <div class="bar-chart">
+                    <div class="bar-container">
+                        <div style="text-align: center;">
+                            <div class="bar red" style="height: 70px;"></div>
+                            <div class="bar-label">Jan</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar yellow" style="height: 120px;"></div>
+                            <div class="bar-label">Fev</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar red" style="height: 50px;"></div>
+                            <div class="bar-label">Mar</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar yellow" style="height: 100px;"></div>
+                            <div class="bar-label">Abr</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar red" style="height: 80px;"></div>
+                            <div class="bar-label">Mai</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar yellow" style="height: 30px;"></div>
+                            <div class="bar-label">Jun</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="bar red" style="height: 90px;"></div>
+                            <div class="bar-label">Jul</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <div style="font-size: 12px; color: #888;">0</div>
+                        <div style="font-size: 12px; color: #888;">20</div>
+                        <div style="font-size: 12px; color: #888;">40</div>
+                        <div style="font-size: 12px; color: #888;">60</div>
+                        <div style="font-size: 12px; color: #888;">80</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profissionais em Ação -->
+            <div class="card">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background-color: #f0f4ff;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">11k</div>
+                    <div class="stat-label">Profissionais em Ação</div>
+                </div>
+            </div>
+            
+            <!-- Auditorias Realizadas -->
+            <div class="card">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background-color: #f0f4ff;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">973</div>
+                    <div class="stat-label">Auditorias Realizadas</div>
+                </div>
+            </div>
+            
+            <!-- Ocorrências Resolvidas -->
+            <div class="card">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background-color: #f0f4ff;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 4L12 14.01l-3-3" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">973</div>
+                    <div class="stat-label">Ocorrências Resolvidas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Importar icones (lucide)-->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- JavaScript -->
+    <script src="dashboard.js"></script>
+</body>
+</html>

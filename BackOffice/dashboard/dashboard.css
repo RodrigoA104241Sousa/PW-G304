@@ -1,0 +1,561 @@
+/* Variáveis Globais*/ 
+/* Cores */
+:root {
+    --primary-color: #03045e; /* principal */
+    --danger-color: #dc3545; /* alerta */
+    --text-gray: #6c757d; /* texto secundário */
+    --bg-hover: #111b29; /* passar por cima(sidebar) */
+    --bg-light: #f8f9fa; /* cor de fundo */
+    --border-color: #dfdfdf; /* bordas/separadores */
+}
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-light);
+}
+
+/* Estrutura */
+.container {
+    display: flex;
+    height: 100vh;/* Altura total da tela */
+    position: relative;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Título com linhas separadas e alinhado à esquerda */
+.logo {
+    background-color: white;
+    padding: 1.5rem 1rem 1rem 1rem;
+    border-bottom: 1px solid #ddd;
+    line-height: 0.4; /* altura do retangulo do titulo */
+}
+    /* Titulo Eyes*/
+    .logo div:first-child {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+    /* Titulo EveryWhere*/
+    .logo div:last-child {
+        font-size: 1.7rem;
+        font-weight: 400;
+        color: var(--primary-color);
+        text-align: right;
+    }
+
+/* Menu Lateral */
+.menu-item {
+    padding: 1.9rem 1.25rem; /* espaçamento do texto */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 1.1rem; /* tamanho do texto */
+    transition: background-color 0.2s;
+}
+    /* ao passar o mouse por cima */
+    .menu-item:hover {
+        background-color: var(--bg-hover);
+    }
+
+    /* Ícones alinhados */
+    .menu-item i,
+    .menu-item-content i {
+        width: 20px;
+        min-width: 20px;
+        text-align: center;
+    }
+
+/* Submenus (tipoAuditoria e Estado) */
+.submenu {
+    padding-left: 2.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+}
+    /* ponto do submenu */
+    .submenu-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        text-align: left;
+        font-size: 0.9rem; /* tamanho do texto do submenu*/
+    }
+        /* ao passar o mouse por cima do submenu */
+        .submenu-item:hover {
+            background-color: var(--bg-hover) !important;
+        }
+        /* ponto do submenu aberto */
+        .submenu-item.active {
+            background-color: var(--bg-hover);
+        }
+
+        .submenu-item.active .dot {
+            background-color: var(--primary-color);
+        }
+
+        /* ponto */
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .menu-item.active {
+            background-color: var(--bg-hover);
+        }
+        
+
+/* Parte Principal */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+    /* cabeçalho */
+    header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem; /* altura do cabeçalho */
+        border-bottom: 1px solid var(--border-color);
+    }
+    /* espaço para os Botões Adicionar e Remover */
+    .header-left, .header-right {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+
+
+
+/* Page Selector Styles */
+.page-selector {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.page-dropdown-btn {
+    background-color: var(--bg-light);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.page-dropdown-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.page-dropdown-content {
+    display: none;
+    position: fixed;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    z-index: 1000;
+}
+
+.page-dropdown-content a {
+    color: var(--text-gray);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+}
+
+.page-dropdown-content a:hover {
+    background-color: var(--bg-light);
+}
+
+.page-dropdown-content a.active {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.page-selector:hover .page-dropdown-content {
+    display: block;
+}
+
+/* CAIXA DA CÉLULA DA TABELA*/
+    /* Estilo geral da célula da tabela */
+    .card-container {
+        margin: 1rem 2rem;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        max-width: 1600px; /* Increased from 1400px */
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100vh - 250px); /* Add fixed height based on viewport */
+        Overflow: visible;
+    }
+
+    /* Estilo do input de data */
+    input[type="date"] {
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        color: var(--text-gray);
+        transition: border-color 0.2s ease;
+        width: 200px;
+        cursor: pointer;
+    }
+
+    /* Ícone do calendário */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background-color: white;
+        border-radius: 50%;
+        padding: 0.25rem;
+        color: white;
+        cursor: pointer;
+        opacity: 0.6;
+        margin-left: 0.5rem;
+    }
+
+    /* Ao passar o mouse por cima */
+    input[type="date"]:hover::-webkit-calendar-picker-indicator {
+        opacity: 1;
+    }
+/* ================= 3 Pontos ================= */
+/*  Modal base */
+.modal {
+    position: fixed; /* modal fixo no ecrã */
+    top: 0; left: 0;
+    width: 100%; height: 100%; /* ocupa toda o ecrã */
+    background: rgba(0, 0, 0, 0.5); /* fundo escuro */
+    backdrop-filter: blur(3px); /* desfocar fundo */
+    display: none;
+    justify-content: center; /* centralizar horizontalmente */
+    align-items: center; /* centralizar verticalmente */
+    z-index: 9999; /* acima de outros elementos */
+}
+    /* ao abrir o modal */
+    .modal:not(.hidden) {
+        display: flex;
+    }
+
+/* Tabela*/
+.detalhes-grid {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* 2 colunas iguais */
+    column-gap: 30px; /* espaço entre colunas */
+    row-gap: 50px; /* espaço entre linhas */
+    margin-bottom: 30px; /* espaço entre o grid e o botão editar */
+}
+/* texto */
+.detalhes-grid div {
+    font-size: 18px; /* tamanho do texto */
+    color: #333;
+}
+/* titulo */
+.detalhes-grid strong {
+    font-weight: 600;
+    color: #444;
+    margin-right: 5px;
+}
+
+/* ================= Modal conteúdo ================= */
+.modal-content {
+    background: #ffffff; /* fundo branco */
+    padding: 40px 50px; /* espaçamento interno */
+    border-radius: 20px; /* bordas arredondadas */
+    width: 1000px; /* largura desejada */
+    max-width: 95%; /* responsivo */
+    max-height: 90vh; /*não ultrapassa o ecrã */
+    overflow-y: auto; /* scroll se necessário */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* sombra */
+    position: relative; /* posição relativa para o botão fechar */
+    font-family: Arial, sans-serif; /* fonte do texto */
+    animation: fadeIn 0.2s ease-out; /* animação de entrada */
+}
+    /* animação de entrada */
+    @keyframes fadeIn {
+        from { transform: scale(0.95); opacity: 0; } /* começa pequeno e transparente */
+        to { transform: scale(1); opacity: 1; } /* fica visivel e em tamanho real */
+    }
+
+/* Título do modal */
+.modal-content h2 {
+    text-align: center; /* centraliza título */
+    margin-bottom: 40px; /* espaço entre título e conteúdo */
+    font-size: 28px; /* tamanho do título */
+    font-weight: bold; /* negrito */
+}
+
+/* ================= Botão fechar ================= */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 40px; /* tamanho do botão */
+    font-weight: bold; /* negrito */
+    color: #666; /* cor do botão */
+    cursor: pointer;
+    transition: color 0.2s; /* efeito suave */
+}
+    .close-btn:hover {
+        color: #000; /* cor ao passar o mouse */
+    }
+
+/* ================= Texto fora da grid ================= */
+#detalhesPeritoContent p {
+    margin: 10px 0;
+    font-size: 20px;
+    color: #333;
+}
+
+/* ================= Lista de auditorias ================= */
+#detalhesPeritoContent ul {
+    margin: 10px 0 20px;
+    padding-left: 20px;
+}
+
+#detalhesPeritoContent ul li {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+/* quando não houver auditorias */
+.no-auditorias {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+/* ================= Botão Editar ================= */
+#detalhesPeritoContent button {
+    display: block;
+    margin: 30px auto 0 auto; /* centraliza o botão */
+    padding: 10px 35px;
+    background-color: #03045e; /* cor do botão */
+    color: white; /* cor do texto */
+    border: none;
+    border-radius: 40px; /* bordas arredondadas */
+    font-size: 40px; /* tamanho do texto */
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+    /* ao passar o mouse por cima */
+    #detalhesPeritoContent button:hover {
+        background-color: #111b29;
+    }
+
+/* ================= Inputs e selects no modal ================= */
+#formEditarPerito input,
+#formEditarPerito select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.2s;
+}
+
+#formEditarPerito input:focus,
+#formEditarPerito select:focus {
+    outline: none;
+    border-color: #03045e;
+    background-color: #fff;
+}
+
+.auditorias-lista {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    list-style-position: inside; /* bullets dentro do conteúdo */
+    padding-left: 0;
+}
+
+.auditorias-lista li {
+    margin-bottom: 8px;
+    list-style-type: disc; /* bullet padrão (podes usar circle, square...) */
+}
+
+       .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .card-action {
+            color: #5664d2;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .donut-chart {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .donut-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .donut-hole {
+            fill: white;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .stat-card {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .line-chart {
+            width: 100%;
+            height: 100px;
+        }
+        
+        .list-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .list-item-text {
+            font-size: 14px;
+        }
+        
+        .list-item-icon {
+            color: #666;
+        }
+        
+        .bar-chart {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+        
+        .bar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 180px;
+        }
+        
+        .bar {
+            width: 20px;
+            background-color: #5664d2;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .bar.yellow {
+            background-color: #ffc107;
+        }
+        
+        .bar.red {
+            background-color: #f44336;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #666;
+        }
