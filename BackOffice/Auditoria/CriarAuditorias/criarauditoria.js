@@ -728,7 +728,8 @@ function saveAuditToLocalStorage() {
         materiais: materiaisSelecionados,
         peritos: selectedPeritosArray,
         dataCriacao: new Date().toISOString(),
-        tipoOcorrencia: tipoOcorrencia 
+        tipoOcorrencia: tipoOcorrencia,
+        estado: selectedPeritosArray.length > 0 ? "Em Progresso" : "Não Iniciada"
     };
 
     // Obter auditorias existentes do localStorage ou criar array vazio

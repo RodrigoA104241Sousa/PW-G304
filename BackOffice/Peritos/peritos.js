@@ -81,18 +81,26 @@ function setupRemoveButton() {
 // =========================================================================
 // =============================== 3 PONTOS ================================
 // =========================================================================
-function abrirDetalhesPerito(perito) {
-    const modal = document.getElementById('detalhesModal');
-    const content = document.getElementById('detalhesPeritoContent');
 
-    // Buscar todas as auditorias associadas a este perito
+// ---------------------- DETALHES DO PERITO ----------------------
+function abrirDetalhesPerito(perito) {
+    const modal = document.getElementById('detalhesModal'); //seleciona o modal
+    const content = document.getElementById('detalhesPeritoContent'); // onde inserir os dados
+
+    // Filtra as auditorias associadas a este perito
     const auditorias = getAuditorias().filter(a =>
         a.peritos?.some(p => p.id == perito.id)
     );
 
-    // Gerar HTML com a lista de auditorias
+    // Gerar HTML com a lista de auditorias (ou mensagem se não houver)
     const auditoriasHTML = auditorias.length > 0
-        ? `<ul>${auditorias.map(a => `<li>${a.nome} (${a.data || a.dataCriacao?.split("T")[0]})</li>`).join('')}</ul>`
+        ? `<ul class="auditorias-lista">${auditorias.map(a => `
+            <li>
+                <span class="info-id">ID Auditoria: ${a.nome || a.id}</span>
+                <span class="info-data">Data de Criação: ${a.data || a.dataCriacao?.split("T")[0]}</span>
+                <span class="${getEstadoBadgeClass(a.estado)}">${a.estado || '—'}</span>
+            </li>`).join('')}
+            </ul>`
         : `<p class="no-auditorias">Nenhuma auditoria associada.</p>`;
 
     // Conteúdo HTML com 2 colunas
@@ -103,7 +111,7 @@ function abrirDetalhesPerito(perito) {
             <div><strong>Código Postal:</strong> ${perito.postalCode || '—'}</div>
             <div><strong>Morada:</strong> ${perito.address || '—'}</div>
             <div><strong>Telefone:</strong> ${perito.phone || '—'}</div>
-            <div><strong>Data de Nascimento:</strong> ${perito.birthDate || '—'}</div>
+            <div><strong>Data de Nascimento:</strong> ${formatarDataVisual(perito.birthDate) || '—'}</div>
             <div><strong>Estado:</strong> ${perito.status}</div>
             <div><strong>Auditorias Associadas:</strong> ${auditorias.length}</div>
         </div>
@@ -113,17 +121,103 @@ function abrirDetalhesPerito(perito) {
         <button onclick="editarPerito(${perito.id})">Editar</button>
     `;
 
-    modal.classList.remove('hidden');
+    modal.classList.remove('hidden'); // Mostra o modal
 }
 
 // Botão para fechar o modal
 document.querySelector('.close-btn').addEventListener('click', () => {
-    document.getElementById('detalhesModal').classList.add('hidden');
+    document.getElementById('detalhesModal').classList.add('hidden'); // Esconde o modal
 });
 
-// Função auxiliar para buscar auditorias do localStorage
+// Função que vai buscar auditorias do localStorage
 function getAuditorias() {
     return JSON.parse(localStorage.getItem('auditorias')) || [];
+}
+
+// ---------------------- EDITAR PERITO ----------------------
+function editarPerito(peritoId) {
+    const peritos = getExpertsData(); // obter peritos do localStorage	
+    const perito = peritos.find(p => p.id === peritoId); // encontrar o perito com o ID a editar
+    const content = document.getElementById('detalhesPeritoContent'); // inserir os dados
+
+    // substituir o conteúdo do modal pela edição
+    content.innerHTML = `
+        <form id="formEditarPerito" class="detalhes-grid">
+            <div><strong>Nome:</strong> <input type="text" name="name" value="${perito.name}" required></div>
+            <div><strong>Email:</strong> <input type="email" name="email" value="${perito.email}" required></div>
+            <div><strong>Código Postal:</strong> <input type="text" name="postalCode" value="${perito.postalCode || ''}"></div>
+            <div><strong>Morada:</strong> <input type="text" name="address" value="${perito.address || ''}"></div>
+            <div><strong>Telefone:</strong> <input type="text" name="phone" value="${perito.phone || ''}"></div>
+            <div><strong>Data de Nascimento:</strong> <input type="date" name="birthDate" value="${formatarDataInput(perito.birthDate)}"></div>
+            <div><strong>Especialidade:</strong>
+                <select name="specialty">
+                    <option ${perito.specialty === 'Buraco na Estrada' ? 'selected' : ''}>Buraco na Estrada</option>
+                    <option ${perito.specialty === 'Passeio Danificado' ? 'selected' : ''}>Passeio Danificado</option>
+                    <option ${perito.specialty === 'Falta de Sinalização' ? 'selected' : ''}>Falta de Sinalização</option>
+                    <option ${perito.specialty === 'Iluminação Pública' ? 'selected' : ''}>Iluminação Pública</option>
+                </select>
+            </div>
+            <div><strong>Estado:</strong>
+                <select name="status">
+                    <option ${perito.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
+                    <option ${perito.status === 'Não Disponível' ? 'selected' : ''}>Não Disponível</option>
+                    <option ${perito.status === 'Em Auditoria' ? 'selected' : ''}>Em Auditoria</option>
+                </select>
+            </div>
+        </form>
+
+        <button id="guardarAlteracoesBtn">Guardar Alterações</button>
+    `;
+
+    // Botão Guardar alterações
+    document.getElementById('guardarAlteracoesBtn').addEventListener('click', () => {
+        const form = document.getElementById('formEditarPerito');
+        const formData = new FormData(form);
+
+        // Atualizar perito
+        const updatedPerito = {
+            ...perito,
+            name: formData.get('name'),
+            email: formData.get('email'),
+            postalCode: formData.get('postalCode'),
+            address: formData.get('address'),
+            phone: formData.get('phone'),
+            birthDate: formData.get('birthDate'),
+            specialty: formData.get('specialty'),
+            status: formData.get('status'),
+        };
+            // Atualizar perito na lista
+            peritos[peritos.findIndex(p => p.id === peritoId)] = updatedPerito;
+            saveExpertsData(peritos);
+
+            atualizarTabelaPeritos();
+            document.getElementById('detalhesModal').classList.add('hidden');
+    });
+}
+
+    // Formatar data para input
+    function formatarDataInput(data) {
+        if (!data) return '';
+        // Se já estiver no formato YYYY-MM-DD, retorna direto
+        if (/^\d{4}-\d{2}-\d{2}$/.test(data)) return data;
+        // Se estiver no formato DD/MM/YYYY → converte
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
+            const [d, m, y] = data.split('/');
+            return `${y}-${m}-${d}`;
+        }
+        return ''; // formato inválido
+    }
+
+    function formatarDataVisual(data) {
+    if (!data) return '';
+    // Se for YYYY-MM-DD → converter para DD/MM/YYYY
+    if (/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+        const [y, m, d] = data.split('-');
+        return `${d}/${m}/${y}`;
+    }
+    // Se já estiver no formato DD/MM/YYYY → devolver como está
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(data)) return data;
+    return ''; // formato inválido
 }
 
 // =========================================================================
@@ -279,6 +373,7 @@ function getEstadoBadgeClass(estado) {
             return 'status-badge';
     }
 }
+
 
 // =========================================================================
 // =============================== PAGINAÇÃO ===============================
