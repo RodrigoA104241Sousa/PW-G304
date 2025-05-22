@@ -157,9 +157,10 @@ body {
 
 /* Page Selector Styles */
 .page-selector {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    display: inline-block;
+    z-index: 100; /* Adiciona este z-index para garantir prioridade */
+    margin: 0 auto;
 }
 
 .page-dropdown-btn {
@@ -184,7 +185,7 @@ body {
 
 .page-dropdown-content {
     display: none;
-    position: fixed;
+    position: absolute;
     top: 100%;
     left: 0;
     background-color: white;
@@ -192,7 +193,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     border-radius: 8px;
     margin-top: 0.5rem;
-    z-index: 1000;
+    z-index: 9999; /* Bem alto */
 }
 
 .page-dropdown-content a {

@@ -123,7 +123,7 @@
             <!-- Auditorias realizadas por área -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Auditorias realizadas por área</div>
+                    <div class="card-title">Ocorrências criadas por área</div>
                     <div class="card-action">View Report</div>
                 </div>
                 <div class="donut-chart">
@@ -138,15 +138,19 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #5664d2;"></div>
-                        <div>Jardins 40%</div>
+                        <div>Buraco na Estrada 40%</div>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #abd2ff;"></div>
-                        <div>Parques 32%</div>
+                        <div>Passeio Danificado 32%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #363945;"></div>
+                        <div>Falta de Sinalização 28%</div>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background-color: #e0e6ff;"></div>
-                        <div>Ruas 28%</div>
+                        <div>Iluminação Pública 28%</div>
                     </div>
                 </div>
             </div>
@@ -197,7 +201,7 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div class="stat-value">11k</div>
+                    <div class="stat-value" id="profissionais-disponiveis">11k</div>
                     <div class="stat-label">Profissionais Disponíveis</div>
                 </div>
             </div>
@@ -208,112 +212,12 @@
                     <div class="card-title">Auditorias Resolvidas</div>
                     <div class="card-action">Atualizar</div>
                 </div>
-                <div class="list">
-                    <div class="list-item">
-                        <div class="list-item-text">Lista</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Lista</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Lista</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Lista</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
+                <div class="list" id="auditorias-resolvidas-list">
+                    <!-- Os nomes das auditorias vão aparecer aqui -->
                 </div>
             </div>
             
-            <!-- Materiais disponíveis em Armazém -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Materiais disponíveis em Armazém</div>
-                    <div class="card-action">Atualizar</div>
-                </div>
-                <div class="list">
-                    <div class="list-item">
-                        <div class="list-item-text">Nome do material</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Nome do material</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Nome do material</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-item-text">Nome do material</div>
-                        <div class="list-item-icon">〉</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Custo de materiais usados -->
-            <div class="card">
-                <div class="metric-card">
-                    <div class="metric-icon" style="background-color: #f0f4ff;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="stat-value">13 €</div>
-                    <div class="stat-label">Custo de materiais usados</div>
-                </div>
-            </div>
-            
-            <!-- Materiais Usados -->
-            <div class="card full-width">
-                <div class="card-header">
-                    <div class="card-title">Materiais Usados</div>
-                </div>
-                <div class="dropdown">Semanal</div>
-                <div class="bar-chart">
-                    <div class="bar-container">
-                        <div style="text-align: center;">
-                            <div class="bar red" style="height: 70px;"></div>
-                            <div class="bar-label">Jan</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar yellow" style="height: 120px;"></div>
-                            <div class="bar-label">Fev</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar red" style="height: 50px;"></div>
-                            <div class="bar-label">Mar</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar yellow" style="height: 100px;"></div>
-                            <div class="bar-label">Abr</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar red" style="height: 80px;"></div>
-                            <div class="bar-label">Mai</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar yellow" style="height: 30px;"></div>
-                            <div class="bar-label">Jun</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div class="bar red" style="height: 90px;"></div>
-                            <div class="bar-label">Jul</div>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                        <div style="font-size: 12px; color: #888;">0</div>
-                        <div style="font-size: 12px; color: #888;">20</div>
-                        <div style="font-size: 12px; color: #888;">40</div>
-                        <div style="font-size: 12px; color: #888;">60</div>
-                        <div style="font-size: 12px; color: #888;">80</div>
-                    </div>
-                </div>
-            </div>
-            
+  
             <!-- Profissionais em Ação -->
             <div class="card">
                 <div class="metric-card">
@@ -361,7 +265,7 @@
     </div>
     <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- JavaScript -->
+    <script> lucide.createIcons(); </script>
     <script src="dashboard.js"></script>
 </body>
 </html>
