@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const el = document.getElementById('profissionais-disponiveis');
     if (el) el.textContent = disponiveis;
 
+    const emAuditoria = expertsData.filter(e => e.status && e.status.toLowerCase() === 'em auditoria').length;
+    const elEmAcao = document.getElementById('profissionais-em-acao');
+    if (elEmAcao) elEmAcao.textContent = emAuditoria;
+
     // AUDITORIAS RESOLVIDAS COM PAGINAÇÃO
     const auditorias = JSON.parse(localStorage.getItem('auditorias') || '[]');
     const lista = document.getElementById('auditorias-resolvidas-list');
@@ -104,4 +108,13 @@ document.addEventListener('DOMContentLoaded', function() {
             offset += (perc / 100) * 360;
         }
     });
+
+    const auditoriasAceites = JSON.parse(localStorage.getItem('auditorias') || '[]').length;
+    const elAuditoriasAceites = document.getElementById('auditorias-aceites');
+    if (elAuditoriasAceites) elAuditoriasAceites.textContent = auditoriasAceites;
+
+    const ocorrenciasData = JSON.parse(localStorage.getItem('ocorrencias') || '[]');
+    const ocorrenciasEmEspera = ocorrenciasData.filter(o => o.estado && o.estado.toLowerCase() === 'em espera').length;
+    const elOcorrenciasEmEspera = document.getElementById('ocorrencias-em-espera');
+    if (elOcorrenciasEmEspera) elOcorrenciasEmEspera.textContent = ocorrenciasEmEspera;
 });

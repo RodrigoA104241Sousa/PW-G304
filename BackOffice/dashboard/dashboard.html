@@ -6,7 +6,7 @@
     <title>EyesEveryWhere</title> <!-- Título da página -->
     <link rel="stylesheet" href="dashboard.css"> <!-- Link para o CSS -->
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
-    <link rel="icon" type="image/ico" href="favicon.ico"> <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="minilogo.png"> <!-- Favicon -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Biblioteca para gráficos -->
 </head>
 <body>
@@ -155,41 +155,6 @@
                 </div>
             </div>
             
-            <!-- Ocorrências resolvidas -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Ocorrências resolvidas</div>
-                    <div class="card-action">View Report</div>
-                </div>
-                <div class="card-content">
-                    <div>Número de ocorrências resolvidas ao longo do tempo</div>
-                    <div class="line-chart">
-                        <svg viewBox="0 0 300 100">
-                            <polyline points="0,80 50,60 100,75 150,40 200,55 250,20 300,35" fill="none" stroke="#5664d2" stroke-width="3" />
-                            <line x1="0" y1="100" x2="300" y2="100" stroke="#eee" stroke-width="1" />
-                            <!-- x-axis ticks -->
-                            <line x1="0" y1="100" x2="0" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="50" y1="100" x2="50" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="100" y1="100" x2="100" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="150" y1="100" x2="150" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="200" y1="100" x2="200" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="250" y1="100" x2="250" y2="95" stroke="#ccc" stroke-width="1" />
-                            <line x1="300" y1="100" x2="300" y2="95" stroke="#ccc" stroke-width="1" />
-                        </svg>
-                    </div>
-                    <div class="legend" style="justify-content: flex-start; margin-top: 30px;">
-                        <div class="legend-item" style="margin-right: 20px;">
-                            <div class="legend-color" style="background-color: #5664d2;"></div>
-                            <div>Last 6 days</div>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #aaa;"></div>
-                            <div>Last week</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Profissionais Disponíveis -->
             <div class="card">
                 <div class="metric-card">
@@ -209,8 +174,7 @@
             <!-- Auditorias Resolvidas -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Auditorias Resolvidas</div>
-                    <div class="card-action">Atualizar</div>
+                    <div class="card-title">Auditorias a ser Resolvidas</div>
                 </div>
                 <div class="list" id="auditorias-resolvidas-list">
                     <!-- Os nomes das auditorias vão aparecer aqui -->
@@ -229,12 +193,12 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="#5664d2" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <div class="stat-value">11k</div>
+                    <div class="stat-value" id="profissionais-em-acao">0</div>
                     <div class="stat-label">Profissionais em Ação</div>
                 </div>
             </div>
             
-            <!-- Auditorias Realizadas -->
+            <!-- Auditorias Aceites -->
             <div class="card">
                 <div class="metric-card">
                     <div class="metric-icon" style="background-color: #f0f4ff;">
@@ -243,12 +207,12 @@
                             <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <div class="stat-value">973</div>
-                    <div class="stat-label">Auditorias Realizadas</div>
+                    <div class="stat-value" id="auditorias-aceites">973</div>
+                    <div class="stat-label">Auditorias Aceites</div>
                 </div>
             </div>
             
-            <!-- Ocorrências Resolvidas -->
+            <!-- Ocorrências em Espera -->
             <div class="card">
                 <div class="metric-card">
                     <div class="metric-icon" style="background-color: #f0f4ff;">
@@ -257,8 +221,8 @@
                             <path d="M22 4L12 14.01l-3-3" stroke="#5664d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <div class="stat-value">973</div>
-                    <div class="stat-label">Ocorrências Resolvidas</div>
+                    <div class="stat-value" id="ocorrencias-em-espera">973</div>
+                    <div class="stat-label">Ocorrências em Espera</div>
                 </div>
             </div>
         </div>
