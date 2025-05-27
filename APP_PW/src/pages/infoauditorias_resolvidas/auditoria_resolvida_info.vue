@@ -18,7 +18,7 @@ console.log("Auditoria:", auditoria_resolvida)
 
 function goRegistarLocalizacao(id) {
     
-    router.push(`/registarlocalizacao/${id}`)
+    router.push(`/verlocal/${id}`)
 }
 
 function goMaisDetalhes(id) {
@@ -35,7 +35,7 @@ function goDocumentar(id) {
 
 <template>
     <div class="bg-[#E0F1FE] h-screen">
-        <Header  :backRoute="`/verauditoria/${id}`"></Header>
+        <Header  :backRoute="`/auditoriasresolvidas`"></Header>
         <Navbar></Navbar>
         <div class="px-8 space-y-4">
             <p class="text-[#695C5C] font-semibold ml-3 mb-1">Data de Início</p>
@@ -77,7 +77,7 @@ function goDocumentar(id) {
             <div class="flex flex-col items-center font-semibold space-y-5">
                 <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"
                     @click="goRegistarLocalizacao(id)">
-                    Registar Localização
+                    Ver Localização
                 </button>
 
                 <button class="bg-[#1865B8]/80 text-white w-65 h-15  rounded-xl"

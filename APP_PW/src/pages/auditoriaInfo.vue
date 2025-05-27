@@ -4,7 +4,11 @@ import Header from '../components/header.vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useOcorrenciasStore } from '../stores/ocorrencia.js';
 import { useAuditoriaStore } from '../stores/auditoria.js';
+import Popup from '../components/Pop_up.vue' // Ajusta o caminho se necessário
+import { ref } from 'vue'
 
+const showPopup = ref(false)
+const popupText = ref('')
 
 const store = useOcorrenciasStore()
 const auditoria = useAuditoriaStore()
@@ -22,7 +26,14 @@ console.log("Ocorrência:", ocorrencia)
 function guardarTudo(id, tipo_problema) {
 
     auditoria.guardarAuditoriaCompleta(id, tipo_problema)
-    alert('Auditoria guardada com sucesso!')
+    popupText.value = 'Auditoria guardada com sucesso!'
+    showPopup.value = true
+    setTimeout(() => {
+        showPopup.value = false
+        localStorage.removeItem('auditorias')
+        router.push(`/auditorias`)
+    }, 2000)
+    
 }
 
 function goRegistarLocalizacao(id) {
@@ -46,6 +57,11 @@ function goDocumentar(id) {
     <div class="bg-[#E0F1FE] h-screen">
         <Header :title="ocorrencia.tipo_de_problema" :backRoute="`/verauditoria/${id}`"></Header>
         <Navbar></Navbar>
+        <Popup
+            v-if="showPopup"
+            :text="popupText"
+            @close="showPopup = false"
+        />
         <div class="px-8 space-y-4">
             <p class="text-[#695C5C] font-semibold ml-3 mb-1">Data de Início</p>
             <div class="flex flex-col items-center border-2 border-[#03045E] rounded-xl">

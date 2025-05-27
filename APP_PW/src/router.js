@@ -13,6 +13,7 @@ import verauditoria from './pages/verauditoria.vue'
 import verauditoriaresolvida from './pages/infoauditorias_resolvidas/auditoria_resolvida_info.vue'
 import auditoriaresolvidamaisdetalhes from './pages/infoauditorias_resolvidas/auditoria_resolvida_mais_detalhes.vue'
 import mapageral from './pages/mapageral.vue'
+import verlocal from './pages/infoauditorias_resolvidas/auditoria_resolvida_verlocal.vue'
 
 
 const routes = [
@@ -30,6 +31,7 @@ const routes = [
   {path: '/verauditoriaresolvida/:id', component: verauditoriaresolvida, props: true},//botao ver auditoria
   {path: '/auditoriaresolvidamaisdetalhes/:id', component: auditoriaresolvidamaisdetalhes, props: true},//botao mais detalhes
   {path: '/mapageral', component: mapageral},//botao mapa geral
+  {path: '/verlocal/:id', component: verlocal, props: true},
 ]
 
 const router = createRouter({
