@@ -49,7 +49,7 @@ function setupHeaderCheckbox() {
     });
 }
 
-// REMOVER AUDITORIA SELECIONADA
+// REMOVER PERITO SELECIONADO
 function setupRemoveButton() {
     // BOTÃO
     const removeButton = document.querySelector('.btn-danger');
@@ -234,7 +234,7 @@ function ordenarPorData(criterio) {
     updatePagination();
 }
 
-// TIPO DE AUDITORIA
+// TIPO DE PERITO
 function filterByEspecialidade(tipo) {
     const i = currentTipoFiltro.indexOf(tipo);
     if (i >= 0) {
