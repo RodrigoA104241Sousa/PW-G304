@@ -788,7 +788,7 @@ function showSuccessToast(message) {
             document.body.removeChild(toast);
             // Redirecionar para ocorrencia.html
             
-            window.location.href = '../../Ocorrência/ocorrencia.html';
+            window.location.href = '../ListaAuditorias/ListaAuditorias.html'; 
         }, 300);
     }, 3000);
 }

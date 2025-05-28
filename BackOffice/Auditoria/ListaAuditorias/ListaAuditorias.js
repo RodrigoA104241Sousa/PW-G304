@@ -1,5 +1,5 @@
 // auditorias data com localStorage ou default
-let auditoriasData = JSON.parse(localStorage.getItem('auditorias')) || defaultAuditorias;
+let auditoriasData = JSON.parse(localStorage.getItem('auditorias')) || [];
 
 // Salvar Auditorias em localStorage
 function saveAuditoriasData() {
