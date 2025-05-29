@@ -1,5 +1,26 @@
-// ------- INICIO -------
+// ------- GERAR ID -------
+function gerarProximoIdAuditoria() {
+    const auditorias = JSON.parse(localStorage.getItem('auditorias')) || [];
+    if (auditorias.length === 0) return "1";
+
+    const ids = auditorias.map(a => parseInt(a.id)).filter(id => !isNaN(id));
+    return (Math.max(...ids) + 1).toString();
+}
+function getAndIncrementNextAuditId() {
+    let nextId = parseInt(localStorage.getItem('nextAuditId')) || 1;
+    localStorage.setItem('nextAuditId', (nextId + 1).toString());
+    return nextId.toString();
+}
+
+// ------- DOM -------
 document.addEventListener('DOMContentLoaded', function() {
+    // ID auditoria
+    const idPreview = localStorage.getItem('nextAuditId') || "1";
+    const idDisplay = document.getElementById('auditIdDisplay');
+    if (idDisplay) {
+        idDisplay.textContent = idPreview;
+    }
+
     // Pegar o ID da ocorrência do localStorage
     const occurrenceId = localStorage.getItem('occurrenceForAudit');
     
@@ -23,6 +44,38 @@ document.addEventListener('DOMContentLoaded', function() {
             moradaInput.setAttribute('readonly', true);
             codigoPostalInput.setAttribute('readonly', true);
         }
+    }
+});
+
+// ------- TIPO AUDITORIA -------
+const tipoInput = document.getElementById('tipoAuditoriaInput');
+const tipoDropdownIcon = document.getElementById('tipoDropdownIcon');
+const tipoList = document.getElementById('tipoAuditoriaList');
+
+// Toggle da lista
+function toggleTipoList() {
+    tipoList.style.display = tipoList.style.display === 'none' ? 'block' : 'none';
+}
+
+tipoInput.addEventListener('click', toggleTipoList);
+tipoDropdownIcon.addEventListener('click', toggleTipoList);
+
+// Selecionar tipo
+document.querySelectorAll('input[name="tipoAuditoria"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        tipoInput.value = this.value;
+        tipoList.style.display = 'none';
+
+         tipoInput.classList.remove('invalid');
+        const erro = tipoInput.closest('.form-group')?.querySelector('.error-message');
+        if (erro) erro.remove();
+    });
+});
+
+// Fechar ao clicar fora
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('.tipo-container')) {
+        tipoList.style.display = 'none';
     }
 });
 
@@ -294,20 +347,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const timePickerApply = document.getElementById('timePickerApply');
 
         // Elementos para horas, minutos e segundos
-        const hoursValue = document.getElementById('hoursValue');
-        const minutesValue = document.getElementById('minutesValue');
-        const secondsValue = document.getElementById('secondsValue');
-        const hoursUp = document.getElementById('hoursUp');
-        const hoursDown = document.getElementById('hoursDown');
-        const minutesUp = document.getElementById('minutesUp');
-        const minutesDown = document.getElementById('minutesDown');
-        const secondsUp = document.getElementById('secondsUp');
-        const secondsDown = document.getElementById('secondsDown');
+        const mesesValue = document.getElementById('mesesValue');
+        const diasValue = document.getElementById('diasValue');
+        const horasValue = document.getElementById('horasValue');
+        const mesesUp = document.getElementById('mesesUp');
+        const mesesDown = document.getElementById('mesesDown');
+        const diasUp = document.getElementById('diasUp');
+        const diasDown = document.getElementById('diasDown');
+        const horasUp = document.getElementById('horasUp');
+        const horasDown = document.getElementById('horasDown');
 
         // Valores iniciais
-        let hours = 0;
-        let minutes = 0;
-        let seconds = 0;
+        let meses = 0;
+        let dias = 0;
+        let horas = 0;
 
         // Função para formatar números com dois dígitos
         function formatTwoDigits(num) {
@@ -316,47 +369,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Função para atualizar os valores mostrados
         function updateTimeDisplay() {
-            hoursValue.textContent = formatTwoDigits(hours);
-            minutesValue.textContent = formatTwoDigits(minutes);
-            secondsValue.textContent = formatTwoDigits(seconds);
+            mesesValue.textContent = formatTwoDigits(meses);
+            diasValue.textContent = formatTwoDigits(dias);
+            horasValue.textContent = formatTwoDigits(horas);
         }
 
         // Função para aplicar valores ao input
         function applyTime() {
-            durationInput.value = `${formatTwoDigits(hours)}:${formatTwoDigits(minutes)}:${formatTwoDigits(seconds)}`;
+            durationInput.value = `${formatTwoDigits(meses)}mês(es),${formatTwoDigits(dias)}dias(s),${formatTwoDigits(horas)}hora(s)`;
             timePicker.style.display = 'none';
         }
 
         // Incremento e decremento para horas
-        hoursUp.addEventListener('click', function() {
-            hours = (hours + 1) % 24;
+        mesesUp.addEventListener('click', function() {
+            meses = (meses + 1) % 13;
             updateTimeDisplay();
         });
 
-        hoursDown.addEventListener('click', function() {
-            hours = (hours - 1 + 24) % 24;
+        mesesDown.addEventListener('click', function() {
+            meses = (meses - 1 + 13) % 13;
             updateTimeDisplay();
         });
 
         // Incremento e decremento para minutos
-        minutesUp.addEventListener('click', function() {
-            minutes = (minutes + 1) % 60;
+        diasUp.addEventListener('click', function() {
+            dias = (dias + 1) % 32;
             updateTimeDisplay();
         });
 
-        minutesDown.addEventListener('click', function() {
-            minutes = (minutes - 1 + 60) % 60;
+        diasDown.addEventListener('click', function() {
+            dias = (dias - 1 + 32) % 32;
             updateTimeDisplay();
         });
 
         // Incremento e decremento para segundos
-        secondsUp.addEventListener('click', function() {
-            seconds = (seconds + 1) % 60;
+        horasUp.addEventListener('click', function() {
+            horas = (horas + 1) % 25;
             updateTimeDisplay();
         });
 
-        secondsDown.addEventListener('click', function() {
-            seconds = (seconds - 1 + 60) % 60;
+        horasDown.addEventListener('click', function() {
+            horas = (horas - 1 + 25) % 25;
             updateTimeDisplay();
         });
 
@@ -375,9 +428,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (durationInput.value) {
                 const timeValues = durationInput.value.split(':');
                 if (timeValues.length === 3) {
-                    hours = parseInt(timeValues[0]) || 0;
-                    minutes = parseInt(timeValues[1]) || 0;
-                    seconds = parseInt(timeValues[2]) || 0;
+                    meses = parseInt(timeValues[0]) || 0;
+                    dias = parseInt(timeValues[1]) || 0;
+                    horas = parseInt(timeValues[2]) || 0;
                     updateTimeDisplay();
                 }
             }
@@ -560,11 +613,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Aplicar a data selecionada ao input
         calendarApply.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevenir submissão do formulário
+            e.preventDefault();
             
             if (selectedDate) {
                 dateInput.value = formatDate(selectedDate);
                 calendar.style.display = 'none';
+                dateInput.classList.remove('invalid');
+                const erro = dateInput.closest('.form-group')?.querySelector('.error-message');
+                if (erro) erro.remove();
             } else {
                 alert('Por favor, selecione uma data no calendário.');
             }
@@ -632,11 +688,8 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
   
     // Lista de campos obrigatórios: mapeamos {nome-lógico: elemento}
     const required = {
-      'Nome':       document.querySelector('.form-group:nth-child(1) input'),
-      'Descrição':  document.querySelector('.description-area'),
-      'Duração':    document.getElementById('durationInput'),
       'Data':       document.getElementById('dateInput'),
-      'Morada':     document.querySelector('.form-group:nth-child(3) input'),
+      'Morada': document.querySelector('input[placeholder="Insira morada"]'),
     };
   
     let firstError = null;
@@ -655,13 +708,14 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
         const msg = document.createElement('div');
         msg.className = 'error-message';
         msg.textContent = `Por favor, preencha o campo ${label}.`;
-        field.parentNode.insertAdjacentElement('afterend', msg);
+        field.closest('.form-group').appendChild(msg);
   
         if (!firstError) firstError = field;
       }
     }
   
     // Verificar materiais selecionados
+    document.getElementById('materialsSearchInput')?.classList.remove('invalid');
     const materiaisSelecionados = 
       Array.from(document.querySelectorAll('input[name="materials"]:checked')).length;
     if (materiaisSelecionados === 0) {
@@ -675,7 +729,75 @@ document.getElementById('auditForm').addEventListener('submit', function(e) {
   
       if (!firstError) firstError = cont;
     }
-  
+
+    // Verificar Tipo de Auditoria
+    document.getElementById('tipoAuditoriaInput')?.classList.remove('invalid');
+    const tipoAuditoriaInput = document.getElementById('tipoAuditoriaInput');
+    if (!tipoAuditoriaInput.value) {
+        valid = false;
+        tipoAuditoriaInput.classList.add('invalid');
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = 'Por favor, selecione o tipo de auditoria.';
+        tipoAuditoriaInput.parentNode.insertAdjacentElement('afterend', msg);
+        if (!firstError) firstError = tipoAuditoriaInput;
+    }
+
+    // Verificar Nível de Urgência
+    document.querySelector('.urgency-rating')?.classList.remove('invalid');
+    const urgenciaSelecionada = document.querySelector('input[name="urgency"]:checked');
+    if (!urgenciaSelecionada) {
+        valid = false;
+        const container = document.querySelector('.urgency-rating');
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = 'Por favor, selecione o nível de urgência.';
+        container.insertAdjacentElement('beforeend', msg);
+        if (!firstError) firstError = container;
+    }
+    // ------- REMOVER INVALIDAÇAO DO FORMULÁRIO -------
+    
+    // Remove o 'invalid' e a mensagem de erro ao preencher campos de texto
+    document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+        if (el.value.trim() !== '') {
+        el.classList.remove('invalid');
+        const erro = el.closest('.form-group')?.querySelector('.error-message');
+        if (erro) erro.remove();
+        }
+    });
+    });
+
+    // Remove o 'invalid' ao selecionar tipo de auditoria
+    document.getElementById('tipoAuditoriaInput')?.addEventListener('click', () => {
+    const input = document.getElementById('tipoAuditoriaInput');
+    if (input.value.trim() !== '') {
+        input.classList.remove('invalid');
+        const erro = input.closest('.form-group')?.querySelector('.error-message');
+        if (erro) erro.remove();
+    }
+    });
+
+    // Remove o 'invalid' ao marcar um material
+    document.querySelectorAll('input[name="materials"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+        const materiaisInput = document.getElementById('materialsSearchInput');
+        if (document.querySelectorAll('input[name="materials"]:checked').length > 0) {
+        materiaisInput.classList.remove('invalid');
+        const erro = materiaisInput.closest('.materials-search')?.querySelector('.error-message');
+        if (erro) erro.remove();
+        }
+    });
+    });
+
+    // Remove erro ao marcar urgência
+    document.querySelectorAll('input[name="urgency"]').forEach(rb => {
+    rb.addEventListener('change', () => {
+        const erro = document.querySelector('.urgency-rating .error-message');
+        if (erro) erro.remove();
+    });
+    });
+    
     // Se algo inválido, foca e aborta
     if (!valid) {
       firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -706,7 +828,7 @@ function saveAuditToLocalStorage() {
     );
 
         // Obter o tipo da ocorrência correspondente
-    let tipoOcorrencia = '';
+    let tipoOcorrencia = document.getElementById('tipoAuditoriaInput')?.value || '';
     const ocorrenciaID = parseInt(localStorage.getItem('occurrenceForAudit'), 10);
     if (ocorrenciaID) {
         const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
@@ -718,7 +840,7 @@ function saveAuditToLocalStorage() {
 
     // Criar objeto da auditoria
     const auditoria = {
-        id: Date.now().toString(), // ID único baseado no timestamp
+        id:  getAndIncrementNextAuditId(), 
         nome: nome,
         descricao: descricao,
         duracao: duracao,

@@ -75,7 +75,7 @@ function setupRemoveButton() {
             const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
 
             // remove as auditorias selecionadas
-            auditoriasData = auditoriasData.filter(a => !ids.includes(a.id));
+            auditoriasData = auditoriasData.filter(a => !ids.includes(parseInt(a.id)));
             saveAuditoriasData(); // atualiza o localStorage
             document.querySelector('.header-checkbox').checked = false; // desmarca os checkboxs
             // atualiza a tabela e a paginação
@@ -85,8 +85,34 @@ function setupRemoveButton() {
     });
 }
 
-// ----------------------  BOTÃO 3 PONTOS ----------------------  
+// =========================================================================
+// =============================== 3 PONTOS ================================
+// =========================================================================
 
+// ---------------------- DETALHES DA AUDITORIA ----------------------
+function abrirDetalhesAuditoria(auditoria) {
+    const modal = document.getElementById('detalhesModal');
+    const content = document.getElementById('detalhesAuditoriaContent');
+
+    content.innerHTML = `
+        <div class="detalhes-grid">
+            <div><strong>ID:</strong> ${auditoria.id}</div>
+            <div><strong>Nome:</strong> ${auditoria.nome || '—'}</div>
+            <div><strong>Tipo de Auditoria:</strong> ${auditoria.tipoOcorrencia || '—'}</div>
+            <div><strong>Materiais:</strong> ${auditoria.materiais?.join(', ') || '—'}</div>
+            <div><strong>Morada:</strong> ${auditoria.morada || '—'}</div>
+            <div><strong>Duração Estimada:</strong> ${auditoria.duracao || '—'}</div>
+            <div><strong>Descrição:</strong><br><pre>${auditoria.descricao || '—'}</pre></div>
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+}
+
+// Botão para fechar o modal
+document.querySelector('.close-btn').addEventListener('click', () => {
+    document.getElementById('detalhesModal').classList.add('hidden');
+});
 // =========================================================================
 // ================================ FILTROS ================================
 // =========================================================================
@@ -202,16 +228,25 @@ function atualizarTabelaAuditorias(lista = null) {
             <td>
                 <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}"> 
             </td>
-            <td>${auditoria.nome}</td>
+            <td>${auditoria.nome || "—"}</td>
             <td>
                 <span class="${getUrgenciaBadgeClass(parseInt(auditoria.nivelUrgencia))}">${auditoria.nivelUrgencia || "—"}</span>
             </td>
             <td>${auditoria.tipoOcorrencia}</td>
-            <td>${auditoria.dataCriacao || auditoria.data || "—"}</td>
+            <td>${auditoria.data || "—"}</td>
             <td>
                 <div>${auditoria.peritos?.[0]?.name || "—"}</div>
             </td>
+            <td>
+                <button class="btn-icon">
+                    <i data-lucide="more-vertical"></i>
+                </button>
+            </td>
         `;
+        // Botão 3 pontos
+        row.querySelector('.btn-icon').addEventListener('click', () => {
+            abrirDetalhesAuditoria(auditoria);
+        });
         tbody.appendChild(row);
     });
 

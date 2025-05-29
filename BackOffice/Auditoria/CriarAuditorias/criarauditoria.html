@@ -28,14 +28,15 @@
                 <!-- -- Coluna da ESQUERDA -- -->
                 <div class="left-column">
 
-                    <!-- ID Auditoria -->
+                    <!-- Nome Auditoria -->
                     <div class="form-group">
                         <label class="form-label">Nome de Auditoria</label>
                         <div class="form-control-icon">
-                            <input type="text" class="form-control" placeholder="Insira um nome para a auditoria" required>
+                            <input type="text" class="form-control" placeholder="Insira um nome para a auditoria">
                             <img src="auditoria.png" alt="Ícone de auditoria">
                         </div>
                     </div>
+
 
                     <!-- Materiais e equipamentos -->
                     <div class="form-group">
@@ -91,11 +92,28 @@
                 <!-- -- Coluna da DIREITA -- -->
                 <div class="right-column">
 
+                    <!-- Tipo de Auditoria -->
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Auditoria</label>
+                        <div class="tipo-container">
+                            <div class="tipo-select">
+                                <input type="text" id="tipoAuditoriaInput" placeholder="Selecionar tipo de auditoria" class="form-control" readonly>
+                                <img src="setabaixo.png" alt="Ícone de seta para baixo" id="tipoDropdownIcon">
+                            </div>
+                            <div class="tipo-list" id="tipoAuditoriaList" style="display: none;">
+                                <label><input type="radio" name="tipoAuditoria" value="Buraco na Estrada"> Buraco na Estrada</label>
+                                <label><input type="radio" name="tipoAuditoria" value="Passeio Danificado"> Passeio Danificado</label>
+                                <label><input type="radio" name="tipoAuditoria" value="Falta de Sinalização"> Falta de Sinalização</label>
+                                <label><input type="radio" name="tipoAuditoria" value="Iluminação Pública"> Iluminação Pública</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Duração Estimada -->
                     <div class="form-group">
                         <label class="form-label">Duração Estimada</label>
                         <div class="form-control-icon">
-                            <input type="text" class="form-control" placeholder="HH:MM:SS" id="durationInput" readonly>
+                            <input type="text" class="form-control" placeholder="MM:DD:HH" id="durationInput" readonly>
                             <img src="clock.png" alt="Ícone de relógio" id="timePickerIcon">
                         </div>
                         <!-- Componente Time Picker -->
@@ -106,24 +124,24 @@
                             </div>
                             <div class="time-picker-content">
                                 <div class="time-unit">
-                                    <div class="time-up" id="hoursUp">▲</div>
-                                    <div class="time-value" id="hoursValue">00</div>
-                                    <div class="time-down" id="hoursDown">▼</div>
+                                    <div class="time-up" id="mesesUp">▲</div>
+                                    <div class="time-value" id="mesesValue">00</div>
+                                    <div class="time-down" id="mesesDown">▼</div>
+                                    <div class="time-label">Meses</div>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-unit">
+                                    <div class="time-up" id="diasUp">▲</div>
+                                    <div class="time-value" id="diasValue">00</div>
+                                    <div class="time-down" id="diasDown">▼</div>
+                                    <div class="time-label">Dias</div>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-unit">
+                                    <div class="time-up" id="horasUp">▲</div>
+                                    <div class="time-value" id="horasValue">00</div>
+                                    <div class="time-down" id="horasDown">▼</div>
                                     <div class="time-label">Horas</div>
-                                </div>
-                                <div class="time-separator">:</div>
-                                <div class="time-unit">
-                                    <div class="time-up" id="minutesUp">▲</div>
-                                    <div class="time-value" id="minutesValue">00</div>
-                                    <div class="time-down" id="minutesDown">▼</div>
-                                    <div class="time-label">Minutos</div>
-                                </div>
-                                <div class="time-separator">:</div>
-                                <div class="time-unit">
-                                    <div class="time-up" id="secondsUp">▲</div>
-                                    <div class="time-value" id="secondsValue">00</div>
-                                    <div class="time-down" id="secondsDown">▼</div>
-                                    <div class="time-label">Segundos</div>
                                 </div>
                             </div>
                             <div class="time-picker-buttons">
@@ -214,8 +232,13 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="criar-btn" >Criar</button> <!-- Botão de Criar Auditoria -->
-                </div>
+                    <div class="criar-container">
+                        <div class="id-container">
+                            <label class="id-title">ID Auditoria</label>
+                            <div class="id-bubble" id="auditIdDisplay">1</div>
+                        </div>
+                        <button type="submit" class="criar-btn">Criar</button>
+                    </div>
             </div>
         </form>
     </div>
