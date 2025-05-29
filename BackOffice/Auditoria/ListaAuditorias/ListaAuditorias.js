@@ -25,9 +25,10 @@ function saveAuditoriasData() {
 
     // Pesquisa
     let filtroId = null; // id da auditoria
+    let filtroNomeAuditoria = null; // nome da auditoria
     let filtroData = null; // data de criação
     let filtroPerito = null; // nome do perito
-    let filtroOcorrencia = null; // id da ocorrência
+
 
 // =========================================================================
 // ============================ FUNCIONALIDADES ============================
@@ -86,34 +87,6 @@ function setupRemoveButton() {
 }
 
 // =========================================================================
-// =============================== 3 PONTOS ================================
-// =========================================================================
-
-// ---------------------- DETALHES DA AUDITORIA ----------------------
-function abrirDetalhesAuditoria(auditoria) {
-    const modal = document.getElementById('detalhesModal');
-    const content = document.getElementById('detalhesAuditoriaContent');
-
-    content.innerHTML = `
-        <div class="detalhes-grid">
-            <div><strong>ID:</strong> ${auditoria.id}</div>
-            <div><strong>Nome:</strong> ${auditoria.nome || '—'}</div>
-            <div><strong>Tipo de Auditoria:</strong> ${auditoria.tipoOcorrencia || '—'}</div>
-            <div><strong>Materiais:</strong> ${auditoria.materiais?.join(', ') || '—'}</div>
-            <div><strong>Morada:</strong> ${auditoria.morada || '—'}</div>
-            <div><strong>Duração Estimada:</strong> ${auditoria.duracao || '—'}</div>
-            <div><strong>Descrição:</strong><br><pre>${auditoria.descricao || '—'}</pre></div>
-        </div>
-    `;
-
-    modal.classList.remove('hidden');
-}
-
-// Botão para fechar o modal
-document.querySelector('.close-btn').addEventListener('click', () => {
-    document.getElementById('detalhesModal').classList.add('hidden');
-});
-// =========================================================================
 // ================================ FILTROS ================================
 // =========================================================================
 
@@ -160,6 +133,12 @@ function filtrarAuditorias() {
     if (currentTipoFiltro.length > 0) {
         filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
     }
+    // NOME DA AUDITORIA
+    if (filtroNomeAuditoria) {
+        filtradas = filtradas.filter(a =>
+            a.nome?.toLowerCase().includes(filtroNomeAuditoria)
+        );
+    }
     // ESTADO
     if (currentEstadoFiltro.length > 0) {
         filtradas  = filtradas .filter(a => currentEstadoFiltro.includes(a.estado));
@@ -175,16 +154,16 @@ function filtrarAuditorias() {
 function limparFiltros() {
     // Limpar inputs do topo
     document.getElementById('searchId').value = '';
+    document.getElementById('searchNomeAuditoria').value = '';
     document.getElementById('searchData').value = '';
     document.getElementById('searchPerito').value = '';
-    document.getElementById('searchOcorrencia').value = '';
 
     // Reset das variáveis globais
     auditoriasFiltradasPesquisa = null;
     filtroId = null;
+    filtroNomeAuditoria = null;
     filtroData = null;
     filtroPerito = null;
-    filtroOcorrencia = null;
     currentTipoFiltro = [];
     currentEstadoFiltro = [];
     sortOrder = 'recente'; 
@@ -212,8 +191,10 @@ function atualizarTabelaAuditorias(lista = null) {
 
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
-            const dataA = new Date(a.dataCriacao);
-            const dataB = new Date(b.dataCriacao);
+            const [diaA, mesA, anoA] = a.data.split('/');
+            const [diaB, mesB, anoB] = b.data.split('/');
+            const dataA = new Date(`${anoA}-${mesA}-${diaA}`);
+            const dataB = new Date(`${anoB}-${mesB}-${diaB}`);
             return sortOrder === 'recente' ? dataB - dataA : dataA - dataB;
         });
     }
@@ -228,7 +209,8 @@ function atualizarTabelaAuditorias(lista = null) {
             <td>
                 <input type="checkbox" class="auditoria-checkbox" data-id="${auditoria.id}"> 
             </td>
-            <td>${auditoria.nome || "—"}</td>
+            <td class="auditoria-id">${auditoria.id}</td>
+            <td class="auditoria-nome">${auditoria.nome || "—"}</td>
             <td>
                 <span class="${getUrgenciaBadgeClass(parseInt(auditoria.nivelUrgencia))}">${auditoria.nivelUrgencia || "—"}</span>
             </td>
@@ -236,6 +218,11 @@ function atualizarTabelaAuditorias(lista = null) {
             <td>${auditoria.data || "—"}</td>
             <td>
                 <div>${auditoria.peritos?.[0]?.name || "—"}</div>
+            </td>
+            <td>
+                <span class="${getEstadoBadgeClass(auditoria.estado)}">
+                    ${auditoria.estado === 'Aceite' ? 'Não Iniciada' : (auditoria.estado || '—')}
+                </span>
             </td>
             <td>
                 <button class="btn-icon">
@@ -252,6 +239,87 @@ function atualizarTabelaAuditorias(lista = null) {
 
     lucide.createIcons();
 }
+
+
+// ---------------------- 3 PONTOS ----------------------
+function abrirDetalhesAuditoria(auditoria) {
+    const modal = document.getElementById('detalhesModal');
+    const content = document.getElementById('detalhesAuditoriaContent');
+
+    const estadoApresentado = auditoria.estado === 'Aceite' ? 'Não Iniciada' : (auditoria.estado || '—');
+    const perito = auditoria.peritos?.[0]?.name || '—';
+    const dataCriacao = auditoria.dataCriacao 
+        ? new Date(auditoria.dataCriacao).toLocaleDateString('pt-PT')
+        : '—';
+
+    content.innerHTML = `
+        <div class="detalhes-grid">
+            <div><strong>ID:</strong> ${auditoria.id}</div>
+            <div><strong>Nome:</strong> ${auditoria.nome || '—'}</div>
+            <div><strong>Tipo de Auditoria:</strong> ${auditoria.tipoOcorrencia || '—'}</div>
+            <div><strong>Perito Associado:</strong> ${perito}</div>
+            <div><strong>Materiais:</strong> ${auditoria.materiais?.join(', ') || '—'}</div>
+            <div><strong>Morada:</strong> ${auditoria.morada || '—'}</div>
+            <div><strong>Data de Criação:</strong> ${dataCriacao}</div>
+            <div><strong>Duração Estimada:</strong> ${auditoria.duracao || '—'}</div>
+            <div><strong>Estado:</strong> ${estadoApresentado}</div>
+            <div><strong>Descrição:</strong><br><pre>${auditoria.descricao || '—'}</pre></div>
+        </div>
+        <button onclick="editarAuditoria(${auditoria.id})">Editar</button>
+    `;
+    // Editar Auditoria
+    function editarAuditoria(auditoriaId) {
+    const auditorias = JSON.parse(localStorage.getItem('auditorias')) || [];
+    const auditoria = auditorias.find(a => a.id == auditoriaId);
+    const content = document.getElementById('detalhesAuditoriaContent');
+
+    content.innerHTML = `
+        <form id="formEditarAuditoria" class="detalhes-grid">
+            <div><strong>Nome:</strong> <input type="text" name="nome" value="${auditoria.nome}" required></div>
+            <div><strong>Tipo de Auditoria:</strong> <input type="text" name="tipo" value="${auditoria.tipoOcorrencia}" required></div>
+            <div><strong>Morada:</strong> <input type="text" name="morada" value="${auditoria.morada}" required></div>
+            <div><strong>Duração Estimada:</strong> <input type="text" name="duracao" value="${auditoria.duracao}" required></div>
+            <div><strong>Estado:</strong>
+                <select name="estado">
+                    <option ${auditoria.estado === 'Não Iniciada' ? 'selected' : ''}>Não Iniciada</option>
+                    <option ${auditoria.estado === 'Em Progresso' ? 'selected' : ''}>Em Progresso</option>
+                    <option ${auditoria.estado === 'Concluída' ? 'selected' : ''}>Concluída</option>
+                </select>
+            </div>
+            <div><strong>Descrição:</strong><textarea name="descricao">${auditoria.descricao || ''}</textarea></div>
+        </form>
+        <button id="guardarAlteracoesAuditoriaBtn">Guardar Alterações</button>
+    `;
+
+    document.getElementById('guardarAlteracoesAuditoriaBtn').addEventListener('click', () => {
+        const form = document.getElementById('formEditarAuditoria');
+        const formData = new FormData(form);
+
+        // Atualizar os dados
+        auditoria.nome = formData.get('nome');
+        auditoria.tipoOcorrencia = formData.get('tipo');
+        auditoria.morada = formData.get('morada');
+        auditoria.duracao = formData.get('duracao');
+        auditoria.estado = formData.get('estado');
+        auditoria.descricao = formData.get('descricao');
+
+        // Guardar
+        localStorage.setItem('auditorias', JSON.stringify(auditorias));
+
+        // Atualizar tabela e fechar modal
+        atualizarTabelaAuditorias();
+        document.getElementById('detalhesModal').classList.add('hidden');
+    });
+}
+
+    modal.classList.remove('hidden');
+}
+
+// Botão para fechar o modal
+document.querySelector('.close-btn').addEventListener('click', () => {
+    document.getElementById('detalhesModal').classList.add('hidden');
+});
+
 // ---------------------- ESTILO ESTADO ----------------------
 function getEstadoBadgeClass(estado) {
     switch (estado) {
@@ -395,20 +463,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchButton').addEventListener('click', () => {
         // ID auditoria
         const id = document.getElementById('searchId').value.trim();
+        // Nome da auditoria
+        const filtroNomeAuditoria = document.getElementById('searchNomeAuditoria').value.trim().toLowerCase();
         // Data
         const data = document.getElementById('searchData').value;
         // Nome Perito
         const perito = document.getElementById('searchPerito').value.trim().toLowerCase();
-        // ID Ocorrência
-        const ocorrencia = document.getElementById('searchOcorrencia').value.trim();
+        
 
         let filtradas = [...auditoriasData];
 
         if (id) filtradas = filtradas.filter(a => a.id.toString() === id);
-        if (data) filtradas = filtradas.filter(a => new Date(a.dataCriacao) >= new Date(data));
+        if (filtroNomeAuditoria) {
+            filtradas = filtradas.filter(a =>
+                a.nome?.toLowerCase().includes(filtroNomeAuditoria)
+            );
+        }
+        if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
         if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
-        if (ocorrencia) filtradas = filtradas.filter(a => a.ocorrencia?.toString() === ocorrencia);
-
+        
         auditoriasFiltradasPesquisa = filtradas;
         currentPage = 1;
         atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
@@ -416,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Ativar pesquisa ao carregar Enter nos inputs
-    ['searchId', 'searchData', 'searchPerito', 'searchOcorrencia'].forEach(id => {
+    ['searchId', 'searchNomeAuditoria', 'searchData', 'searchPerito'].forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {

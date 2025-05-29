@@ -199,9 +199,13 @@ window.addEventListener('click', function(event) {
         // Obter peritos do localStorage
         const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
         
-        // Filtrar apenas peritos disponíveis
-        const availableExperts = experts.filter(expert => expert.status === "Disponível");
-        
+        // Filtrar peritos disponíveis e da mesma especialidade do tipo de auditoria
+        const tipoAuditoriaSelecionado = document.getElementById('tipoAuditoriaInput').value;
+        const availableExperts = experts.filter(expert =>
+            expert.status === "Disponível" &&
+            expert.specialty === tipoAuditoriaSelecionado
+        );
+            
         if (availableExperts.length === 0) {
             // Se não houver peritos disponíveis, mostrar mensagem
             peritosListContainer.innerHTML = '<div class="no-peritos-message">Não há peritos disponíveis no momento.</div>';
@@ -376,8 +380,19 @@ window.addEventListener('click', function(event) {
 
         // Função para aplicar valores ao input
         function applyTime() {
-            durationInput.value = `${formatTwoDigits(meses)}mês(es),${formatTwoDigits(dias)}dias(s),${formatTwoDigits(horas)}hora(s)`;
+            durationInput.value = formatarDuracao(meses, dias, horas);
             timePicker.style.display = 'none';
+        }
+        
+        //Formatar duração
+        function formatarDuracao(meses, dias, horas) {
+            const partes = [];
+
+            if (meses > 0) partes.push(`${meses} ${meses === 1 ? 'mês' : 'meses'}`);
+            if (dias > 0) partes.push(`${dias} ${dias === 1 ? 'dia' : 'dias'}`);
+            if (horas > 0) partes.push(`${horas} ${horas === 1 ? 'hora' : 'horas'}`);
+
+            return partes.length > 0 ? partes.join(', ') : '0 horas';
         }
 
         // Incremento e decremento para horas
@@ -819,7 +834,7 @@ function saveAuditToLocalStorage() {
     const descricao = document.querySelector('textarea.description-area').value;
     const duracao = document.getElementById('durationInput').value;
     const data = document.getElementById('dateInput').value;
-    const morada = document.querySelector('.form-group:nth-child(3) input').value;
+    const morada = document.getElementById('inputMorada').value;
     const nivelUrgencia = document.querySelector('input[name="urgency"]:checked')?.value || '';
 
     // Obter materiais selecionados
