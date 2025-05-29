@@ -287,7 +287,11 @@ function editarAuditoria(id) {
     const auditoria = auditoriasData.find(a => a.id == id);
     if (!auditoria) return;
 
-    const modal = document.getElementById("detalhesModal");
+    if (auditoria.estado === "Concluída") {
+        abrirDetalhesAuditoria(auditoria); // Mostra apenas os detalhes
+        return;
+    }
+
     const content = document.getElementById("detalhesAuditoriaContent");
     const [meses, dias, horas] = extrairDuracao(auditoria.duracao);
 
@@ -329,7 +333,24 @@ function editarAuditoria(id) {
                     </div>
                 </div>
             </div>
-        
+            
+            <div>
+                <label><strong>Perito:</strong></label>
+                <div class="materiais-wrapper" id="peritoDropdownWrapper">
+                    <input type="text" id="peritoSelecionadoInput" class="materiais-input" readonly placeholder="Selecionar perito">
+                    <span id="peritoDropdownIcon" class="materiais-seta">▾</span>
+                </div>
+                <div id="peritoDropdownList" class="materiais-lista" style="display: none;">
+                    <!-- preenchido por JS -->
+                </div>
+            </div>
+
+            <div>
+                <label><strong>Tipo de Auditoria:</strong></label>
+                <input type="text" value="${auditoria.tipoOcorrencia}" disabled style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; width: 100%;" />
+            </div>
+            
+
             <div>
                 <label><strong>Estado:</strong></label>
                 <select name="estado">
@@ -338,12 +359,13 @@ function editarAuditoria(id) {
                     <option value="Concluída" ${auditoria.estado === 'Concluída' ? 'selected' : ''}>Concluída</option>
                 </select>
             </div>
+ 
             <div>
                 <label><strong>Duração Estimada:</strong></label>
                 <div style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; display: flex; gap: 10px; align-items: center;">
-                    <input type="number" name="meses" value="${meses}" min="0" style="width: 50px;" /> <span>meses</span>
-                    <input type="number" name="dias" value="${dias}" min="0" max="31" style="width: 50px;" /> <span>dias</span>
-                    <input type="number" name="horas" value="${horas}" min="0" max="24" style="width: 50px;" /> <span>horas</span>
+                    <input type="number" name="meses" value="${meses}" min="0" style="width: 65px;" /> <span>meses</span>
+                    <input type="number" name="dias" value="${dias}" min="0" max="31" style="width: 65px;" /> <span>dias</span>
+                    <input type="number" name="horas" value="${horas}" min="0" max="24" style="width: 65px;" /> <span>horas</span>
                 </div>
             </div>
             <div style="flex: 1;">
@@ -360,7 +382,7 @@ function editarAuditoria(id) {
                 <label><strong>Descrição:</strong></label>
                 <textarea name="descricao" style="min-height: 40px; resize: none;" oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';">${auditoria.descricao || ''}</textarea>
             </div>
-            <div style="grid-column: span 2; display: flex; justify-content: center; gap: 20px;">
+            <div style="grid-column: span 2; display: flex; justify-content: center; gap: 20px; margin-top: 0px;">
                 <button type="submit" style="padding: 10px 30px; background-color: #03045e; color: white; border: none; border-radius: 40px;">Guardar</button>
                 <button type="button" id="btnCancelar" style="padding: 10px 30px; background-color: white; color: #03045e; border: 2px solid #03045e; border-radius: 40px;">Cancelar</button>
             </div>
@@ -372,71 +394,138 @@ function editarAuditoria(id) {
     form.style.rowGap = '30px';
 
     // ---------- MATERIAIS DROPDOWN ----------
-    const materialsSearchInput = document.getElementById('materialsSearchInput');
-    const materialsList = document.getElementById('materialsList');
-    const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
-    const checkboxes = document.querySelectorAll('input[name="materials"]');
+const materialsSearchInput = document.getElementById('materialsSearchInput');
+const materialsList = document.getElementById('materialsList');
+const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
+const checkboxes = document.querySelectorAll('input[name="materials"]');
 
-    // Mostrar/ocultar dropdown
-    function toggleMaterialsList() {
-        materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
+// Mostrar/ocultar dropdown
+function toggleMaterialsList() {
+    materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
+}
+materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
+materialsSearchInput.addEventListener('click', toggleMaterialsList);
+
+// Fechar dropdown se clicar fora
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('.materiais-wrapper') && !event.target.closest('.materiais-lista')) {
+        materialsList.style.display = 'none';
     }
-    materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
-    materialsSearchInput.addEventListener('click', toggleMaterialsList);
+});
 
-    // Fechar se clicar fora
-    window.addEventListener('click', function(event) {
-        if (!event.target.closest('.materiais-wrapper') && !event.target.closest('.materiais-lista')) {
-            materialsList.style.display = 'none';
+// Atualizar seleção visual
+function updateSelectedMaterials() {
+    const selectedContainer = document.getElementById('selectedMaterials');
+    selectedContainer.innerHTML = '';
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            const tag = document.createElement('span');
+            tag.className = 'selected-item';
+            tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
+            selectedContainer.appendChild(tag);
         }
     });
 
-    // Atualizar seleção visual
-    function updateSelectedMaterials() {
-        const selectedContainer = document.getElementById('selectedMaterials');
-        selectedContainer.innerHTML = '';
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                const tag = document.createElement('span');
-                tag.className = 'selected-item';
-                tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
-                selectedContainer.appendChild(tag);
-            }
+    document.querySelectorAll('.remove-material').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const value = this.getAttribute('data-value');
+            document.querySelector(`input[name="materials"][value="${value}"]`).checked = false;
+            updateSelectedMaterials();
         });
+    });
 
-        document.querySelectorAll('.remove-material').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const value = this.getAttribute('data-value');
-                document.querySelector(`input[name="materials"][value="${value}"]`).checked = false;
-                updateSelectedMaterials();
+    updateInputText();
+}
+
+function updateInputText() {
+    const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+    materialsSearchInput.value = selected.length > 0 ? `${selected.length} item(s) selecionado(s)` : '';
+}
+
+// Ligar eventos aos checkboxes
+checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedMaterials));
+
+// Botões Selecionar Todos / Nenhum
+document.getElementById('selecionarTodosMateriais').addEventListener('click', function () {
+    checkboxes.forEach(cb => cb.checked = true);
+    updateSelectedMaterials();
+});
+document.getElementById('removerTodosMateriais').addEventListener('click', function () {
+    checkboxes.forEach(cb => cb.checked = false);
+    updateSelectedMaterials();
+});
+
+// Inicial
+updateSelectedMaterials();
+
+    // ------ PERITOS -------
+    const peritoSelecionadoInput = document.getElementById('peritoSelecionadoInput');
+    const peritoDropdownIcon = document.getElementById('peritoDropdownIcon');
+    const peritoDropdownList = document.getElementById('peritoDropdownList');
+
+    let peritoSelecionado = auditoria.peritos?.[0] || null;
+
+    // Mostrar lista ao clicar
+    function togglePeritoDropdown() {
+        peritoDropdownList.style.display = peritoDropdownList.style.display === 'none' ? 'block' : 'none';
+    }
+    peritoSelecionadoInput.addEventListener('click', togglePeritoDropdown);
+    peritoDropdownIcon.addEventListener('click', togglePeritoDropdown);
+
+    // Fechar dropdown se clicar fora
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('#peritoDropdownWrapper') && !event.target.closest('#peritoDropdownList')) {
+            peritoDropdownList.style.display = 'none';
+        }
+    });
+
+    // Carregar peritos filtrados
+    function carregarPeritosDisponiveis() {
+        const tipo = auditoria.tipoOcorrencia;
+        const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+        const disponiveis = experts.filter(p => p.status === "Disponível" && p.specialty === tipo);
+
+        peritoDropdownList.innerHTML = `
+            <div class="dropdown-item-perito" data-id="" data-nome="—" style="padding: 8px 12px; cursor: pointer;">
+                <span style="margin-left: 40px;">—</span>
+            </div>
+        ` + disponiveis.map(p => `
+            <div class="dropdown-item-perito" 
+                data-id="${p.id}" 
+                data-nome="${p.name}" 
+                data-email="${p.email}" 
+                data-foto="${p.profilePhoto || 'default-user.png'}" 
+                data-specialty="${p.specialty}"
+                style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer;">
+                <img src="${p.profilePhoto || 'default-user.png'}" alt="${p.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                <span>${p.name}</span>
+            </div>
+        `).join('');
+
+        // Adicionar eventos a cada item
+        document.querySelectorAll('.dropdown-item-perito').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault(); // <- impede quebra de submissão
+                e.stopPropagation(); // <- impede conflitos de clique com form
+                peritoSelecionado = {
+                    id: item.dataset.id,
+                    name: item.dataset.nome,
+                    email: item.dataset.email,
+                    photo: item.dataset.foto,
+                    specialty: item.dataset.specialty
+                };
+                peritoSelecionadoInput.value = peritoSelecionado.name;
+                peritoDropdownList.style.display = 'none';
             });
         });
 
-        updateInputText();
+        // Se já tiver perito, mostrar no input
+        if (peritoSelecionado) {
+            peritoSelecionadoInput.value = peritoSelecionado.name;
+        }
     }
-
-    function updateInputText() {
-        const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-        materialsSearchInput.value = selected.length > 0 ? `${selected.length} item(s) selecionado(s)` : '';
-    }
-
-    // Ligar eventos aos checkboxes
-    checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedMaterials));
-
-    // Botões Selecionar Todos / Nenhum
-    document.getElementById('selecionarTodosMateriais').addEventListener('click', function () {
-        checkboxes.forEach(cb => cb.checked = true);
-        updateSelectedMaterials();
-    });
-
-    document.getElementById('removerTodosMateriais').addEventListener('click', function () {
-        checkboxes.forEach(cb => cb.checked = false);
-        updateSelectedMaterials();
-    });
-
-    // Inicial
-    updateSelectedMaterials();
-
+    // Inicializar dropdown
+    carregarPeritosDisponiveis();
 
 
     // ---------- CANCELAR ----------
@@ -453,7 +542,41 @@ function editarAuditoria(id) {
         auditoria.nome = formData.get("nome");
         auditoria.morada = formData.get("morada");
         auditoria.materiais = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-        auditoria.estado = formData.get("estado");
+        // Estado anterior do perito (antes de editar)
+        const peritoAnterior = auditoria.peritos?.[0];
+        const peritoAtual = peritoSelecionado?.id ? peritoSelecionado : null;
+
+        // Associar perito à auditoria
+        auditoria.peritos = peritoAtual ? [peritoAtual] : [];
+
+        // Estado selecionado pelo utilizador
+        const estadoSelecionado = formData.get("estado");
+
+        // Atualizar estado da auditoria
+        auditoria.estado = (estadoSelecionado === "Não Iniciada" && peritoAtual)
+            ? "Em Progresso"
+            : estadoSelecionado;
+
+        // Atualizar estado dos peritos
+        const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+
+        // Se o perito anterior foi removido ou substituído → marcar como Disponível
+        if (peritoAnterior?.id && (!peritoAtual || peritoAnterior.id !== peritoAtual.id)) {
+            const idxAntigo = experts.findIndex(p => p.id == peritoAnterior.id);
+            if (idxAntigo !== -1) experts[idxAntigo].status = "Disponível";
+        }
+
+        // Se foi atribuído novo perito e a auditoria não está concluída → marcar como Em Auditoria
+        if (peritoAtual?.id) {
+            const idxNovo = experts.findIndex(p => p.id == peritoAtual.id);
+            if (idxNovo !== -1) {
+                experts[idxNovo].status = (auditoria.estado === "Concluída") ? "Disponível" : "Em Auditoria";
+            }
+        }
+
+        localStorage.setItem('expertsData', JSON.stringify(experts));
+
+
         auditoria.nivelUrgencia = formData.get("urgencia");
         auditoria.descricao = formData.get("descricao");
 
