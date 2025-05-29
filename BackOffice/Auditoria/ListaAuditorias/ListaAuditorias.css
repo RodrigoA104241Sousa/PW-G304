@@ -637,106 +637,68 @@ pre {
     background-color: #fff;
 }
 
-/* ================= MATERIAIS ================= */
+/* === Campo de Materiais === */
 .materiais-wrapper {
     position: relative;
-    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    overflow: visible;
-    background-color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 15px;
 }
 
-.materiais-selecionados {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
+.materiais-wrapper input {
+    border: none;
+    background: transparent;
+    flex: 1;
     cursor: pointer;
+    font-size: 15px;
+}
+
+.materiais-wrapper input:focus {
+    outline: none;
 }
 
 .materiais-seta {
     font-size: 1.2rem;
+    color: #555;
+    pointer-events: none;
 }
 
 .materiais-lista {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: relative;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #03045e;
-    background: white;
-    z-index: 9999;
-    border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
-.materiais-lista.show {
-    display: block;
-}
-
-.materiais-controles {
+.selected-materiais-tags {
+    margin-top: 5px;
     display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #eee;
-    background-color: #f9f9f9;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
-.materiais-controles button {
-    background-color: #03045e;
-    color: white;
-    border: none;
-    border-radius: 999px;
-    padding: 0.4rem 1rem;
-    font-weight: bold;
+.selected-item {
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 13px;
+}
+
+.remove-material {
+    margin-left: 6px;
+    color: #dc3545;
     cursor: pointer;
 }
-
-.materiais-controles button:hover {
-    background-color: #00254d;
-}
-
-.checkbox-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem 1rem; /* ligeiro padding horizontal */
-    max-width: 100%; /* limita ao contêiner pai */
-    box-sizing: border-box;
-}
-
-.checkbox-grid label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0.5rem;
-    width: 100%;
-    font-size: 15px;
-    color: #333;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background 0.2s ease;
-    box-sizing: border-box;
-    word-break: break-word;
-}
-
-.checkbox-grid label:hover {
-    background-color: #f1f1f1;
-}
-
-.checkbox-grid input[type="checkbox"] {
-    flex-shrink: 0;
-    margin: 0;
-    accent-color: #03045e;
-    cursor: pointer;
-}
-
-.checkbox-grid span {
-    flex: 1;
-    display: inline-block;
-    word-break: break-word;
-    overflow-wrap: break-word;
+.checkbox-grid label span {
+    transform: translateY(4px);
 }

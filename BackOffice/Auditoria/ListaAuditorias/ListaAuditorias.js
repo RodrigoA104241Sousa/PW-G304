@@ -304,23 +304,17 @@ function editarAuditoria(id) {
             </div>
 
             <div>
-            <label><strong>Materiais:</strong></label>
-            <div id="materiaisDropdown" class="materiais-wrapper">
-                <!-- Campo com materiais selecionados -->
-                <div id="materiaisSelecionados" class="materiais-selecionados">
-                    <span id="materiaisTexto">${auditoria.materiais?.join(', ') || 'Selecionar materiais'}</span>
-                    <span class="materiais-seta">▾</span>
+                <label><strong>Materiais:</strong></label>
+                <div class="materiais-wrapper">
+                    <input type="text" id="materialsSearchInput" class="materiais-input" readonly placeholder="Selecionar materiais">
+                    <span id="materialsDropdownIcon" class="materiais-seta">▾</span>
                 </div>
-
-                <!-- Dropdown com botões + lista -->
-                <div id="materiaisLista" class="materiais-lista">
-                    <!-- Botões de ação -->
+                <div id="selectedMaterials" class="selected-materiais-tags"></div>
+                <div id="materialsList" class="materiais-lista" style="display: none;">
                     <div class="materiais-controles">
                         <button type="button" id="selecionarTodosMateriais">Selecionar todos</button>
                         <button type="button" id="removerTodosMateriais">Nenhum</button>
                     </div>
-
-                    <!-- Lista de checkboxes -->
                     <div class="checkbox-grid">
                         ${[
                             "Lanterna", "Câmera fotográfica", "Fita sinalizadora e cones",
@@ -328,14 +322,13 @@ function editarAuditoria(id) {
                             "Caneleiras", "Bloco de notas", "Colete refletor"
                         ].map(mat => `
                             <label>
-                                <input type="checkbox" value="${mat}" ${auditoria.materiais?.includes(mat) ? 'checked' : ''}>
                                 <span>${mat}</span>
+                                <input type="checkbox" name="materials" value="${mat}" ${auditoria.materiais?.includes(mat) ? 'checked' : ''}>
                             </label>
                         `).join('')}
                     </div>
                 </div>
             </div>
-        </div>
         
             <div>
                 <label><strong>Estado:</strong></label>
@@ -379,42 +372,72 @@ function editarAuditoria(id) {
     form.style.rowGap = '30px';
 
     // ---------- MATERIAIS DROPDOWN ----------
-    const dropdown = document.getElementById('materiaisDropdown');
-    const lista = document.getElementById('materiaisLista');
-    const selecionadosSpan = document.getElementById('materiaisTexto');
+    const materialsSearchInput = document.getElementById('materialsSearchInput');
+    const materialsList = document.getElementById('materialsList');
+    const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
+    const checkboxes = document.querySelectorAll('input[name="materials"]');
 
-    document.getElementById('materiaisSelecionados').addEventListener('click', () => {
-        lista.classList.toggle('show');
-    });
-
-    // Atualizar texto dos materiais
-    const checkboxes = lista.querySelectorAll('input[type="checkbox"]');
-    function updateMateriaisTexto() {
-        const selecionados = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-        selecionadosSpan.textContent = selecionados.length > 0 ? selecionados.join(', ') : 'Selecionar materiais';
+    // Mostrar/ocultar dropdown
+    function toggleMaterialsList() {
+        materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
     }
+    materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
+    materialsSearchInput.addEventListener('click', toggleMaterialsList);
 
-    // Eventos de seleção
-    checkboxes.forEach(cb => cb.addEventListener('change', updateMateriaisTexto));
-
-    document.getElementById('selecionarTodosMateriais').onclick = (e) => {
-        e.preventDefault();
-        checkboxes.forEach(cb => cb.checked = true);
-        updateMateriaisTexto();
-    };
-
-    document.getElementById('removerTodosMateriais').onclick = (e) => {
-        e.preventDefault();
-        checkboxes.forEach(cb => cb.checked = false);
-        updateMateriaisTexto();
-    };
-
-    // Fechar dropdown ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            lista.classList.remove('show');
+    // Fechar se clicar fora
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('.materiais-wrapper') && !event.target.closest('.materiais-lista')) {
+            materialsList.style.display = 'none';
         }
     });
+
+    // Atualizar seleção visual
+    function updateSelectedMaterials() {
+        const selectedContainer = document.getElementById('selectedMaterials');
+        selectedContainer.innerHTML = '';
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const tag = document.createElement('span');
+                tag.className = 'selected-item';
+                tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
+                selectedContainer.appendChild(tag);
+            }
+        });
+
+        document.querySelectorAll('.remove-material').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const value = this.getAttribute('data-value');
+                document.querySelector(`input[name="materials"][value="${value}"]`).checked = false;
+                updateSelectedMaterials();
+            });
+        });
+
+        updateInputText();
+    }
+
+    function updateInputText() {
+        const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+        materialsSearchInput.value = selected.length > 0 ? `${selected.length} item(s) selecionado(s)` : '';
+    }
+
+    // Ligar eventos aos checkboxes
+    checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedMaterials));
+
+    // Botões Selecionar Todos / Nenhum
+    document.getElementById('selecionarTodosMateriais').addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = true);
+        updateSelectedMaterials();
+    });
+
+    document.getElementById('removerTodosMateriais').addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = false);
+        updateSelectedMaterials();
+    });
+
+    // Inicial
+    updateSelectedMaterials();
+
+
 
     // ---------- CANCELAR ----------
     document.getElementById('btnCancelar').addEventListener('click', (e) => {
