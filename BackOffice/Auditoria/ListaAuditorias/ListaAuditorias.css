@@ -526,6 +526,7 @@ table {
 }
 
 .modal-content {
+    position: relative;
     background: white;
     padding: 40px 50px;
     border-radius: 20px;
@@ -537,6 +538,7 @@ table {
     position: relative;
     font-family: Arial, sans-serif;
     animation: fadeIn 0.2s ease-out;
+    z-index: 1000;
 }
 
 @keyframes fadeIn {
@@ -579,7 +581,7 @@ table {
     font-size: 18px;
     color: #333;
 }
-
+/* titulos dos detalhes */
 .detalhes-grid strong {
     font-weight: 600;
     color: #444;
@@ -593,10 +595,9 @@ pre {
     background-color: #f5f5f5;
     padding: 10px;
     border-radius: 8px;
-    margin-top: 5px;
 }
 
-/* ================= BOTÃO EDITAR ================= */
+/* ================= BOTÕES================= */
 #detalhesAuditoriaContent button {
     display: block;
     margin: 30px auto 0 auto;
@@ -609,10 +610,10 @@ pre {
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
-#detalhesAuditoriaContent button:hover {
-    background-color: #111b29;
-}
+    /* ao passar o mouse por cima do botão */
+    #detalhesAuditoriaContent button:hover {
+        background-color: #111b29;
+    }
 
 /* ================= FORMULÁRIO DE EDIÇÃO ================= */
 #formEditarAuditoria input,
@@ -634,4 +635,108 @@ pre {
     outline: none;
     border-color: #03045e;
     background-color: #fff;
+}
+
+/* ================= MATERIAIS ================= */
+.materiais-wrapper {
+    position: relative;
+    border: 1px solid black;
+    border-radius: 8px;
+    overflow: visible;
+    background-color: white;
+}
+
+.materiais-selecionados {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.materiais-seta {
+    font-size: 1.2rem;
+}
+
+.materiais-lista {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #03045e;
+    background: white;
+    z-index: 9999;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.materiais-lista.show {
+    display: block;
+}
+
+.materiais-controles {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+.materiais-controles button {
+    background-color: #03045e;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.materiais-controles button:hover {
+    background-color: #00254d;
+}
+
+.checkbox-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem; /* ligeiro padding horizontal */
+    max-width: 100%; /* limita ao contêiner pai */
+    box-sizing: border-box;
+}
+
+.checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+
+.checkbox-grid label:hover {
+    background-color: #f1f1f1;
+}
+
+.checkbox-grid input[type="checkbox"] {
+    flex-shrink: 0;
+    margin: 0;
+    accent-color: #03045e;
+    cursor: pointer;
+}
+
+.checkbox-grid span {
+    flex: 1;
+    display: inline-block;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
