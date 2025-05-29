@@ -4,6 +4,10 @@ import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/navbar.vue'
 import Header from '../components/header.vue'
 import { useAuditoriaStore } from '../stores/auditoria'
+import Popup from '../components/Pop_up.vue' // Ajusta o caminho se necessário
+
+const showPopup = ref(false)
+const popupText = ref('')
 
 const route = useRoute()
 const id = route.params.id
@@ -76,7 +80,11 @@ function registarLocalizacaoAtual() {
             }
           })
 
-          alert('Localização atual registada com sucesso!')
+          popupText.value = `Localização registada com sucesso`
+          showPopup.value = true
+          setTimeout(() => {
+            showPopup.value = false
+          }, 2000)
         } else {
           alert('Não foi possível obter a morada.')
         }
@@ -102,6 +110,7 @@ onMounted(() => {
 <template>
   <div class="bg-[#E0F1FE] min-h-screen flex flex-col">
     <Header title="Mapa" :backRoute="`/auditoriasInfo/${id}`" />
+    <Popup v-if="showPopup" :text="popupText" @close="showPopup = false" />
     <div class="flex-1 relative">
       <div id="map" class="w-full h-[500px]"></div>
       <div class="p-4 flex justify-center">
