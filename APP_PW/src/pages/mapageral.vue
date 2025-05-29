@@ -47,48 +47,49 @@ function initMap() {
 
   const infoWindow = new google.maps.InfoWindow()
 
-  ocorrencias_lista.forEach(ocorrencia => {
-    if (ocorrencia.morada) {
-      geocoder.geocode({ address: ocorrencia.morada }, (results, status) => {
-        if (status === 'OK' && results[0]?.geometry?.location) {
-          const isDoPerito = Array.isArray(ocorrencia.peritos) &&
-              ocorrencia.peritos.some(perito =>
-              perito.email?.trim().toLowerCase() === user?.email?.trim().toLowerCase()
-            )
+  ocorrencias_lista
+    .filter(ocorrencia => ocorrencia.estado === "Em Progresso")
+    .forEach(ocorrencia => {
+      if (ocorrencia.morada) {
+        geocoder.geocode({ address: ocorrencia.morada }, (results, status) => {
+          if (status === 'OK' && results[0]?.geometry?.location) {
+            const isDoPerito = Array.isArray(ocorrencia.peritos) &&
+                ocorrencia.peritos.some(perito =>
+                perito.email?.trim().toLowerCase() === user?.email?.trim().toLowerCase()
+              )
 
-          const marker = new google.maps.Marker({
-            map,
-            position: results[0].geometry.location,
-            icon: isDoPerito
-              ? 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-              : 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-          })
+            const marker = new google.maps.Marker({
+              map,
+              position: results[0].geometry.location,
+              icon: isDoPerito
+                ? 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                : 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            })
 
-          let content = `
-            <div>
-              <strong>Tipo:</strong> ${ocorrencia.tipoOcorrencia || '—'}<br/>
-              <strong>Morada:</strong> ${ocorrencia.morada || '—'}<br/>
-              <strong>Data:</strong> ${ocorrencia.data || '—'}<br/>
-              <strong>Urgência:</strong> ${ocorrencia.nivelUrgencia || '—'}<br/>
-            </div>
-          `
+            let content = `
+              <div>
+                <strong>Tipo:</strong> ${ocorrencia.tipoOcorrencia || '—'}<br/>
+                <strong>Morada:</strong> ${ocorrencia.morada || '—'}<br/>
+                <strong>Data:</strong> ${ocorrencia.data || '—'}<br/>
+                <strong>Urgência:</strong> ${ocorrencia.nivelUrgencia || '—'}<br/>
+            `
 
-          if (isDoPerito) {
-              content += `<button onclick="window.location.href='/app/verauditoria/${ocorrencia.id}'" 
-                            style="margin-top:5px;padding:5px 10px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;">
-                            Ver Ocorrência
-                          </button>`
+            if (isDoPerito) {
+                content += `<button onclick="window.location.href='/app/verauditoria/${ocorrencia.id}'" 
+                              style="margin-top:5px;padding:5px 10px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;">
+                              Ver Ocorrência
+                            </button>`
             }
             content += `</div>`
 
-          marker.addListener('click', () => {
-            infoWindow.setContent(content)
-            infoWindow.open(map, marker)
-          })
-        }
-      })
-    }
-  })
+            marker.addListener('click', () => {
+              infoWindow.setContent(content)
+              infoWindow.open(map, marker)
+            })
+          }
+        })
+      }
+    })
 }
 </script>
 
