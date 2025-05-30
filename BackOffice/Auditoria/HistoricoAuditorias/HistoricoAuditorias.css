@@ -44,6 +44,8 @@ body {
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease;
+    line-height: 1; 
+    text-decoration: none;
     }
     /* efeito expandido ao passar por cima */
     .btn-voltar:hover {

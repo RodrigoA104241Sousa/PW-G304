@@ -549,13 +549,28 @@ updateSelectedMaterials();
         // Associar perito à auditoria
         auditoria.peritos = peritoAtual ? [peritoAtual] : [];
 
+        // Guardar o estado anterior
+        const estadoAnterior = auditoria.estado;
+
         // Estado selecionado pelo utilizador
         const estadoSelecionado = formData.get("estado");
 
-        // Atualizar estado da auditoria
-        auditoria.estado = (estadoSelecionado === "Não Iniciada" && peritoAtual)
-            ? "Em Progresso"
-            : estadoSelecionado;
+        if (estadoSelecionado === "Não Iniciada" && peritoAtual) {
+            auditoria.estado = "Em Progresso";
+        } else {
+            auditoria.estado = estadoSelecionado;
+        }
+
+        // Se mudou para "Concluída" agora → guardar data de conclusão
+        if (estadoAnterior !== "Concluída" && auditoria.estado === "Concluída") {
+            const hoje = new Date();
+            auditoria.dataConclusao = hoje.toISOString().split("T")[0]; // Ex: "2025-05-30"
+        }
+
+        // Se mudou de "Concluída" para outro estado → apagar data de conclusão
+        if (estadoAnterior === "Concluída" && auditoria.estado !== "Concluída") {
+            auditoria.dataConclusao = null;
+        }
 
         // Atualizar estado dos peritos
         const experts = JSON.parse(localStorage.getItem('expertsData')) || [];

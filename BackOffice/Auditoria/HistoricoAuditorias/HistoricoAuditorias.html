@@ -1,4 +1,4 @@
-<!DOCTYPE html>  <!-- Ficheiro HTML5 -->
+<!DOCTYPE html> <!-- Ficheiro HTML5 -->
 <html lang="pt"> <!-- idioma português -->
 
 <head>
@@ -7,7 +7,7 @@
   <title>EyesEveryWhere</title>
   <link rel="stylesheet" href="HistoricoAuditorias.css"> <!-- Link para o CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Importa a fonte Inter -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> <!--Importa o Vue.js 2.7.14 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script> <!-- Importa o Vue.js 2.7.14 -->
   <link rel="icon" type="image/x-icon" href="minilogo.png"> <!-- Favicon -->
 </head>
 
@@ -16,7 +16,7 @@
 
     <!-- Cabeçalho -->
     <header class="cabecalho">
-      <button class="btn-voltar">←</button>
+      <a href="../../../Frontoffice/Auditorias/index.html" class="btn-voltar">←</a>
       <h1>Histórico de Auditorias</h1>
       <img src="icon.png" class="logo" alt="Logo" />
     </header>
@@ -26,30 +26,22 @@
 
       <!-- Indicadores à esquerda -->
       <aside class="indicadores">
+        <!-- Auditorias Ativas -->
         <div class="indicador">
-          <span class="titulo">Auditores Ativos</span>
+          <span class="titulo">Auditorias Ativas</span>
           <div class="circulo">
-            <strong class="valor">189</strong>
+            <strong class="valor">{{ totalAtivas }}</strong>
             <img class="icon" src="monitor.png" alt="Monitor" />
           </div>
         </div>
-      
+
+        <!-- Total Peritos -->
         <div class="indicador">
-          <span class="titulo">Peritos</span>
+          <span class="titulo">Total de Peritos</span>
           <div class="circulo">
-            <strong class="valor">1.893</strong>
-            <img class="icon" src="userY.png" alt="Peritos" />
+            <strong class="valor">{{ totalPeritos }}</strong>
+            <img class="icon" src="user.png" alt="Peritos" />
           </div>
-          <small class="variacao down">↓ 12%<br />este mês</small>
-        </div>
-      
-        <div class="indicador">
-          <span class="titulo">Total Auditorias</span>
-          <div class="circulo">
-            <strong class="valor">5.423</strong>
-            <img class="icon" src="user.png" alt="Total" />
-          </div>
-          <small class="variacao up">↑ 18%<br />este mês</small>
         </div>
       </aside>
 
@@ -64,32 +56,26 @@
           </select>
         </div>
 
+        <!-- Tabela -->
         <table>
           <thead>
-            <!-- Cabeçalho da tabela -->
             <tr>
               <th>Tipo de Auditoria</th>
-              <th>Perito Supervisor</th>
-              <th>Localização</th>
-              <th>Código Postal</th>
-              <th>Cidade</th>
-              <th>Data</th>
+              <th>Morada</th>
+              <th>Data de Início</th>
+              <th>Data Final</th> 
               <th>Estado</th>
-              <th></th> <!-- coluna vazia para detalhes -->
+              <th></th> <!-- coluna de ações -->
             </tr>
           </thead>
           <tbody is="transition-group" name="fade" tag="tbody">
-            <!-- Dados da tabela -->
             <tr v-for="auditoria in paginatedAuditorias" :key="auditoria.id" class="fade-item">
-              <td>{{ auditoria.tipo }}</td>
-              <td>{{ auditoria.perito }}</td>
+              <td>{{ auditoria.tipoOcorrencia }}</td>
               <td>{{ auditoria.morada }}</td>
-              <td>{{ auditoria.postal }}</td>
-              <td>{{ auditoria.cidade }}</td>
-              <td>{{ formatarData(auditoria.dataCriacao) }}</td>
+              <td>{{ auditoria.data }}</td>
+              <td>{{ formatarData(auditoria.dataConclusao) }}</td> 
               <td><span class="estado-tag">{{ auditoria.estado }}</span></td>
               <td class="detalhes">
-                <!-- O evento de clique passa o ID da auditoria para o método -->
                 <span @click="irParaLocalAuditado(auditoria.id)" title="Ver detalhes" class="detalhes-clique">»</span>
               </td>
             </tr>
@@ -98,16 +84,16 @@
 
         <!-- Rodapé -->
         <div class="footer-table">
-          <span>Mostrando dados {{ primeiroItem }} a {{ ultimoItem }} de {{ auditoriasFiltradas.length }} entradas</span> <!-- mostra o intervalo de dados -->
+          <span>Mostrando dados {{ primeiroItem }} a {{ ultimoItem }} de {{ auditoriasFiltradas.length }} entradas</span>
           <div class="pagination">
-            <button @click="prevPage" :disabled="paginaAtual === 1">‹</button> <!-- botão anterior, desativo se estiver na 1ºpagina -->
+            <button @click="prevPage" :disabled="paginaAtual === 1">‹</button>
             <button
-              v-for="n in totalPaginas" 
+              v-for="n in totalPaginas"
               :key="n"
               @click="irParaPagina(n)"
               :class="{ ativo: n === paginaAtual }"
-            >{{ n }}</button> 
-            <button @click="nextPage" :disabled="paginaAtual === totalPaginas">›</button> <!-- botão seguinte, desativo se estiver na ultima pagina -->
+            >{{ n }}</button>
+            <button @click="nextPage" :disabled="paginaAtual === totalPaginas">›</button>
           </div>
         </div>
       </section>
