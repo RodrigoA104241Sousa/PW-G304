@@ -114,12 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  const logo = document.getElementById('logoLink');
-    if (logo) {
-      logo.addEventListener('click', () => {
-        window.scrollTo(0, 0);
-      });
-    }
 
   // Selecionando todos os cards da área de atuação
   const cards = document.querySelectorAll('.area-atuacao .card');
@@ -242,4 +236,33 @@ function getModalId(index) {
         case 2: return 'modalAuditorias';
         default: return null;
     }
+}
+
+// Suavizar scroll nos links da navbar (Sobre Nós, Áreas de Atuação, Contacte-nos)
+document.querySelectorAll('.nav-item a').forEach(link => {
+  link.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const destino = document.querySelector(href);
+      if (destino) {
+        const offset = 100; // altura da navbar
+        const top = destino.getBoundingClientRect().top + window.scrollY - offset;
+
+        window.scrollTo({
+          top,
+          behavior: 'smooth'
+        });
+      }
+    }
+  });
+});
+
+// Tornar o clique no logo suave até ao topo
+const logo = document.getElementById('logoLink');
+if (logo) {
+  logo.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
