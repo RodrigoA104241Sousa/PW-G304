@@ -35,25 +35,14 @@ body.fade-out {
 
     /* Botão voltar */
     .btn-voltar {
-    background-color: #0d0f47;         
-    color: white;                      
-    border: none;                      
-    border-radius: 20px;               
-    width: 120px;                      
-    height: 70px;                      
-    font-size: 3rem;                   
-    cursor: pointer;                  
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); 
-    display: flex;                    
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
-    line-height: 1; 
-    text-decoration: none;
-    }
-    /* efeito expandido ao passar por cima */
-    .btn-voltar:hover {
-    transform: scale(1.05);            
+    background-color: #001f5c;
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     /* Logotipo do topo direito */
