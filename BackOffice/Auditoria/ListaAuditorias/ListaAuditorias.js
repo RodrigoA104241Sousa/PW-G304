@@ -67,7 +67,7 @@ function setupRemoveButton() {
         // verifica as selecionadas
         const selected = document.querySelectorAll('.auditoria-checkbox:checked');
         if (selected.length === 0) {
-            alert('Selecione pelo menos uma auditoria para remover.');
+            showCustomAlert('Selecione pelo menos uma auditoria para remover.');
             return;
         }
 
@@ -788,10 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
         if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
-        if (perito) filtradas = filtradas.filter(a =>
-    a.peritos && a.peritos.length > 0 &&
-    a.peritos[0].name?.toLowerCase().includes(perito)
-);
+        if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
         
         auditoriasFiltradasPesquisa = filtradas;
         currentPage = 1;
@@ -810,5 +807,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Limpar filtros
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
-    });
+});
+
+// Mostrar modal customizado
+function showCustomAlert(message) {
+    const modal = document.getElementById('customAlertModal');
+    const msg = document.getElementById('customAlertMessage');
+    msg.textContent = message;
+    modal.style.display = 'flex';
+    document.getElementById('customAlertOk').onclick = () => {
+        modal.style.display = 'none';
+    };
+}
 
