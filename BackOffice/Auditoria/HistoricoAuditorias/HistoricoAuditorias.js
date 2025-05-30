@@ -112,3 +112,10 @@ new Vue({
     }
   }
 });
+
+function voltarSuave() {
+  document.body.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "../../../Frontoffice/Auditorias/index.html";
+  }, 300);
+}

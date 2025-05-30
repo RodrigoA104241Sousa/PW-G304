@@ -10,6 +10,10 @@ body {
     background-color: #f4f7fa;
     padding: 2rem;
 }
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
 /* CABEÇALHO SUPERIOR */
 .cabecalho {
