@@ -187,7 +187,7 @@ function atualizarTabelaAuditorias(lista = null) {
     const tbody = document.getElementById("auditoriasTableBody");
     tbody.innerHTML = "";
 
-    let auditoriasFiltradas = lista || filtrarAuditorias();
+    let auditoriasFiltradas = (lista === null || lista === undefined) ? filtrarAuditorias() : lista;
 
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
@@ -707,6 +707,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------- BOTÕES Adicionar / Remover ----------
     setupRemoveButton();
     setupHeaderCheckbox();
+
+    
     // --------- ATUALIZAR TABELA / PAGINAÇÃO ---------
     atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
     updatePagination(auditoriasFiltradasPesquisa);
@@ -790,10 +792,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
         if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
         
-        auditoriasFiltradasPesquisa = filtradas;
+        if (
+            id || filtroNomeAuditoria || data || perito
+        ) {
+            auditoriasFiltradasPesquisa = filtradas;
+            atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
+            updatePagination(auditoriasFiltradasPesquisa);
+        } else {
+            auditoriasFiltradasPesquisa = null;
+            atualizarTabelaAuditorias();
+            updatePagination();
+        }
         currentPage = 1;
-        atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
-        updatePagination(auditoriasFiltradasPesquisa);
+
     });
 
     // Ativar pesquisa ao carregar Enter nos inputs
