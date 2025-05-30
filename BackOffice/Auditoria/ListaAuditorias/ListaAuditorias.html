@@ -55,7 +55,6 @@
                     <button class="submenu-item" data-tipo="Iluminação pública"><span class="dot"></span>Iluminação Pública</button>
                 </div>
 
-
                 <!-- Estado -->
                 <div class="menu-item">
                     <div class="menu-item-content">
@@ -171,6 +170,25 @@
                 </div>
             </div>
 
+            <!-- Modal de alerta customizado -->
+            <div id="customAlertModal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="customAlertMessage"></span>
+                    <button id="customAlertOk" class="btn btn-primary" style="margin-top: 20px;">OK</button>
+                </div>
+            </div>
+
+            <!-- Modal de confirmação de remoção -->
+            <div id="confirmRemoveModal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="confirmRemoveMessage">Tem a certeza que deseja remover a(s) auditoria(s) selecionada(s)?</span>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                        <button id="confirmRemoveYes" class="btn btn-danger">Remover</button>
+                        <button id="confirmRemoveNo" class="btn btn-primary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Paginação -->
             <div class="pagination">
                 <!-- Informação -->
@@ -200,13 +218,5 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- JavaScript -->
     <script src="ListaAuditorias.js"></script> 
-
-    <!-- Modal de aviso customizado -->
-<div id="customAlertModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.2); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#fff; border:2px solid #000052; border-radius:12px; padding:32px 40px; min-width:320px; text-align:center; box-shadow:0 4px 24px rgba(0,0,0,0.10);">
-        <div id="customAlertMessage" style="font-size:1.1rem; color:#222; margin-bottom:24px;"></div>
-        <button id="customAlertOk" style="background:#000052; color:#fff; border:none; border-radius:6px; padding:8px 32px; font-size:1rem; cursor:pointer;">OK</button>
-    </div>
-</div>
 </body>
 </html>

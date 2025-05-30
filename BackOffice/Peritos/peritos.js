@@ -50,31 +50,34 @@ function setupHeaderCheckbox() {
 }
 
 // REMOVER PERITO SELECIONADO
+let peritosParaRemover = []; // variável global temporária
+
 function setupRemoveButton() {
-    // BOTÃO
     const removeButton = document.querySelector('.btn-danger');
-    // quando clicar no botão
     removeButton.addEventListener('click', () => {
-        // verifica as selecionadas
         const selected = document.querySelectorAll('.expert-checkbox:checked');
         if (selected.length === 0) {
-            alert('Selecione pelo menos um perito para remover.');
+            showCustomAlert('Selecione pelo menos um perito para remover.');
             return;
         }
+        // Mostrar modal de confirmação
+        document.getElementById('confirmRemoveModal').classList.remove('hidden');
 
-        if (confirm('Tem certeza que deseja remover os peritos selecionados?')) {
-            // Vê ids das auditorias selecionadas
-            const selectedIds = Array.from(selected).map(checkbox => 
-                parseInt(checkbox.getAttribute('data-id'))
-            );
-            // remove as auditorias selecionadas
-            const updated = getExpertsData().filter(expert => !selectedIds.includes(expert.id));
-            saveExpertsData(updated); // atualiza o localStorage
-            document.querySelector('.header-checkbox').checked = false; // desmarca os checkboxs
-            // atualiza a tabela e a paginação
-            atualizarTabelaPeritos(); 
+        // Ao clicar em "Remover"
+        document.getElementById('confirmRemoveYes').onclick = function() {
+            const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
+            const updated = getExpertsData().filter(expert => !ids.includes(expert.id));
+            saveExpertsData(updated);
+            document.querySelector('.header-checkbox').checked = false;
+            atualizarTabelaPeritos();
             updatePagination();
-        }
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
+
+        // Ao clicar em "Cancelar"
+        document.getElementById('confirmRemoveNo').onclick = function() {
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
     });
 }
 
@@ -515,3 +518,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+function showCustomAlert(message) {
+    document.getElementById('customAlertMessage').textContent = message;
+    document.getElementById('customAlertModal').classList.remove('hidden');
+}
+document.getElementById('customAlertOk').onclick = function() {
+    document.getElementById('customAlertModal').classList.add('hidden');
+};

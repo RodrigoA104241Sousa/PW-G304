@@ -60,29 +60,31 @@ function setupHeaderCheckbox() {
 
 // REMOVER AUDITORIA SELECIONADA
 function setupRemoveButton() {
-    // BOTÃO
     const removeButton = document.querySelector('.btn-danger');
-    // quando clicar no botão
     removeButton.addEventListener('click', () => {
-        // verifica as selecionadas
         const selected = document.querySelectorAll('.auditoria-checkbox:checked');
         if (selected.length === 0) {
             showCustomAlert('Selecione pelo menos uma auditoria para remover.');
             return;
         }
+        // Mostrar modal de confirmação
+        document.getElementById('confirmRemoveModal').classList.remove('hidden');
 
-        if (confirm('Tem certeza que deseja remover as auditorias selecionadas?')) {
-            // Vê ids das auditorias selecionadas
+        // Ao clicar em "Remover"
+        document.getElementById('confirmRemoveYes').onclick = function() {
             const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
-
-            // remove as auditorias selecionadas
             auditoriasData = auditoriasData.filter(a => !ids.includes(parseInt(a.id)));
-            saveAuditoriasData(); // atualiza o localStorage
-            document.querySelector('.header-checkbox').checked = false; // desmarca os checkboxs
-            // atualiza a tabela e a paginação
-            atualizarTabelaAuditorias(); 
+            saveAuditoriasData();
+            document.querySelector('.header-checkbox').checked = false;
+            atualizarTabelaAuditorias();
             updatePagination();
-        }
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
+
+        // Ao clicar em "Cancelar"
+        document.getElementById('confirmRemoveNo').onclick = function() {
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
     });
 }
 
