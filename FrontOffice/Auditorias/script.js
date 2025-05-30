@@ -200,6 +200,30 @@ document.addEventListener('DOMContentLoaded', () => {
             event.target.style.display = 'none';
         }
     });
+
+    // Abrir notificações.html ao clicar em "Notificações"
+    const notificacoesItem = Array.from(document.querySelectorAll('.sidebar-list .label'))
+        .find(label => label.textContent.trim() === "Notificações");
+    if (notificacoesItem) {
+        notificacoesItem.parentElement.addEventListener('click', () => {
+            window.location.href = "../Notificações/notificacoes.html";
+        });
+    }
+
+    // Atualizar badge de notificações com o número real de ocorrências rejeitadas
+    const badge = document.querySelector('.sidebar-list .badge');
+    const user = JSON.parse(localStorage.getItem('userfront'));
+    const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+    let count = 0;
+    if (user) {
+        count = ocorrencias.filter(
+            o => o.userid === user.id && o.estado === "Não Aceite"
+        ).length;
+    }
+    if (badge) {
+        badge.textContent = count > 0 ? count : '';
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
 });
 
 function getModalId(index) {

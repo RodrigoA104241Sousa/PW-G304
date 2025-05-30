@@ -560,3 +560,57 @@ body {
             font-size: 12px;
             color: #666;
         }
+        
+/* Ocorrências por área - percentagens nos cantos */
+.area-percentages {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    min-height: 120px;
+}
+
+.area-item {
+    position: absolute;
+    max-width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.area-item .area-label {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.area-item .area-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.area-item.top-left {
+    top: 10px;
+    left: 10px;
+    align-items: flex-start;
+}
+
+.area-item.top-right {
+    top: 10px;
+    right: 10px;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.area-item.bottom-left {
+    bottom: 10px;
+    left: 10px;
+    align-items: flex-start;
+}
+
+.area-item.bottom-right {
+    bottom: 10px;
+    right: 10px;
+    align-items: flex-end;
+    text-align: right;
+}

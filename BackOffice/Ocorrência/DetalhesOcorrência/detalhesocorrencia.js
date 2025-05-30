@@ -92,14 +92,18 @@ if (statusTag) {
 
 // Atualizar o botão vermelho
 document.querySelector('.button-red').addEventListener('click', () => {
+    // Pede a razão ao gestor
+    const motivo = prompt("Indique a razão da rejeição da ocorrência:");
+    if (motivo === null) return; // Cancelado
+
     const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
     const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
     
     if (index !== -1) {
         occurrences[index].estado = 'Não Aceite';
+        occurrences[index].motivoRejeicao = motivo; // Guarda a razão
         localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
         
-        // Atualizar a tag com a nova cor
         updateStatusTag('Não Aceite');
         
         setTimeout(() => {
