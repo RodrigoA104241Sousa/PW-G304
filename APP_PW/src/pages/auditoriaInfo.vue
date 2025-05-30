@@ -23,6 +23,7 @@ const ocorrencia = store.getOcorrenciaById(id)
 const tipo_problema = ocorrencia.tipo_de_problema
 console.log("Ocorrência:", ocorrencia)
 
+
 function guardarTudo(id, tipo_problema) {
 
     auditoria.guardarAuditoriaCompleta(id, tipo_problema)
@@ -30,7 +31,7 @@ function guardarTudo(id, tipo_problema) {
     showPopup.value = true
     setTimeout(() => {
         showPopup.value = false
-        localStorage.removeItem('auditorias')
+        store.updateEstado(id, "Concluída")
         router.push(`/auditorias`)
     }, 2000)
     

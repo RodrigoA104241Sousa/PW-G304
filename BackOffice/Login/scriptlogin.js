@@ -39,6 +39,7 @@ function isAdmin(email) {
   const adminEmails = [
     'fmachado999888@gmail.com',
     'rodrigoamsousa1922@gmail.com',
+    'antoniocorreiabusiness@gmail.com',
     'marianapa89.56@gmail.com'
   ];
   return adminEmails.includes(email);

@@ -5,8 +5,10 @@ import Card from '../components/card.vue';
 import { ref, computed } from 'vue'
 import { useAuditoriaStore } from '../stores/auditoria.js'
 
+
 // Aceder ao store
 const auditoria = useAuditoriaStore()
+
 
 // Obter todas as auditorias guardadas
 const todasAuditorias = ref(auditoria.getTodasAuditorias())

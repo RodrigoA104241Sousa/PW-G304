@@ -83,15 +83,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Calcula percentagens
     const percentagens = tipos.map(tipo =>
-        total > 0 ? (contagem[tipo] / total) * 100 : 0
+        total > 0 ? Math.round((contagem[tipo] / total) * 100) : 0
     );
 
-    // Atualiza as percentagens na legenda
-    const legendItems = document.querySelectorAll('.legend .legend-item');
-    legendItems.forEach((item, idx) => {
-        const labelDiv = item.querySelector('div:last-child');
-        if (!labelDiv) return;
-        labelDiv.textContent = `${tipos[idx]} ${Math.round(percentagens[idx])}%`;
+    // Atualiza as percentagens nos cantos do card
+    const areaItems = document.querySelectorAll('.area-percentages .area-item');
+    areaItems.forEach((item, idx) => {
+        const label = item.querySelector('.area-label');
+        const value = item.querySelector('.area-value');
+        if (label && value) {
+            label.textContent = tipos[idx];
+            value.textContent = percentagens[idx] + '%';
+        }
     });
 
     // Atualiza o donut chart

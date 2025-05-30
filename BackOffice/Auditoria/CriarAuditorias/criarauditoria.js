@@ -30,19 +30,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Encontrar a ocorrência específica
         const ocorrencia = ocorrencias.find(o => o.id === parseInt(occurrenceId));
-        
+
         if (ocorrencia) {
-            // Preencher o campo de morada
-            const moradaInput = document.querySelector('.form-group:nth-child(3) input');
-            moradaInput.value = ocorrencia.morada || '';
-            
+            // Preencher o campo de morada corretamente
+            const moradaInput = document.getElementById('inputMorada');
+            if (moradaInput) moradaInput.value = ocorrencia.morada || '';
+
             // Preencher o código postal se existir
             const codigoPostalInput = document.getElementById('postalCode');
-            codigoPostalInput.value = ocorrencia.codigoPostal || '';
-            
+            if (codigoPostalInput) codigoPostalInput.value = ocorrencia.codigoPostal || '';
+
             // Opcional: tornar os campos readonly se você não quiser que sejam editados
-            moradaInput.setAttribute('readonly', true);
-            codigoPostalInput.setAttribute('readonly', true);
+            if (moradaInput) moradaInput.setAttribute('readonly', true);
+            if (codigoPostalInput) codigoPostalInput.setAttribute('readonly', true);
         }
     }
 });

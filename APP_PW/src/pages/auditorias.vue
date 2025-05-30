@@ -10,6 +10,7 @@ const user = JSON.parse(localStorage.getItem('user') || '{}')
 // Filtrar só as auditorias do perito logado
 const minhasOcorrencias = computed(() =>
   todasOcorrencias.value.filter(ocorrencia =>
+    ocorrencia.estado === "Em Progresso" &&
     ocorrencia.peritos.some(perito => perito.email === user.email)
   )
 )
