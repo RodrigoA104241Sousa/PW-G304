@@ -7,27 +7,36 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/x-icon" href="../imagens/minilogo.png">
 </head>
-
 <body>
-  <!-- Cabeçalho -->
-  <div class="menu-toggle">☰</div>
 
-  <div class="navbar-grid">
-    <div class="nav-item"><a href="#sobre-nos">SOBRE NÓS</a></div>
-    <div class="nav-item"><a href="#area-atuacao">ÁREAS DE ATUAÇÃO</a></div>
-
-    <div class="logo" id="logoLink">
-      <img src="../imagens/logo.png" alt="Logo" />
+  <!-- Header -->
+  <header class="navbar">
+    <div class="menu-icon">
+      <span class="menu-bars"></span>
     </div>
 
-    <div class="nav-item"><a href="#contanct">CONTACTE-NOS</a></div>
+    <div class="header-content">
+      <nav class="nav-links left-links">
+        <a href="#sobre-nos">SOBRE NÓS</a>
+        <a href="#area-atuacao">ÁREAS DE ATUAÇÃO</a>
+      </nav>
 
-    <div class="auth-buttons">
+      <div class="logo-container">
+        <img src="../imagens/logo.png" alt="Logo" />
+      </div>
+
+      <nav class="nav-links right-links">
+        <a href="#contanct">CONTACTE-NOS</a>
+      </nav>
+    </div>
+
+    <div class="auth-buttons" id="loginContainer">
       <a href="../../BackOffice/Login/LoginEyesEverywhere.html">
-        <button class="btn btn-login">Login</button>
+        <button class="sign-in">Login</button>
       </a>
+      
     </div>
-  </div>
+  </header>
 
   <div class="sidebar" id="sidebar">
     <div class="sidebar-top">
@@ -76,10 +85,8 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="title">
-        <span class="eyes">Eyes</span><span class="everywhere">EveryWhere</span>
-      </h1>
-      <p class="description">Visão em todos os cantos de Portugal</p>
+      <h1><span class="eyes">Eyes</span><span class="everywhere">EveryWhere</span></h1>
+      <p>Visão em todos os cantos de Braga</p>
       <p class="hero-subtitle">Junte-se a nós e contribua para um país mais seguro e eficiente!</p>
     </div>
     <button class="saber-mais">Saber Mais</button>

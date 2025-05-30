@@ -12,113 +12,127 @@ html, body {
 body {
   background-color: #f5faff;
   scroll-behavior: smooth;
-  padding-top: 80px; /* Espaço para o cabeçalho fixo */
 }
 
 /* ------------------------- */
 /* CABEÇALHO */
-  .menu-toggle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #03045E;
-    color: white;
-    height: 100px;
-    width: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    z-index: 1001;
-    cursor: pointer;
-    transition: width 0.3s ease;
-  }
-
-  /* Quando a sidebar está aberta */
-  body.sidebar-open .menu-toggle {
-    width: 260px;
-  }
-
-.navbar-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto 1fr 1fr auto;
+header.navbar {
+  display: flex;
   align-items: center;
-  height: 100px;
-  background: white;
-  padding-left: 140px;
-  padding-right: 4rem;
-  gap: 2rem;
+  justify-content: space-between;
+  background-color: white;
+  padding: 0;
+  height: 80px;
+  border-bottom: 1px solid #eee;
+
+  /* estes são os novos */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 998;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  transition: padding-left 0.3s ease;
+  z-index: 1000;
 }
 
-.nav-item {
-  display: flex;
-  justify-content: center;
-}
 
-.nav-item a {
-  color: black;
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 600;
-  transition: color 0.3s;
-}
 
-.nav-item a:hover {
-  color: #03045E;
-}
-
-.logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo img {
-  height: 100px;
-}
-
-.auth-buttons {
-  display: flex;
-  gap: 2rem;
-  justify-content: flex-end;
-}
-
-.auth-buttons a {
-  text-decoration: none;
-}
-
-.btn {
-  height: 55px;
-  min-width: 140px;
-  padding: 0 2rem;
-  border-radius: 30px;
-  font-weight: bold;
-  font-size: 1.2rem;
+.menu-icon {
+  background-color: #000052;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.btn-login {
-  background-color: #03045E;
+.menu-bars {
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+}
+
+.menu-bars::before,
+.menu-bars::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  left: 0;
+}
+
+.menu-bars::before {
+  top: -6px;
+}
+
+.menu-bars::after {
+  top: 6px;
+}
+
+.header-content {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.left-links {
+  margin-right: 50px;
+}
+
+.right-links {
+  margin-left: 50px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #000052;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-container img {
+  height: 80px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 20px;
+  padding-right: 30px;
+}
+
+.auth-buttons button {
+  padding: 6px 25px;
+  border: 2px solid #000052;
+  background: white;
+  color: #000052;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-buttons .sign-up {
+  background-color: #000052;
   color: white;
-  border: 2px solid #03045E;
 }
 
-.btn-login:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.auth-buttons button:hover {
+  opacity: 0.9;
 }
-
 
 /* Estilo para o perfil do usuário */
 .user-profile {
@@ -141,7 +155,92 @@ body {
   font-weight: bold;
 }
 
-/* ----Menu Lateral -------- */
+/* ------------------------- */
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  background-image: url('../imagens/imagemprincipal.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Alinha os elementos verticalmente */
+  padding-left: 40px; /* Adiciona espaçamento interno */
+  padding-top: 20px;
+  overflow: hidden; /* Evita que o conteúdo transborde */
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.hero-content {
+  z-index: 2;
+  color: white;
+  max-width: 600px;
+  padding-top: 100px;
+}
+
+.hero-content h1 {
+  font-size: 48px; /* Reduz o tamanho do título */
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.eyes {
+  color: white;
+}
+
+.everywhere {
+  color: #000080;
+  font-size: 56px;
+}
+
+.hero-content p {
+  font-size: 18px; /* Reduz o tamanho do texto */
+  margin-bottom: 20px;
+  color: #e0f0ff;
+}
+
+.hero-content p:not(.hero-subtitle) {
+  color: #76d3f5;
+}
+
+.hero-subtitle {
+  font-size: 16px; /* Reduz o tamanho do subtítulo */
+  margin-bottom: 30px;
+}
+
+.saber-mais {
+  position: absolute; /* Posiciona o botão de forma absoluta */
+  bottom: 20px; /* Define a distância do botão em relação à parte inferior */
+  right: 20px; /* Define a distância do botão em relação à lateral direita */
+  background-color: #000052;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  position: absolute;
+  bottom: 50px;
+  right: 90px;
+  z-index: 2;
+}
+
+
+.saber-mais:hover {
+  background-color: #0000a0;
+}
+
 .sidebar {
   position: fixed;
   top: 80px;
@@ -232,108 +331,6 @@ body {
   width: 100%;
 }
 
-/* ------------------------- */
-/* Hero Section */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  background-image: url('../imagens/imagemprincipal.png');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 3.5rem 4rem 4rem;
-  padding-left: 100px; /* igual ao menu lateral */
-  overflow: hidden;
-  transition: padding-left 0.3s ease;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.35); /* mais escuro */
-  z-index: 1;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  color: white;
-  max-width: 1100px;
-  line-height: 1.8;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-}
-
-.hero-content h1 {
-  font-size: 6rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  letter-spacing: 1px;
-}
-
-.eyes {
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.everywhere {
-  color: #03045E;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-}
-
-.hero-content .description {
-  font-size: 2.1rem;
-  color: #d6f3ff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  margin-bottom: 1.2rem;
-}
-
-.hero-subtitle {
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: #ffffff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  margin-top: 1rem;
-}
-
-.saber-mais {
-  position: absolute;
-  bottom: 10rem;
-  right: 5rem;
-  background-color: #03045E;
-  color: white;
-  padding: 1.6rem 5rem;
-  border: none;
-  border-radius: 20px;
-  font-size: 1.7rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-  .saber-mais:hover {
-    background-color: #023e8a;
-    transform: scale(1.03);
-  }
-
-
-  /* Navbar segue a largura da sidebar */
-  body.sidebar-open .navbar-grid {
-    padding-left: 260px;
-    transition: padding-left 0.3s ease;
-  }
-
-  /* Hero pode ser mais afastada */
-  body.sidebar-open .hero {
-    padding-left: 300px;
-    transition: padding-left 0.3s ease;
-  }
 
 
 /* ------------------------- */
