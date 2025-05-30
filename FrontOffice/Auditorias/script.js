@@ -1,11 +1,13 @@
 // Menu toggle
-const menuIcon = document.querySelector('.menu-icon');
+const menuToggle = document.querySelector('.menu-toggle');
 const sidebar = document.getElementById('sidebar');
 
-menuIcon.addEventListener('click', () => {
-  console.log('Menu icon clicked'); // Adicionado para depuração
+menuToggle.addEventListener('click', () => {
   sidebar.classList.toggle('open');
+  document.body.classList.toggle('sidebar-open'); // Adiciona/remover classe ao body
 });
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
   // Botão "Saber Mais" - Redirecionar para a seção "Sobre Nós"
@@ -112,6 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+  const logo = document.getElementById('logoLink');
+    if (logo) {
+      logo.addEventListener('click', () => {
+        window.scrollTo(0, 0);
+      });
+    }
+
   // Selecionando todos os cards da área de atuação
   const cards = document.querySelectorAll('.area-atuacao .card');
   
