@@ -131,7 +131,7 @@ function filtrarAuditorias() {
     let filtradas = [...auditoriasData];
     // TIPO 
     if (currentTipoFiltro.length > 0) {
-        filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
+        filtradas = filtradas.filter(a => currentTipoFiltro.includes(a.tipoOcorrencia));
     }
     // NOME DA AUDITORIA
     if (filtroNomeAuditoria) {
@@ -742,17 +742,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
      
-    // Tipo de auditoria
-    document.querySelectorAll('[data-tipo]').forEach(btn => {
+    // Tipo de Ocorrencia
+    document.querySelectorAll('.submenu-item[data-tipo]').forEach(btn => {
         btn.addEventListener('click', () => {
             const tipo = btn.getAttribute('data-tipo');
-            filterByTipoAuditoria(tipo);
-
-            // Alternar visualmente a classe .active
+            filterByTipoAuditoria(tipo); // <-- CORRETO
             btn.classList.toggle('active');
         });
     });
-
     // Estado da auditoria
     document.querySelectorAll('[data-estado]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -791,7 +788,10 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
         if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
-        if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
+        if (perito) filtradas = filtradas.filter(a =>
+    a.peritos && a.peritos.length > 0 &&
+    a.peritos[0].name?.toLowerCase().includes(perito)
+);
         
         auditoriasFiltradasPesquisa = filtradas;
         currentPage = 1;
