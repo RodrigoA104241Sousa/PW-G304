@@ -2,58 +2,66 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Responsivo para móvel-->
-    <title>EyesEveryWhere</title> <!-- Título da página -->
-    <link rel="stylesheet" href="ocorrencias.css"> <!-- Link para o CSS -->
-    <link rel="icon" type="image/x-icon" href="minilogo.png"> <!-- Favicon -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyesEveryWhere</title>
+    <link rel="stylesheet" href="ocorrencias.css">
+    <link rel="icon" type="image/x-icon" href="minilogo.png">
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
 </head>
 <body>
-    <!-- Estrutura principal -->
     <div class="container">
-        
-         <!-- Menu Lateral -->
+        <!-- Sidebar -->
         <div class="sidebar">
             <!-- Logo -->
             <div class="logo">
                 <div>Eyes</div>
                 <div>EveryWhere</div>
             </div>
-
-            <!-- Filtros do Menu Lateral-->
+<!-- Filtros do Menu Lateral-->
             <nav>
-                <!-- Filtros -->
+                <!-- Ordenar -->
                 <div class="menu-item">
-                    <!-- Icone do filtro -->
-                    <i data-lucide="filter"></i>
-                    <span>Filtros</span>
+                    <i data-lucide="sort-asc"></i>
+                    <span>Ordenar</span>
+                </div>
+                <div class="submenu">
+                    <button class="submenu-item" data-sort="recente">
+                        <span class="dot"></span>
+                        <span>Mais Recente</span>
+                    </button>
+                    <button class="submenu-item" data-sort="antiga">
+                        <span class="dot"></span>
+                        <span>Mais Antigo</span>
+                    </button>
                 </div>
 
-                <!-- + Recente -->
-                <div class="menu-item" data-sort="recente">
-                    <span>Mais Recente</span>
-                </div>
-
-                <!-- + Antiga -->
-                <div class="menu-item" data-sort="antiga">
-                    <span>Mais Antiga</span>
-                </div>
-
-                <!-- Tipo de Ocorrencia -->
+                <!-- Especialidade -->
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
-                        <span>Tipo Ocorrência</span>
+                        <span>Especialidade</span>
                     </div>
                     <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
-                <!-- Submenu do Tipo de Ocorrencia -->
+                <!-- Submenu da Especialidade -->
                 <div class="submenu">
-                    <button class="submenu-item" data-tipo="Buraco na estrada"><span class="dot"></span>Buraco na Estrada</button>
-                    <button class="submenu-item" data-tipo="Passeio danificado"><span class="dot"></span>Passeio Danificado</button>
-                    <button class="submenu-item" data-tipo="Falta de sinalização"><span class="dot"></span>Falta de Sinalização</button>
-                    <button class="submenu-item" data-tipo="Iluminação pública"><span class="dot"></span>Iluminação Pública</button>
+                    <button class="submenu-item" data-tipo="Buraco na Estrada">
+                            <span class="dot"></span>
+                            <span>Buraco na Estrada</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Passeio Danificado">
+                        <span class="dot"></span>
+                        <span>Passeio Danificado</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Falta de Sinalização">
+                        <span class="dot"></span>
+                        <span>Falta de Sinalização</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Iluminação Pública">
+                        <span class="dot"></span>
+                        <span>Iluminação Pública</span>
+                    </button>
                 </div>
 
                 <!-- Estado -->
@@ -65,28 +73,30 @@
                     <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
+
                 <!-- Submenu do Estado -->
                 <div class="submenu">
-                    <button class="submenu-item" data-estado="Aceite"><span class="dot"></span>Aceite</button>
-                    <button class="submenu-item" data-estado="Não Aceite"><span class="dot"></span>Não Aceite</button>
-                    <button class="submenu-item" data-estado="Em espera"><span class="dot"></span>Em Espera</button>
+                    <button class="submenu-item" data-estado="Aceite">
+                        <span class="dot"></span>
+                        <span>Aceite</span>
+                    </button>
+                    <button class="submenu-item" data-estado="Não Aceite">
+                        <span class="dot"></span>
+                        <span>Não Aceite</span>
+                    </button>
+                    <button class="submenu-item" data-estado="Em espera">
+                        <span class="dot"></span>
+                        <span>Em Espera</span>
+                    </button>
                 </div>
             </nav>
         </div>
 
-        <!-- Página Principal -->
+        <!-- Main Content -->
         <div class="main-content">
-            <!-- Cabeçalho -->
+            <!-- Header -->
             <header>
-                <!-- Botão Adicionar -->
-                <div class="header-left">
-                    <button id="addOcorrenciaBtn" class="btn btn-primary">
-                        <i data-lucide="plus"></i>
-                        <span>ADICIONAR</span>
-                    </button>
-                </div>
 
-                <!-- Centro -->
                 <div class="page-selector">
                     <button class="page-dropdown-btn">
                         Ocorrências Registadas
@@ -100,69 +110,57 @@
                     </div>
                 </div>
 
-                <!-- Botão Remover -->
                 <div class="header-right">
-                    <button class="btn btn-danger">
-                        <i data-lucide="minus"></i>
-                        <span>REMOVER</span>
-                    </button>
-                    <!-- LOGO -->
+
+                    <i data-lucide="settings"></i>
                     <div class="avatar">
-                        <img src="logo.png" alt="Avatar" width="60" height="60">
+                        <img src="logo.png" alt="Avatar" width="24" height="24">
                     </div>
                 </div>
             </header>
 
-            <!-- Filtros de pesquisa -->
+            <!-- Filters -->
             <div class="filters">
-                <input type="text" id="searchId" placeholder="ID da Ocorrência">
-                <input type="text" id="searchEmailUsuario" placeholder="Email Usuário ...">
-                <input type="date" id="searchData" placeholder="Trabalha desde ...">
-                <!-- Botões -->
-                <button id="searchButton" class="search-icon-btn">
-                    <img src="pesquisa.png" alt="Pesquisar" />
-                  </button>
-                <button id="clearFiltersBtn" class="search-icon-btn" title="Limpar Filtros">
-                    <img src="borracha.png" alt="Limpar" />
+                <input type="text" id="searchInput" placeholder="Nome / Email Usuário ...">
+                <input type="date" id="dateInput" placeholder="Trabalha desde ...">
+                <button class="search-button" id="searchButton">
+                    <span>Procurar</span>
+                    <i data-lucide="search"></i>
                 </button>
             </div>
 
-            <!-- Tabela de Ocorrencias -->
+            <!-- Table -->
             <div class="card-container">
                 <div class="table-container">
                     <table>
-                        <!-- Cabeçalho da tabela-->
                         <thead>
-                            <tr class="table-header">
+                            <tr>
                                 <th><input type="checkbox" class="header-checkbox"></th>
-                                <th><div class="header-cell"><span>ID</span></div></th>
-                                <th><div class="header-cell"><span>Email Usuário</span></div></th>
-                                <th><div class="header-cell"><span>Tipo</span></div></th>
-                                <th><div class="header-cell"><span>Data</span></div></th>
-                                <th><div class="header-cell"><span>Estado</span></div></th>
-                                <th><div class="header-cell"><span></span></div></th>
+                                <th>Nome / Email Usuário</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <!-- corpo da tabela, preenchido automaticamente JS -->
                         <tbody id="occurrencesTableBody">
+                            <!-- Rows will be populated by JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Paginação -->
+            <!-- Pagination -->
             <div class="pagination">
-                <!-- Informação -->
-                <div class="pagination-info"> </div>
-                <!-- Controlos de página -->
+                <div class="pagination-info">
+                    Mostrando 1 - 16 de 5.000 Ocorrências Registadas
+                </div>
                 <div class="pagination-controls">
-                    <!-- Nº de Ocorrencias a aparecer -->
-                    <select id="itemsPerPageSelect">
-                        <option>5</option>
-                        <option>10</option>
-                        <option>15</option>
+                    <select>
+                        <option>16</option>
+                        <option>32</option>
+                        <option>64</option>
                     </select>
-                    <!-- Nº da página -->
                     <div class="pagination-buttons">
                         <button>&lt;</button>
                         <button class="active">1</button>
@@ -175,9 +173,7 @@
             </div>
         </div>
     </div>
-    <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- JavaScript -->
     <script src="ocorrencias.js"></script>
 </body>
 </html>
