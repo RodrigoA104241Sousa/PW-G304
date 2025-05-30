@@ -1,401 +1,398 @@
-// Initialize occurrences data with a complete example
+// ocorrencias data com localStorage ou default
+let occurrencesData = JSON.parse(localStorage.getItem('ocorrencias')) || [];
 
+// Salvar Ocorrencias em localStorage
+function saveOcorrenciasData(newOccurrence) {
+    // Obter lista atualizada do localStorage
+    let data = JSON.parse(localStorage.getItem('ocorrencias')) || [];
 
-// Initialize occurrences data with localStorage or default
-let occurrencesData = JSON.parse(localStorage.getItem('ocorrencias')) || defaultOccurrences;
+    // Gerar novo ID incremental com base no maior ID existente
+    const novoId = data.length > 0
+        ? Math.max(...data.map(o => o.id || 0)) + 1
+        : 1;
 
-function getStatusClass(estado) {
-    switch (estado) {
-        case "Aceite":
-            return "status-available";
-        case "Não Aceite":
-            return "status-unavailable";
-        case "Em espera":
-            return "status-audit";
-        default:
-            return "";
-    }
+    const novaOcorrencia = {
+        id: novoId,
+        ...newOccurrence
+    };
+
+    // Adicionar nova ocorrência à lista
+    data.push(novaOcorrencia);
+    occurrencesData = data;
+
+    // Guardar no localStorage
+    localStorage.setItem('ocorrencias', JSON.stringify(data));
+
+    // Atualizar interface
+    atualizarTabelaOcorrencias();
+    updatePagination();
 }
 
-// Add pagination state
-let currentPage = 1;
-let itemsPerPage = 16;
+// =========================================================================
+// =========================== VARIÁVEIS GLOBAIS ===========================
+// =========================================================================
+// Exemplo de ocorrencias
+    let ocorrenciasFiltradasPesquisa = null;
 
-// Adicione esta variável no topo do arquivo junto com as outras variáveis globais
-let currentSpecialtyFilter = null;
+// Paginação
+let currentPage = 1; // Página atual 
+let itemsPerPage = 5; // nº ocorrências por página
 
-// Adicione estas variáveis globais
-let searchTerm = '';
+// Menu lateral
+let currentTipoFiltro = []; // Filtro de tipo de ocorrencia
+let currentEstadoFiltro = []; // Filtro de estado da ocorrencia
+let sortOrder = 'recente'; // filtro de ordenação
 
-// Adicione estas variáveis globais
-let dateFilter = null;
+// Pesquisa
+let filtroId = null; // id da ocorrencia
+let filtroEmailUsuario = null; // nome da ocorrencia
+let filtroData = null; // data de criação
+let filtroMorada = null; 
 
-// Add at the top with other state variables
-let currentTypeFilter = null;
 
-// Add this variable at the top of the file
-let currentSort = 'recente'; // 'recente' ou 'antiga'
+// =========================================================================
+// ============================ FUNCIONALIDADES ============================
+// =========================================================================
 
-// Function to update pagination
-function updatePagination() {
-    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-    const totalOccurrences = occurrences.length;
-    const totalPages = Math.ceil(totalOccurrences / itemsPerPage);
-    
-    // Update info text
-    const start = (currentPage - 1) * itemsPerPage + 1;
-    const end = Math.min(currentPage * itemsPerPage, totalOccurrences);
-    document.querySelector('.pagination-info').textContent = 
-        `Mostrando ${start} - ${end} de ${totalOccurrences} ocorrências registradas`;
+// ----------------------  BOTÃO ADICIONAR ----------------------  
+document.getElementById('addOcorrenciaBtn').addEventListener('click', () => {
+    window.location.href = '../../Frontoffice/Formulario de Ocorr 1/index.html';
+});
 
-    // Update pagination buttons
-    const paginationButtons = document.querySelector('.pagination-buttons');
-    paginationButtons.innerHTML = `
-        <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&lt;</button>
-        ${getPaginationButtons(currentPage, totalPages)}
-        <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">&gt;</button>
-    `;
-
-    // Update items per page select
-    const select = document.querySelector('.pagination-controls select');
-    select.value = itemsPerPage;
+// ----------------------  BOTÃO REMOVER ----------------------  
+// QUADRADO (SELECIONAR TODAS AS OCORRÊNCIAS)
+function setupHeaderCheckbox() {
+    const headerCheckbox = document.querySelector('.header-checkbox');
+    headerCheckbox.addEventListener('change', (e) => {
+        const checkboxes = document.querySelectorAll('.ocorrencia-checkbox');
+        checkboxes.forEach(cb => cb.checked = e.target.checked);
+    });
 }
 
-// Function to generate pagination buttons
-function getPaginationButtons(current, total) {
-    let buttons = '';
-    for (let i = 1; i <= total; i++) {
-        if (i === current) {
-            buttons += `<button class="active">${i}</button>`;
-        } else {
-            buttons += `<button onclick="changePage(${i})">${i}</button>`;
+// REMOVER OCORRÊNCIA SELECIONADA
+function setupRemoveButton() {
+    // BOTÃO
+    const removeButton = document.querySelector('.btn-danger');
+    // quando clicar no botão
+    removeButton.addEventListener('click', () => {
+        // verifica as selecionadas
+        const selected = document.querySelectorAll('.ocorrencia-checkbox:checked');
+        if (selected.length === 0) {
+            alert('Selecione pelo menos uma ocorrência para remover.');
+            return;
         }
-    }
-    return buttons;
-}
 
-// Function to change page
-function changePage(page) {
-    currentPage = page;
-    updatePagination();
-    populateTable();
-}
+        if (confirm('Tem certeza que deseja remover as ocorrências selecionadas?')) {
+            // Vê ids das ocorrências selecionadas
+            const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
 
-let currentFilter = null;
-
-function filterByStatus(status) {
-    currentFilter = status;
-    currentPage = 1; // Reset to first page when filtering
-    populateTable();
-    updatePagination();
-}
-
-// Adicione esta função nova
-function filterBySpecialty(specialty) {
-    currentSpecialtyFilter = specialty;
-    currentPage = 1; // Reset para a primeira página ao filtrar
-    populateTable();
-    updatePagination();
-}
-
-// Adicione esta nova função
-function searchExperts() {
-    const searchInput = document.getElementById('searchInput');
-    searchTerm = searchInput.value.toLowerCase().trim();
-    currentPage = 1; // Reset para primeira página
-    populateTable();
-    updatePagination();
-}
-
-// Adicione esta nova função
-function filterByDate(date) {
-    dateFilter = date;
-    currentPage = 1; // Reset para primeira página
-    populateTable();
-    updatePagination();
-}
-
-// Update the filter function
-function filterByType(type) {
-    currentTypeFilter = type;
-    currentPage = 1;
-    populateTable();
-    updatePagination();
-}
-
-// Modifique a função populateTable existente
-function populateTable() {
-    const tbody = document.getElementById("occurrencesTableBody");
-    if (!tbody) {
-        console.error("Table body not found!");
-        return;
-    }
-
-    let occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-
-    // Aplicar filtro por estado
-    if (currentFilter) {
-        occurrences = occurrences.filter(occ => occ.estado === currentFilter);
-    }
-    
-    if (currentSpecialtyFilter) {
-        occurrences = occurrences.filter(occ => occ.tipo === currentSpecialtyFilter);
-    }
-
-    // ORDENAR POR DATA
-    occurrences.sort((a, b) => {
-        const dateA = parsePtDate(a.data);
-        const dateB = parsePtDate(b.data);
-        if (currentSort === 'recente') {
-            return dateB - dateA; // Mais recente primeiro
-        } else {
-            return dateA - dateB; // Mais antigo primeiro
+            // remove as ocorrencias selecionadas
+            occurrencesData = occurrencesData.filter(a => !ids.includes(parseInt(a.id)));
+            localStorage.setItem('ocorrencias', JSON.stringify(occurrencesData));
+            document.querySelector('.header-checkbox').checked = false; // desmarca os checkboxs
+            // atualiza a tabela e a paginação
+            atualizarTabelaOcorrencias(); 
+            updatePagination();
         }
     });
+}
 
-    tbody.innerHTML = ""; // Limpar a tabela antes de preencher
+// =========================================================================
+// ================================ FILTROS ================================
+// =========================================================================
+// ---------------------- MENU LATERAL ----------------------
+// + RECENTE / ANTIGA
+function ordenarPorData(criterio) {
+    if (sortOrder === criterio) return; 
+    sortOrder = criterio;
+    currentPage = 1;
+    atualizarTabelaOcorrencias();
+    updatePagination();
+}
 
-    // Preencher a tabela com os dados filtrados
-    occurrences.forEach(occ => {
+// TIPO DE OCORRÊNCIA
+function filterByTipoOcorrencia(tipo) {
+    const i = currentTipoFiltro.indexOf(tipo);
+    if (i >= 0) {
+        currentTipoFiltro.splice(i, 1);
+    } else {
+        currentTipoFiltro.push(tipo);
+    }
+    currentPage = 1;
+    atualizarTabelaOcorrencias();
+    updatePagination();
+}
+
+// ESTADO DA OCORRÊNCIA
+function filterByEstado(estado) {
+    const i = currentEstadoFiltro.indexOf(estado);
+    if (i >= 0) {
+        currentEstadoFiltro.splice(i, 1);
+    } else {
+        currentEstadoFiltro.push(estado);
+    }
+    currentPage = 1;
+    atualizarTabelaOcorrencias();
+    updatePagination();
+}
+
+// ---------------------- FILTRAR OCORRÊNCIAS ----------------------
+function filtrarOcorrencias() {
+    let filtradas = [...occurrencesData];
+    // ID
+    if (filtroId) {
+        filtradas = filtradas.filter(a => a.id.toString() === filtroId);
+    }
+    // TIPO 
+    if (currentTipoFiltro.length > 0) {
+        filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
+    }
+    // EMAIL DO USUÁRIO
+    if (filtroEmailUsuario) {
+        filtradas = filtradas.filter(a =>   
+            a.email?.toLowerCase().includes(filtroEmailUsuario)
+        );
+    }
+    // ESTADO
+    if (currentEstadoFiltro.length > 0) {
+        filtradas  = filtradas .filter(a => currentEstadoFiltro.includes(a.estado));
+    }
+    // DATA
+    if (filtroData) {
+        const filtro = new Date(filtroData).toDateString();
+        filtradas = filtradas.filter(a => {
+            const dataOcorr = new Date(a.data.replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, '$2/$1/$3 $4')).toDateString();
+            return dataOcorr === filtro;
+        });
+    }
+    return filtradas; 
+}
+
+
+// ---------------------- LIMPAR FILTROS ----------------------
+function limparFiltros() {
+    // Limpar inputs do topo
+    document.getElementById('searchId').value = '';
+    document.getElementById('searchEmailUsuario').value = '';
+    document.getElementById('searchData').value = '';
+
+    // Reset das variáveis globais
+    ocorrenciasFiltradasPesquisa = null;
+    filtroId = null;
+    filtroEmailUsuario = null;
+    filtroData = null;
+    currentTipoFiltro = [];
+    currentEstadoFiltro = [];
+    sortOrder = 'recente'; 
+
+    // Remover botões ativos do menu lateral
+    document.querySelectorAll('[data-tipo], [data-estado], [data-sort]').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Repor página inicial e atualizar
+    currentPage = 1;
+    atualizarTabelaOcorrencias();
+    updatePagination();
+}
+
+// =========================================================================
+// =========================== ATUALIZAR TABELA ============================
+// =========================================================================
+
+function atualizarTabelaOcorrencias(lista = null) {
+    const tbody = document.getElementById("occurrencesTableBody");
+    tbody.innerHTML = "";
+
+    let ocorrenciasFiltradas = lista || filtrarOcorrencias();
+
+    if (sortOrder) {
+        ocorrenciasFiltradas.sort((a, b) => {
+            const dataA = new Date(a.data.replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, '$2/$1/$3 $4'));
+            const dataB = new Date(b.data.replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, '$2/$1/$3 $4'));
+            return sortOrder === 'recente' ? dataB - dataA : dataA - dataB;
+        });
+    }
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginaOcorrencias = ocorrenciasFiltradas.slice(start, end);
+
+    paginaOcorrencias.forEach(ocorrencia => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><input type="checkbox" class="occurrence-checkbox" data-id="${occ.id}"></td>
+            <td><input type="checkbox" class="ocorrencia-checkbox" data-id="${ocorrencia.id}"></td>
+            <td>${ocorrencia.id}</td>
             <td>
                 <div class="user-info">
-                    <div class="user-email">${occ.email || 'N/A'}</div>
+                    <div class="user-email">${ocorrencia.email || 'N/A'}</div>
                 </div>
             </td>
-            <td>${(occ.data)}</td>
-            <td>${occ.tipo || 'N/A'}</td>
-            <td><span class="status-badge ${getStatusClass(occ.estado)}">${occ.estado}</span></td>
+            <td>${ocorrencia.tipo}</td>
+            <td>${ocorrencia.data || "—"}</td>
+             <td><span class="status-badge ${getEstadoBadgeClass(ocorrencia.estado)}">${ocorrencia.estado}</span></td>
             <td>
-                <button class="btn-icon details-btn" data-id="${occ.id}">
+                <button class="btn-icon details-btn" data-id="${ocorrencia.id}">
                     <i data-lucide="more-vertical"></i>
                 </button>
             </td>
         `;
         tbody.appendChild(row);
 
-        // Adicionar evento ao botão de detalhes
         const detailsBtn = row.querySelector('.details-btn');
         detailsBtn.addEventListener('click', () => {
-            localStorage.setItem('selectedOccurrenceId', occ.id);
+            localStorage.setItem('selectedOccurrenceId', ocorrencia.id);
             window.location.href = '../Ocorrência/DetalhesOcorrência/detalhesocorrencia.html';
         });
     });
 
-    // Atualizar ícones
     lucide.createIcons();
 }
 
-// Add header checkbox functionality
-function setupHeaderCheckbox() {
-    const headerCheckbox = document.querySelector('.header-checkbox');
-    headerCheckbox.addEventListener('change', (e) => {
-        const checkboxes = document.querySelectorAll('.occurrence-checkbox');
-        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-    });
-}
-
-// Filtro por Especialidade
-document.querySelectorAll('.submenu-item[data-tipo]').forEach(item => {
-  item.addEventListener('click', () => {
-    // define o filtro
-    currentSpecialtyFilter = item.getAttribute('data-tipo');
-    currentPage = 1;
-
-    // atualiza estado visual de ativo
-    document.querySelectorAll('.submenu-item').forEach(i => 
-      i.classList.remove('active')
-    );
-    item.classList.add('active');
-
-    // reaplica filtros e paginação
-    populateTable();
-    updatePagination();
-  });
-});
-
-
-// Add this function to save new occurrences
-function saveOccurrence(newOccurrence) {
-    occurrencesData.push({
-        id: occurrencesData.length + 1,
-        ...newOccurrence
-    });
-    localStorage.setItem('ocorrencias', JSON.stringify(occurrencesData));
-    populateTable();
-    updatePagination();
-}
-
-// Add event listener for items per page select
-document.querySelector('.pagination-controls select').addEventListener('change', (e) => {
-    itemsPerPage = parseInt(e.target.value);
-    currentPage = 1; // Reset to first page
-    updatePagination();
-    populateTable();
-});
-
-// First, simplify the initialization
-document.addEventListener("DOMContentLoaded", () => {
-    // Initialize localStorage if empty
-    if (!localStorage.getItem('ocorrencias')) {
-        console.log('Initializing localStorage with default data');
-        localStorage.setItem('ocorrencias', JSON.stringify(defaultOccurrences));
+// ---------------------- ESTILO ESTADO ----------------------
+function getEstadoBadgeClass(estado) {
+    switch (estado) {
+        case 'Aceite':
+            return 'status-badge status-available';
+        case 'Não Aceite':
+            return 'status-badge status-unavailable';
+        case 'Em espera':
+            return 'status-badge status-audit';
+        default:
+            return 'status-badge';
     }
+}
+
+
+// =========================================================================
+// =============================== PAGINAÇÃO ===============================
+// =========================================================================
+
+function updatePagination(lista = null) {
+    const totalItems = (lista || filtrarOcorrencias()).length; // total de ocorrencias filtradas 
+    const totalPages = Math.ceil(totalItems / itemsPerPage); // total de páginas necessárias
+
+    const start = (currentPage - 1) * itemsPerPage + 1; // primeiro item da página
+    const end = Math.min(currentPage * itemsPerPage, totalItems); // último item da página
     
-    // Log the current state
-    console.log('Current localStorage data:', localStorage.getItem('ocorrencias'));
+    // Atualiza a informação de paginação
+    document.querySelector('.pagination-info').textContent =
+        `Mostrando ${start} - ${end} de ${totalItems} ocorrências registradas`;
 
-    // Initialize the page
-    lucide.createIcons();
-    populateTable();
-    setupHeaderCheckbox();
-    updatePagination();
-});
-
-// Função para preencher os campos do formulário com base no ID da ocorrência
-function preencherFormularioComOcorrencia(id) {
-    // Obter as ocorrências do localStorage
-    const ocorrencias = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-
-    // Encontrar a ocorrência com o ID correspondente
-    const ocorrencia = ocorrencias.find(occ => occ.id === id);
-
-    if (!ocorrencia) {
-        console.error(`Ocorrência com ID ${id} não encontrada.`);
-        return;
-    }
-
-    // Preencher os campos do formulário
-    document.getElementById('codigo-postal').value = ocorrencia.codigoPostal || '';
-    document.getElementById('descricao').value = ocorrencia.descricao || '';
-    document.getElementById('email').value = ocorrencia.email || '';
-    document.getElementById('morada').value = ocorrencia.morada || '';
-    document.getElementById('tipo-ocorrencia').value = ocorrencia.tipo || '';
-
-    // Exibir imagens, se existirem
-    const imagensContainer = document.getElementById('imagens-container');
-    imagensContainer.innerHTML = ''; // Limpar imagens existentes
-    if (ocorrencia.imagens && ocorrencia.imagens.length > 0) {
-        ocorrencia.imagens.forEach(imagemBase64 => {
-            const img = document.createElement('img');
-            img.src = imagemBase64;
-            img.alt = 'Imagem da ocorrência';
-            img.style.width = '100px';
-            img.style.marginRight = '10px';
-            imagensContainer.appendChild(img);
-        });
-    }
+    // botões de paginação
+    const paginationButtons = document.querySelector('.pagination-buttons');
+    // anterior, números das páginas e proximo 
+    paginationButtons.innerHTML = `
+        <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">&lt;</button>
+        ${getPaginationButtons(currentPage, totalPages)}
+        <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">&gt;</button>
+    `;
 }
 
-// Exemplo de uso: preencher o formulário com a ocorrência de ID armazenado no localStorage
+// Criar botões numerados
+function getPaginationButtons(current, total) {
+    let buttons = '';
+    // botão para cada pagina, pagina atual = active
+    for (let i = 1; i <= total; i++) {
+        buttons += `<button ${i === current ? 'class="active"' : ''} onclick="changePage(${i})">${i}</button>`;
+    }
+    return buttons;
+}
+
+// Mudar de página
+function changePage(page) {
+    currentPage = page; // atualiza a página atual
+    atualizarTabelaOcorrencias(); 
+    updatePagination();
+}
+
+
+
+// =========================================================================
+// =========================== DOMContentLoaded ============================
+// =========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    const selectedOccurrenceId = parseInt(localStorage.getItem('selectedOccurrenceId'), 10);
-    if (selectedOccurrenceId) {
-        preencherFormularioComOcorrencia(selectedOccurrenceId);
-    }
-});
-
-// Remove duplicate event listeners and use this simplified version
-document.addEventListener("DOMContentLoaded", () => {
-    // Initialize localStorage if empty
-    if (!localStorage.getItem('ocorrencias')) {
-        console.log('Initializing localStorage with default data');
-        localStorage.setItem('ocorrencias', JSON.stringify(defaultOccurrences));
-    }
-    
-    // Log the current state
-    console.log('Current localStorage data:', localStorage.getItem('ocorrencias'));
-
-    // Initialize the page
-    lucide.createIcons();
-    populateTable();
+    lucide.createIcons(); // Ativa os ícones
+    // ---------- BOTÕES Adicionar / Remover ----------
+    setupRemoveButton();
     setupHeaderCheckbox();
-    updatePagination();
+    // --------- ATUALIZAR TABELA / PAGINAÇÃO ---------
+    atualizarTabelaOcorrencias(ocorrenciasFiltradasPesquisa);
+    updatePagination(ocorrenciasFiltradasPesquisa);
 
-    // Add click handlers for status filters
-document.querySelectorAll('.submenu-item[data-estado]').forEach(item => {
-    item.addEventListener('click', () => {
-        const estado = item.getAttribute('data-estado');
-        
-        // Atualiza o estado ativo
-        document.querySelectorAll('.submenu-item[data-estado]').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        
-        // Aplica o filtro
-        filterByStatus(estado);
-    });
-});
+    // Atualizar itemsPerPage com base no dropdown
+    const itemsPerPageSelect = document.getElementById("itemsPerPageSelect");
+    if (itemsPerPageSelect) {
+        itemsPerPageSelect.value = itemsPerPage;
 
-// Event listeners para os itens de especialidade
-document.querySelectorAll('.submenu-item[data-tipo]').forEach(item => {
-    const tipoText = item.textContent.trim();
-    if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(tipoText)) {
-        item.addEventListener('click', (e) => {
-            filterBySpecialty(tipoText);
-
-            // Atualiza o estado ativo
-            document.querySelectorAll('.submenu-item[data-tipo]').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+        itemsPerPageSelect.addEventListener("change", () => {
+            itemsPerPage = parseInt(itemsPerPageSelect.value);
+            currentPage = 1;
+            atualizarTabelaOcorrencias();
+            updatePagination();
         });
     }
-});
-
-    // Adiciona evento de click no botão de busca
-    const searchButton = document.getElementById('searchButton');
-    searchButton.addEventListener('click', searchExperts);
-
-    // Adiciona evento de pressionar Enter no campo de busca
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            searchExperts();
+    // ======================== FILTROS ========================
+    // -------------------- MENU LATERAL --------------------
+    // Recente
+    document.querySelector('[data-sort="recente"]').addEventListener('click', () => {
+        ordenarPorData('recente');
+        document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
+        if (sortOrder === 'recente') {
+            document.querySelector('[data-sort="recente"]').classList.add('active');
         }
     });
-
-    // Adiciona evento de mudança no input de data
-    const dateInput = document.getElementById('dateInput');
-    dateInput.addEventListener('change', (e) => {
-        filterByDate(e.target.value);
+    // Antiga
+    document.querySelector('[data-sort="antiga"]').addEventListener('click', () => {
+        ordenarPorData('antiga');
+        document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
+        if (sortOrder === 'antiga') {
+            document.querySelector('[data-sort="antiga"]').classList.add('active');
+        }
     });
-
-    // Add click handlers for type filters
-    document.querySelectorAll('.submenu-item[data-type]').forEach(item => {
-        item.addEventListener('click', () => {
-            const type = item.getAttribute('data-type');
-            
-            // Update active state
-            document.querySelectorAll('.submenu-item[data-type]').forEach(i => 
-                i.classList.remove('active')
-            );
-            item.classList.add('active');
-            
-            // Apply filter
-            filterByType(type);
-        });
-    });
-
-    document.querySelectorAll('.submenu-item[data-sort]').forEach(btn => {
+     
+    // Tipo de Ocorrencia
+    document.querySelectorAll('.submenu-item[data-tipo]').forEach(btn => {
         btn.addEventListener('click', () => {
-            currentSort = btn.getAttribute('data-sort');
-            // Atualiza visualmente o botão ativo
-            document.querySelectorAll('.submenu-item[data-sort]').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            // Atualiza a tabela
-            populateTable();
+            const tipo = btn.getAttribute('data-tipo');
+            filterByTipoOcorrencia(tipo);
+            // Alternar visualmente a classe .active
+            btn.classList.toggle('active');
         });
     });
-});
 
-// Função auxiliar para converter "19/05/2025, 17:52:07" em objeto Date
-function parsePtDate(dateStr) {
-    // Divide em data e hora
-    const [datePart, timePart] = dateStr.split(',');
-    if (!datePart) return new Date(0); // fallback para datas inválidas
-    const [day, month, year] = datePart.trim().split('/');
-    const time = timePart ? timePart.trim() : '00:00:00';
-    // Cria string ISO: "2025-05-19T17:52:07"
-    return new Date(`${year}-${month}-${day}T${time}`);
-}
+    // Estado da Ocorrencia
+    document.querySelectorAll('.submenu-item[data-estado]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const estado = btn.getAttribute('data-estado');
+            filterByEstado(estado);
+            // Alternar visualmente a classe .active
+            btn.classList.toggle('active');
+        });
+    });
+    // -------------------- FILTROS DE PESQUISA --------------------
+    document.getElementById('searchButton').addEventListener('click', () => {
+        filtroId = document.getElementById('searchId').value.trim();
+        filtroEmailUsuario = document.getElementById('searchEmailUsuario').value.trim().toLowerCase();
+        filtroData = document.getElementById('searchData').value;
+
+        ocorrenciasFiltradasPesquisa = filtrarOcorrencias();
+        currentPage = 1;
+        atualizarTabelaOcorrencias(ocorrenciasFiltradasPesquisa);
+        updatePagination(ocorrenciasFiltradasPesquisa);
+    });
+
+    // Ativar pesquisa ao carregar Enter nos inputs
+    ['searchId', 'searchEmailUsuario', 'searchData'].forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('searchButton').click();
+            }
+        });
+    });
+    // Limpar filtros
+    document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
+    });
+
 
