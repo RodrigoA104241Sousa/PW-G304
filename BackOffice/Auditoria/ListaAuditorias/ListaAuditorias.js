@@ -757,10 +757,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-estado]').forEach(btn => {
         btn.addEventListener('click', () => {
             const estado = btn.getAttribute('data-estado');
-            filterByEstado(estado);
-
-            // Alternar visualmente a classe .active
-            btn.classList.toggle('active');
+            
+            // Remove 'active' de todos os botões de estado
+            document.querySelectorAll('[data-estado]').forEach(b => b.classList.remove('active'));
+            // Adiciona 'active' só ao botão clicado
+            btn.classList.add('active');
+            
+            // Atualiza o filtro para apenas este estado
+            currentEstadoFiltro = [estado];
+            currentPage = 1;
+            atualizarTabelaAuditorias();
+            updatePagination();
         });
     });
     // -------------------- FILTROS DE PESQUISA --------------------

@@ -33,6 +33,9 @@ let dateFilter = null;
 // Add at the top with other state variables
 let currentTypeFilter = null;
 
+// Add this variable at the top of the file
+let currentSort = 'recente'; // 'recente' ou 'antiga'
+
 // Function to update pagination
 function updatePagination() {
     const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
@@ -128,7 +131,6 @@ function populateTable() {
         return;
     }
 
-    // Obter os dados das ocorrências do localStorage
     let occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
 
     // Aplicar filtro por estado
@@ -139,6 +141,17 @@ function populateTable() {
     if (currentSpecialtyFilter) {
         occurrences = occurrences.filter(occ => occ.tipo === currentSpecialtyFilter);
     }
+
+    // ORDENAR POR DATA
+    occurrences.sort((a, b) => {
+        const dateA = parsePtDate(a.data);
+        const dateB = parsePtDate(b.data);
+        if (currentSort === 'recente') {
+            return dateB - dateA; // Mais recente primeiro
+        } else {
+            return dateA - dateB; // Mais antigo primeiro
+        }
+    });
 
     tbody.innerHTML = ""; // Limpar a tabela antes de preencher
 
@@ -183,6 +196,26 @@ function setupHeaderCheckbox() {
         checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
     });
 }
+
+// Filtro por Especialidade
+document.querySelectorAll('.submenu-item[data-tipo]').forEach(item => {
+  item.addEventListener('click', () => {
+    // define o filtro
+    currentSpecialtyFilter = item.getAttribute('data-tipo');
+    currentPage = 1;
+
+    // atualiza estado visual de ativo
+    document.querySelectorAll('.submenu-item').forEach(i => 
+      i.classList.remove('active')
+    );
+    item.classList.add('active');
+
+    // reaplica filtros e paginação
+    populateTable();
+    updatePagination();
+  });
+});
+
 
 // Add this function to save new occurrences
 function saveOccurrence(newOccurrence) {
@@ -282,28 +315,28 @@ document.addEventListener("DOMContentLoaded", () => {
     updatePagination();
 
     // Add click handlers for status filters
-    document.querySelectorAll('.submenu-item[data-status]').forEach(item => {
-        item.addEventListener('click', () => {
-            const status = item.getAttribute('data-status');
-            
-            // Update active state
-            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            
-            // Apply filter
-            filterByStatus(status);
-        });
+document.querySelectorAll('.submenu-item[data-estado]').forEach(item => {
+    item.addEventListener('click', () => {
+        const estado = item.getAttribute('data-estado');
+        
+        // Atualiza o estado ativo
+        document.querySelectorAll('.submenu-item[data-estado]').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Aplica o filtro
+        filterByStatus(estado);
     });
+});
 
 // Event listeners para os itens de especialidade
-document.querySelectorAll('.submenu-item').forEach(item => {
-    const specialtyText = item.textContent.trim();
-    if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(specialtyText)) {
+document.querySelectorAll('.submenu-item[data-tipo]').forEach(item => {
+    const tipoText = item.textContent.trim();
+    if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(tipoText)) {
         item.addEventListener('click', (e) => {
-            filterBySpecialty(specialtyText);
-            
+            filterBySpecialty(tipoText);
+
             // Atualiza o estado ativo
-            document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.submenu-item[data-tipo]').forEach(i => i.classList.remove('active'));
             item.classList.add('active');
         });
     }
@@ -342,5 +375,27 @@ document.querySelectorAll('.submenu-item').forEach(item => {
             filterByType(type);
         });
     });
+
+    document.querySelectorAll('.submenu-item[data-sort]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentSort = btn.getAttribute('data-sort');
+            // Atualiza visualmente o botão ativo
+            document.querySelectorAll('.submenu-item[data-sort]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // Atualiza a tabela
+            populateTable();
+        });
+    });
 });
+
+// Função auxiliar para converter "19/05/2025, 17:52:07" em objeto Date
+function parsePtDate(dateStr) {
+    // Divide em data e hora
+    const [datePart, timePart] = dateStr.split(',');
+    if (!datePart) return new Date(0); // fallback para datas inválidas
+    const [day, month, year] = datePart.trim().split('/');
+    const time = timePart ? timePart.trim() : '00:00:00';
+    // Cria string ISO: "2025-05-19T17:52:07"
+    return new Date(`${year}-${month}-${day}T${time}`);
+}
 

@@ -17,48 +17,76 @@
                 <div>Eyes</div>
                 <div>EveryWhere</div>
             </div>
-
-            <!-- Sidebar Menu -->
+<!-- Filtros do Menu Lateral-->
             <nav>
+                <!-- Ordenar -->
                 <div class="menu-item">
-                    <i data-lucide="filter"></i>
-                    <span>Filtros</span>
+                    <i data-lucide="sort-asc"></i>
+                    <span>Ordenar</span>
+                </div>
+                <div class="submenu">
+                    <button class="submenu-item" data-sort="recente">
+                        <span class="dot"></span>
+                        <span>Mais Recente</span>
+                    </button>
+                    <button class="submenu-item" data-sort="antiga">
+                        <span class="dot"></span>
+                        <span>Mais Antigo</span>
+                    </button>
                 </div>
 
-
+                <!-- Especialidade -->
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
                         <span>Especialidade</span>
                     </div>
+                    <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
-
+                <!-- Submenu da Especialidade -->
                 <div class="submenu">
-                    <div class="submenu-item"><span class="dot"></span>Buraco na Estrada</div>
-                    <div class="submenu-item"><span class="dot"></span>Passeio Danificado</div>
-                    <div class="submenu-item"><span class="dot"></span>Falta de Sinalização</div>
-                    <div class="submenu-item"><span class="dot"></span>Iluminação Pública</div>
+                    <button class="submenu-item" data-tipo="Buraco na Estrada">
+                            <span class="dot"></span>
+                            <span>Buraco na Estrada</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Passeio Danificado">
+                        <span class="dot"></span>
+                        <span>Passeio Danificado</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Falta de Sinalização">
+                        <span class="dot"></span>
+                        <span>Falta de Sinalização</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Iluminação Pública">
+                        <span class="dot"></span>
+                        <span>Iluminação Pública</span>
+                    </button>
                 </div>
 
+                <!-- Estado -->
                 <div class="menu-item">
                     <div class="menu-item-content">
                         <i data-lucide="filter"></i>
                         <span>Estado</span>
                     </div>
+                    <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
 
-                <!-- Estado Submenu -->
+                <!-- Submenu do Estado -->
                 <div class="submenu">
-                    <button class="submenu-item" data-status="Aceite">
-                        <span class="dot"></span>Aceite
+                    <button class="submenu-item" data-estado="Aceite">
+                        <span class="dot"></span>
+                        <span>Aceite</span>
                     </button>
-                    <button class="submenu-item" data-status="Não Aceite">
-                        <span class="dot"></span>Não Aceite
+                    <button class="submenu-item" data-estado="Não Aceite">
+                        <span class="dot"></span>
+                        <span>Não Aceite</span>
                     </button>
-                    <button class="submenu-item" data-status="Em Espera">
-                        <span class="dot"></span>Em Espera
+                    <button class="submenu-item" data-estado="Em espera">
+                        <span class="dot"></span>
+                        <span>Em Espera</span>
                     </button>
                 </div>
             </nav>

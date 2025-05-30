@@ -20,76 +20,74 @@
                 <div>EveryWhere</div>
             </div>
 
-            <!-- Filtros do Menu Lateral-->
+           <!-- Filtros do Menu Lateral-->
             <nav>
-                <!-- Filtros -->
+                <!-- Ordenar -->
                 <div class="menu-item">
-                    <!-- Icone do filtro -->
-                    <i data-lucide="filter"></i>
-                    <span>Filtros</span>
+                    <i data-lucide="sort-asc"></i>
+                    <span>Ordenar</span>
+                </div>
+                <div class="submenu">
+                    <button class="submenu-item" data-sort="recente">
+                        <span class="dot"></span>
+                        <span>Mais Recente</span>
+                    </button>
+                    <button class="submenu-item" data-sort="antiga">
+                        <span class="dot"></span>
+                        <span>Mais Antigo</span>
+                    </button>
                 </div>
 
-                <!-- + Recente -->
-                <div class="menu-item" data-sort="recente">
-                    <span>Mais Recente</span>
-                </div>
-
-                <!-- + Antiga -->
-                <div class="menu-item" data-sort="antiga">
-                    <span>Mais Antiga</span>
-                </div>
-
-                <!-- Tipo de Auditoria -->
+                <!-- Especialidade -->
                 <div class="menu-item">
                     <div class="menu-item-content">
-                        <span>Tipo de Auditoria</span>
+                        <i data-lucide="filter"></i>
+                        <span>Especialidade</span>
                     </div>
                     <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
-                    <!-- Submenu do Tipo de Auditoria -->
-                    <div class="submenu">
-                        <button class="submenu-item" data-tipo="Buraco na Estrada">
+                <!-- Submenu da Especialidade -->
+                <div class="submenu">
+                    <button class="submenu-item" data-tipo="Buraco na Estrada">
                             <span class="dot"></span>
                             <span>Buraco na Estrada</span>
-                        </button>
-                        <button class="submenu-item" data-tipo="Passeio Danificado">
-                            <span class="dot"></span>
-                            <span>Passeio Danificado</span>
-                        </button>
-                        <button class="submenu-item" data-tipo="Falta de Sinalização">
-                            <span class="dot"></span>
-                            <span>Falta de Sinalização</span>
-                        </button>
-                        <button class="submenu-item" data-tipo="Iluminação Pública">
-                            <span class="dot"></span>
-                            <span>Iluminação Pública</span>
-                        </button>
-                    </div>
+                    </button>
+                    <button class="submenu-item" data-tipo="Passeio Danificado">
+                        <span class="dot"></span>
+                        <span>Passeio Danificado</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Falta de Sinalização">
+                        <span class="dot"></span>
+                        <span>Falta de Sinalização</span>
+                    </button>
+                    <button class="submenu-item" data-tipo="Iluminação Pública">
+                        <span class="dot"></span>
+                        <span>Iluminação Pública</span>
+                    </button>
+                </div>
 
                 <!-- Estado -->
                 <div class="menu-item">
                     <div class="menu-item-content">
+                        <i data-lucide="filter"></i>
                         <span>Estado</span>
                     </div>
                     <!-- seta à frente -->
                     <i data-lucide="chevron-down" class="rotate-180"></i>
                 </div>
-                    <!-- Submenu do Estado -->
-                    <div class="submenu">
-                        <button class="submenu-item" data-estado="Concluída">
-                            <span class="dot"></span>
-                            <span>Concluída</span>
-                        </button>
-                        <button class="submenu-item" data-estado="Não Iniciada">
-                            <span class="dot"></span>
-                            <span>Não Iniciada</span>
-                        </button>
-                        <button class="submenu-item" data-estado="Em Progresso">
-                            <span class="dot"></span>
-                            <span>Em Progresso</span>
-                        </button>
-                    </div>
+
+                <!-- Submenu do Estado -->
+                <div class="submenu">
+                    <button class="submenu-item" data-estado="Concluída">
+                        <span class="dot"></span>
+                        <span>Concluída</span>
+                    </button>
+                    <button class="submenu-item" data-estado="Em Progresso">
+                        <span class="dot"></span>
+                        <span>Em Progresso</span>
+                    </button>
+                </div>
             </nav>
         </div>
 

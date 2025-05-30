@@ -444,22 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // ======================== FILTROS ========================
     // -------------------- MENU LATERAL --------------------
-    // Recente
-    document.querySelector('[data-sort="recente"]').addEventListener('click', () => {
-        ordenarPorData('recente');
-        document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
-        if (sortOrder === 'recente') {
-            document.querySelector('[data-sort="recente"]').classList.add('active');
-        }
-    });
-    // Antiga
-    document.querySelector('[data-sort="antiga"]').addEventListener('click', () => {
-        ordenarPorData('antiga');
-        document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
-        if (sortOrder === 'antiga') {
-            document.querySelector('[data-sort="antiga"]').classList.add('active');
-        }
-    });
+
      
     // Especialidade
     document.querySelectorAll('[data-tipo]').forEach(btn => {
@@ -520,4 +505,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Limpar filtros
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
+
+    document.querySelectorAll('.submenu-item[data-sort]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const criterio = btn.getAttribute('data-sort');
+            ordenarPorData(criterio);
+            document.querySelectorAll('.submenu-item[data-sort]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
     });
+});
