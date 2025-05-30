@@ -92,25 +92,52 @@ if (statusTag) {
 
 // Atualizar o botão vermelho
 document.querySelector('.button-red').addEventListener('click', () => {
-    // Pede a razão ao gestor
-    const motivo = prompt("Indique a razão da rejeição da ocorrência:");
-    if (motivo === null) return; // Cancelado
-
-    const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
-    const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
-    
-    if (index !== -1) {
-        occurrences[index].estado = 'Não Aceite';
-        occurrences[index].motivoRejeicao = motivo; // Guarda a razão
-        localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
-        
-        updateStatusTag('Não Aceite');
-        
-        setTimeout(() => {
-            history.back();
-        }, 500);
-    }
+    showRejectionModal();
 });
+
+// Função para mostrar o modal de rejeição
+function showRejectionModal() {
+    // Cria o modal
+    const modal = document.createElement('div');
+    modal.className = 'custom-modal-bg';
+    modal.innerHTML = `
+        <div class="custom-modal">
+            <h2>Motivo da Rejeição</h2>
+            <textarea id="motivoRejeicaoInput" placeholder="Descreva o motivo..." rows="4"></textarea>
+            <div class="modal-actions">
+                <button id="cancelarModal" class="modal-btn-cancel">Cancelar</button>
+                <button id="confirmarModal" class="modal-btn-confirm">Confirmar</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Cancelar
+    document.getElementById('cancelarModal').onclick = () => modal.remove();
+
+    // Confirmar
+    document.getElementById('confirmarModal').onclick = () => {
+        const motivo = document.getElementById('motivoRejeicaoInput').value.trim();
+        if (!motivo) {
+            alert('Por favor, indique o motivo da rejeição.');
+            return;
+        }
+        // Atualiza a ocorrência no localStorage
+        const occurrences = JSON.parse(localStorage.getItem('ocorrencias')) || [];
+        const occurrenceId = localStorage.getItem('selectedOccurrenceId');
+        const index = occurrences.findIndex(o => o.id === parseInt(occurrenceId));
+        if (index !== -1) {
+            occurrences[index].estado = 'Não Aceite';
+            occurrences[index].motivoRejeicao = motivo;
+            localStorage.setItem('ocorrencias', JSON.stringify(occurrences));
+            updateStatusTag('Não Aceite');
+            modal.remove();
+            setTimeout(() => {
+                history.back();
+            }, 500);
+        }
+    };
+}
 
 // Add this function for fullsize image viewing
 function showImageFullsize(imageBase64) {

@@ -308,3 +308,67 @@ body {
     color: white !important;
 }
 
+/* Modal personalizado para rejeição */
+.custom-modal-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.custom-modal {
+    background: #fff;
+    border: 2px solid #03045e;
+    border-radius: 12px;
+    padding: 2rem 2rem 1.5rem 2rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+}
+.custom-modal h2 {
+    margin-bottom: 0.5rem;
+    color: #03045e;
+    font-size: 1.3rem;
+}
+.custom-modal textarea {
+    width: 100%;
+    border: 1px solid #03045e;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    resize: vertical;
+}
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.modal-btn-cancel {
+    background: #f8f9fa;
+    color: #03045e;
+    border: 1px solid #03045e;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+.modal-btn-confirm {
+    background: #03045e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+.modal-btn-cancel:hover, .modal-btn-confirm:hover {
+    opacity: 0.85;
+}
+
