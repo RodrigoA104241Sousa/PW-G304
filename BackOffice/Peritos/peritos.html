@@ -179,7 +179,26 @@
                     </div>
                 </div>
             </div>
+            
+             <!-- Modal de alerta customizado -->
+            <div id="customAlertModal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="customAlertMessage"></span>
+                    <button id="customAlertOk" class="btn btn-primary" style="margin-top: 20px;">OK</button>
+                </div>
+            </div>
 
+            <!-- Modal de confirmação de remoção -->
+            <div id="confirmRemoveModal" class="modal hidden">
+                <div class="modal-content">
+                    <span id="confirmRemoveMessage">Tem a certeza que deseja remover o(s) perito(s) selecionado(s)?</span>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                        <button id="confirmRemoveYes" class="btn btn-danger">Remover</button>
+                        <button id="confirmRemoveNo" class="btn btn-primary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            
 
             <!-- Paginação -->
             <div class="pagination">

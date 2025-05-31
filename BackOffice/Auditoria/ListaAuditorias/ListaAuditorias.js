@@ -60,29 +60,31 @@ function setupHeaderCheckbox() {
 
 // REMOVER AUDITORIA SELECIONADA
 function setupRemoveButton() {
-    // BOTÃO
     const removeButton = document.querySelector('.btn-danger');
-    // quando clicar no botão
     removeButton.addEventListener('click', () => {
-        // verifica as selecionadas
         const selected = document.querySelectorAll('.auditoria-checkbox:checked');
         if (selected.length === 0) {
-            alert('Selecione pelo menos uma auditoria para remover.');
+            showCustomAlert('Selecione pelo menos uma auditoria para remover.');
             return;
         }
+        // Mostrar modal de confirmação
+        document.getElementById('confirmRemoveModal').classList.remove('hidden');
 
-        if (confirm('Tem certeza que deseja remover as auditorias selecionadas?')) {
-            // Vê ids das auditorias selecionadas
+        // Ao clicar em "Remover"
+        document.getElementById('confirmRemoveYes').onclick = function() {
             const ids = Array.from(selected).map(c => parseInt(c.getAttribute('data-id')));
-
-            // remove as auditorias selecionadas
             auditoriasData = auditoriasData.filter(a => !ids.includes(parseInt(a.id)));
-            saveAuditoriasData(); // atualiza o localStorage
-            document.querySelector('.header-checkbox').checked = false; // desmarca os checkboxs
-            // atualiza a tabela e a paginação
-            atualizarTabelaAuditorias(); 
+            saveAuditoriasData();
+            document.querySelector('.header-checkbox').checked = false;
+            atualizarTabelaAuditorias();
             updatePagination();
-        }
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
+
+        // Ao clicar em "Cancelar"
+        document.getElementById('confirmRemoveNo').onclick = function() {
+            document.getElementById('confirmRemoveModal').classList.add('hidden');
+        };
     });
 }
 
@@ -131,7 +133,7 @@ function filtrarAuditorias() {
     let filtradas = [...auditoriasData];
     // TIPO 
     if (currentTipoFiltro.length > 0) {
-        filtradas  = filtradas .filter(a => currentTipoFiltro.includes(a.tipo));
+        filtradas = filtradas.filter(a => currentTipoFiltro.includes(a.tipoOcorrencia));
     }
     // NOME DA AUDITORIA
     if (filtroNomeAuditoria) {
@@ -187,7 +189,7 @@ function atualizarTabelaAuditorias(lista = null) {
     const tbody = document.getElementById("auditoriasTableBody");
     tbody.innerHTML = "";
 
-    let auditoriasFiltradas = lista || filtrarAuditorias();
+    let auditoriasFiltradas = (lista === null || lista === undefined) ? filtrarAuditorias() : lista;
 
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
@@ -707,6 +709,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------- BOTÕES Adicionar / Remover ----------
     setupRemoveButton();
     setupHeaderCheckbox();
+
+    
     // --------- ATUALIZAR TABELA / PAGINAÇÃO ---------
     atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
     updatePagination(auditoriasFiltradasPesquisa);
@@ -742,17 +746,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
      
-    // Tipo de auditoria
-    document.querySelectorAll('[data-tipo]').forEach(btn => {
+    // Tipo de Ocorrencia
+    document.querySelectorAll('.submenu-item[data-tipo]').forEach(btn => {
         btn.addEventListener('click', () => {
             const tipo = btn.getAttribute('data-tipo');
-            filterByTipoAuditoria(tipo);
-
-            // Alternar visualmente a classe .active
+            filterByTipoAuditoria(tipo); // <-- CORRETO
             btn.classList.toggle('active');
         });
     });
-
     // Estado da auditoria
     document.querySelectorAll('[data-estado]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -793,10 +794,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
         if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
         
-        auditoriasFiltradasPesquisa = filtradas;
+        if (
+            id || filtroNomeAuditoria || data || perito
+        ) {
+            auditoriasFiltradasPesquisa = filtradas;
+            atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
+            updatePagination(auditoriasFiltradasPesquisa);
+        } else {
+            auditoriasFiltradasPesquisa = null;
+            atualizarTabelaAuditorias();
+            updatePagination();
+        }
         currentPage = 1;
-        atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
-        updatePagination(auditoriasFiltradasPesquisa);
+
     });
 
     // Ativar pesquisa ao carregar Enter nos inputs
@@ -810,5 +820,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Limpar filtros
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
-    });
+});
+
+// Mostrar modal customizado
+function showCustomAlert(message) {
+    const modal = document.getElementById('customAlertModal');
+    const msg = document.getElementById('customAlertMessage');
+    msg.textContent = message;
+    modal.style.display = 'flex';
+    document.getElementById('customAlertOk').onclick = () => {
+        modal.style.display = 'none';
+    };
+}
 

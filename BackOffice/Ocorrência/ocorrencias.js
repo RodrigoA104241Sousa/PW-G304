@@ -328,19 +328,15 @@ document.querySelectorAll('.submenu-item[data-estado]').forEach(item => {
     });
 });
 
-// Event listeners para os itens de especialidade
-document.querySelectorAll('.submenu-item[data-tipo]').forEach(item => {
-    const tipoText = item.textContent.trim();
-    if (['Buraco na Estrada', 'Passeio Danificado', 'Falta de Sinalização', 'Iluminação Pública'].includes(tipoText)) {
-        item.addEventListener('click', (e) => {
-            filterBySpecialty(tipoText);
-
-            // Atualiza o estado ativo
-            document.querySelectorAll('.submenu-item[data-tipo]').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+    // Tipo de Ocorrencia
+    document.querySelectorAll('.submenu-item[data-tipo]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tipo = btn.getAttribute('data-tipo');
+            filterByTipoOcorrencia(tipo);
+            // Alternar visualmente a classe .active
+            btn.classList.toggle('active');
         });
-    }
-});
+    });
 
     // Adiciona evento de click no botão de busca
     const searchButton = document.getElementById('searchButton');

@@ -489,6 +489,23 @@ table {
         display: flex;
     }
 
+#customAlertModal .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 300px;
+    min-height: 120px;
+}
+#customAlertMessage {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
 /* Tabela*/
 .detalhes-grid {
     display: grid; 
