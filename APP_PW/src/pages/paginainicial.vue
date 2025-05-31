@@ -1,11 +1,15 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Pop_up from '../components/Pop_up.vue';
 
 const router = useRouter();
 const clientId = '638875266220-lc2qlih7bdm9igt63ti78vsjfb12qiub.apps.googleusercontent.com';
 
 let tokenClient;
+
+const showPopup = ref(false);
+const popupText = ref('');
 
 async function getUserInfo(token) {
   const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -23,7 +27,11 @@ async function getUserInfo(token) {
     localStorage.setItem('user', JSON.stringify(user_data));
     return true; // login bem-sucedido
   } else {
-    alert('Não é perito');
+    popupText.value = 'Apenas peritos podem aceder a esta aplicação.';
+    showPopup.value = true;
+    setTimeout(() => {
+      showPopup.value = false;
+    }, 2000);
     return false; // login falhou
   }
 }
@@ -83,5 +91,6 @@ function loginWithGoogle() {
       </button>
 
     </div>
+    <Pop_up v-if="showPopup" :text="popupText" @close="showPopup = false" />
   </div>
 </template>
