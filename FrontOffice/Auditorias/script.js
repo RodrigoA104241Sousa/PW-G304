@@ -1,10 +1,10 @@
 // Menu toggle
-const menuIcon = document.querySelector('.menu-icon');
+const menuToggle = document.querySelector('.menu-toggle');
 const sidebar = document.getElementById('sidebar');
 
-menuIcon.addEventListener('click', () => {
-  console.log('Menu icon clicked'); // Adicionado para depuração
+menuToggle.addEventListener('click', () => {
   sidebar.classList.toggle('open');
+  document.body.classList.toggle('sidebar-open'); // Adiciona/remover classe ao body
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (islogged && user) {
     loginContainer.innerHTML = `
       <div class="user-profile">
-        <img src="${user.picture}" alt="Foto de Perfil" class="profile-picture" />
+        <img src="../imagens/defaultUser.png" alt="Foto de Perfil" class="profile-picture" />
         <span class="user-name">${user.name}</span>
       </div>
     `;
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Funcionalidade do Modal "Sobre Nós"
-  const verMaisBtn = document.querySelector('.card-sobre button');
+  const verMaisBtn = document.querySelector('#sobre-nos .box-sobre button');
   const modal = document.getElementById('sobreNosModal');
   const closeBtn = document.querySelector('.close-btn');
 
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Botão Ver Mais do Sobre Nós
-    const verMaisBtn = document.querySelector('.card-sobre button');
+    const verMaisBtn = document.querySelector('#sobre-nos .box-sobre button');
     const sobreNosModal = document.getElementById('sobreNosModal');
     
     if (verMaisBtn) {
