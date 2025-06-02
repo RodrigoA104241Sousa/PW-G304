@@ -263,3 +263,33 @@ if (logo) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('.formulario form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Recolher os dados do formulário
+      const nome = form.querySelector('input[type="text"]').value.trim();
+      const email = form.querySelector('input[type="email"]').value.trim();
+      const telefone = form.querySelector('input[type="tel"]').value.trim();
+      const mensagem = form.querySelector('textarea').value.trim();
+
+      // Criar objeto de contacto
+      const contacto = { nome, email, telefone, mensagem, data: new Date().toISOString() };
+
+      // Buscar contactos existentes ou criar array novo
+      const contactos = JSON.parse(localStorage.getItem('contactos')) || [];
+      contactos.push(contacto);
+
+      // Guardar no localStorage
+      localStorage.setItem('contactos', JSON.stringify(contactos));
+
+      // Limpar o formulário
+      form.reset();
+
+      // Opcional: mostrar mensagem de sucess
+    });
+  }
+});
