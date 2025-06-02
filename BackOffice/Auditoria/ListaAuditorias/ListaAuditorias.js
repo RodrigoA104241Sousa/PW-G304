@@ -325,7 +325,7 @@ function editarAuditoria(id) {
                         ${[
                             "Lanterna", "Câmera fotográfica", "Fita sinalizadora e cones",
                             "Fita métrica", "Luvas de proteção", "Capacete de segurança",
-                            "Caneleiras", "Bloco de notas", "Colete reflexor","Tablet"
+                            "Caneleiras", "Bloco de notas", "Colete refletor"
                         ].map(mat => `
                             <label>
                                 <span>${mat}</span>
