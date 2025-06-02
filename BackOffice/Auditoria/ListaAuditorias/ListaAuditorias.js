@@ -1,7 +1,7 @@
-// auditorias data com localStorage ou default
+// auditorias do localStorage ou default
 let auditoriasData = JSON.parse(localStorage.getItem('auditorias')) || [];
 
-// Salvar Auditorias em localStorage
+// Guardar Auditorias em localStorage
 function saveAuditoriasData() {
     try {
         localStorage.setItem('auditorias', JSON.stringify(auditoriasData));
@@ -26,22 +26,13 @@ function saveAuditoriasData() {
     // Pesquisa
     let filtroId = null; // id da auditoria
     let filtroNomeAuditoria = null; // nome da auditoria
-    let filtroData = null; // data de criação
+    let filtroData = null; // data de inicio
     let filtroPerito = null; // nome do perito
 
 
 // =========================================================================
 // ============================ FUNCIONALIDADES ============================
 // =========================================================================
-
-// ----------- BUSCAR NOME DO PERITO ASSOCIADO ----------- 
-// (estático para já)
-function getNomePeritoPorId(idPerito) {
-    const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-    const perito = experts.find(expert => expert.id === idPerito);
-    return perito ? perito.name : "—";
-}
-
 
 // ----------------------  BOTÃO ADICIONAR ----------------------  
 document.getElementById('addAuditoriaBtn').addEventListener('click', () => {
@@ -131,6 +122,10 @@ function filterByEstado(estado) {
 // ---------------------- FILTRAR AUDITORIAS ----------------------
 function filtrarAuditorias() {
     let filtradas = [...auditoriasData];
+    // ID
+    if (filtroId) {
+        filtradas = filtradas.filter(a => a.id.toString() === filtroId);
+    }
     // TIPO 
     if (currentTipoFiltro.length > 0) {
         filtradas = filtradas.filter(a => currentTipoFiltro.includes(a.tipoOcorrencia));
@@ -147,7 +142,15 @@ function filtrarAuditorias() {
     }
     // DATA
     if (filtroData) {
-    filtradas  = filtradas .filter(a => a.dataCriacao === filtroData);
+        const [ano, mes, dia] = filtroData.split("-");
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+        filtradas = filtradas.filter(a => a.data === dataFormatada);
+    }
+     // NOME DO PERITO
+    if (filtroPerito) {
+        filtradas = filtradas.filter(a =>
+            a.peritos?.[0]?.name?.toLowerCase().includes(filtroPerito)
+        );
     }
     return filtradas;
 }
@@ -189,7 +192,7 @@ function atualizarTabelaAuditorias(lista = null) {
     const tbody = document.getElementById("auditoriasTableBody");
     tbody.innerHTML = "";
 
-    let auditoriasFiltradas = (lista === null || lista === undefined) ? filtrarAuditorias() : lista;
+    let auditoriasFiltradas = lista || filtrarAuditorias();
 
     if (sortOrder) {
         auditoriasFiltradas.sort((a, b) => {
@@ -245,16 +248,17 @@ function atualizarTabelaAuditorias(lista = null) {
 // =========================================================================
 // ========================= BOTÃO MAIS DETALHES ===========================
 // =========================================================================
+
+// ============ MOSTRAR DETALHES DA AUDITORIA SELECIONADA ============
 function abrirDetalhesAuditoria(auditoria) {
     const modal = document.getElementById("detalhesModal");
     const content = document.getElementById("detalhesAuditoriaContent");
-
     const materiais = auditoria.materiais?.join(', ') || "—";
     const perito = auditoria.peritos?.length > 0 ? auditoria.peritos.map(p => p.name).join(', ') : "—";
     const duracao = auditoria.duracao || "—";
     const descricao = auditoria.descricao || "—";
     const tipo = auditoria.tipoOcorrencia || auditoria.tipo || "—";
-    const dataCriacao = auditoria.dataCriacao ? new Date(auditoria.dataCriacao).toLocaleDateString() : "—";
+    const dataInicio = auditoria.data ? formatarData(auditoria.data): "—";
     const urgencia = auditoria.nivelUrgencia || "—";
     const estado = auditoria.estado || "—";
 
@@ -266,7 +270,7 @@ function abrirDetalhesAuditoria(auditoria) {
             <div><strong>Perito Associado:</strong> ${perito}</div>
             <div><strong>Materiais:</strong> ${materiais}</div>
             <div><strong>Morada:</strong> ${auditoria.morada || "—"}</div>
-            <div><strong>Data de Criação:</strong> ${dataCriacao}</div>
+            <div><strong>Data de Inicio:</strong> ${dataInicio}</div>
             <div><strong>Duração Estimada:</strong> ${duracao}</div>
             <div><strong>Estado:</strong> ${estado}</div>
             <div><strong>Urgência:</strong> ${urgencia}</div>
@@ -276,7 +280,6 @@ function abrirDetalhesAuditoria(auditoria) {
         </div>
         <button onclick="editarAuditoria(${auditoria.id})">Editar</button>
     `;
-
     modal.classList.remove("hidden");
 
     // Botão de fechar
@@ -285,180 +288,181 @@ function abrirDetalhesAuditoria(auditoria) {
     };
 }
 
+// ============ EDITAR CAMPOS DA AUDITORIA SELECIONADA ============
 function editarAuditoria(id) {
     const auditoria = auditoriasData.find(a => a.id == id);
     if (!auditoria) return;
-
+    // não editável se a auditoria já estiver concluída
     if (auditoria.estado === "Concluída") {
-        abrirDetalhesAuditoria(auditoria); // Mostra apenas os detalhes
+        abrirDetalhesAuditoria(auditoria); 
         return;
     }
 
     const content = document.getElementById("detalhesAuditoriaContent");
     const [meses, dias, horas] = extrairDuracao(auditoria.duracao);
 
-    // ========================== HTML DO FORMULÁRIO ==========================
-    content.innerHTML = `
-        <form id="formEditarAuditoria" class="detalhes-grid">
-            <div>
-                <label><strong>Nome:</strong></label>
-                <input type="text" name="nome" value="${auditoria.nome || ''}" />
-            </div>
-            <div>
-                <label><strong>Morada:</strong></label>
-                <input type="text" name="morada" value="${auditoria.morada || ''}" />
-            </div>
+// ========================== HTML DO FORMULÁRIO ==========================
+content.innerHTML = `
+    <form id="formEditarAuditoria" class="detalhes-grid">
+        <div>
+            <label><strong>Nome:</strong></label>
+            <input type="text" name="nome" value="${auditoria.nome || ''}" />
+        </div>
+        <div>
+            <label><strong>Morada:</strong></label>
+            <input type="text" name="morada" value="${auditoria.morada || ''}" />
+        </div>
 
-            <div>
-                <label><strong>Materiais:</strong></label>
-                <div class="materiais-wrapper">
-                    <input type="text" id="materialsSearchInput" class="materiais-input" readonly placeholder="Selecionar materiais">
-                    <span id="materialsDropdownIcon" class="materiais-seta">▾</span>
-                </div>
-                <div id="selectedMaterials" class="selected-materiais-tags"></div>
-                <div id="materialsList" class="materiais-lista" style="display: none;">
-                    <div class="materiais-controles">
-                        <button type="button" id="selecionarTodosMateriais">Selecionar todos</button>
-                        <button type="button" id="removerTodosMateriais">Nenhum</button>
-                    </div>
-                    <div class="checkbox-grid">
-                        ${[
-                            "Lanterna", "Câmera fotográfica", "Fita sinalizadora e cones",
-                            "Fita métrica", "Luvas de proteção", "Capacete de segurança",
-                            "Caneleiras", "Bloco de notas", "Colete refletor"
-                        ].map(mat => `
-                            <label>
-                                <span>${mat}</span>
-                                <input type="checkbox" name="materials" value="${mat}" ${auditoria.materiais?.includes(mat) ? 'checked' : ''}>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
+        <div>
+            <label><strong>Materiais:</strong></label>
+            <div class="materiais-wrapper">
+                <input type="text" id="materialsSearchInput" class="materiais-input" readonly placeholder="Selecionar materiais">
+                <span id="materialsDropdownIcon" class="materiais-seta">▾</span>
             </div>
-            
-            <div>
-                <label><strong>Perito:</strong></label>
-                <div class="materiais-wrapper" id="peritoDropdownWrapper">
-                    <input type="text" id="peritoSelecionadoInput" class="materiais-input" readonly placeholder="Selecionar perito">
-                    <span id="peritoDropdownIcon" class="materiais-seta">▾</span>
+            <div id="selectedMaterials" class="selected-materiais-tags"></div>
+            <div id="materialsList" class="materiais-lista" style="display: none;">
+                <div class="materiais-controles">
+                    <button type="button" id="selecionarTodosMateriais">Selecionar todos</button>
+                    <button type="button" id="removerTodosMateriais">Nenhum</button>
                 </div>
-                <div id="peritoDropdownList" class="materiais-lista" style="display: none;">
-                    <!-- preenchido por JS -->
-                </div>
-            </div>
-
-            <div>
-                <label><strong>Tipo de Auditoria:</strong></label>
-                <input type="text" value="${auditoria.tipoOcorrencia}" disabled style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; width: 100%;" />
-            </div>
-            
-
-            <div>
-                <label><strong>Estado:</strong></label>
-                <select name="estado">
-                    <option value="Não Iniciada" ${auditoria.estado === 'Não Iniciada' ? 'selected' : ''}>Não Iniciada</option>
-                    <option value="Em Progresso" ${auditoria.estado === 'Em Progresso' ? 'selected' : ''}>Em Progresso</option>
-                    <option value="Concluída" ${auditoria.estado === 'Concluída' ? 'selected' : ''}>Concluída</option>
-                </select>
-            </div>
- 
-            <div>
-                <label><strong>Duração Estimada:</strong></label>
-                <div style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; display: flex; gap: 10px; align-items: center;">
-                    <input type="number" name="meses" value="${meses}" min="0" style="width: 65px;" /> <span>meses</span>
-                    <input type="number" name="dias" value="${dias}" min="0" max="31" style="width: 65px;" /> <span>dias</span>
-                    <input type="number" name="horas" value="${horas}" min="0" max="24" style="width: 65px;" /> <span>horas</span>
-                </div>
-            </div>
-            <div style="flex: 1;">
-                <label><strong>Urgência:</strong></label>
-                <div style="display: flex; gap: 15px; margin-top: 5px;">
-                    ${[1, 2, 3, 4, 5].map(n => `
-                        <label style="display: flex; align-items: center; gap: 4px;">
-                            <input type="radio" name="urgencia" value="${n}" ${parseInt(auditoria.nivelUrgencia) === n ? 'checked' : ''}/> ${n}
+                <div class="checkbox-grid">
+                    ${[
+                        "Lanterna", "Câmera fotográfica", "Fita sinalizadora e cones",
+                        "Fita métrica", "Luvas de proteção", "Capacete de segurança",
+                        "Caneleiras", "Bloco de notas", "Colete refletor"
+                    ].map(mat => `
+                        <label>
+                            <span>${mat}</span>
+                            <input type="checkbox" name="materials" value="${mat}" ${auditoria.materiais?.includes(mat) ? 'checked' : ''}>
                         </label>
                     `).join('')}
                 </div>
             </div>
-            <div style="grid-column: span 2;">
-                <label><strong>Descrição:</strong></label>
-                <textarea name="descricao" style="min-height: 40px; resize: none;" oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';">${auditoria.descricao || ''}</textarea>
+        </div>
+        
+        <div>
+            <label><strong>Perito:</strong></label>
+            <div class="materiais-wrapper" id="peritoDropdownWrapper">
+                <input type="text" id="peritoSelecionadoInput" class="materiais-input" readonly placeholder="Selecionar perito">
+                <span id="peritoDropdownIcon" class="materiais-seta">▾</span>
             </div>
-            <div style="grid-column: span 2; display: flex; justify-content: center; gap: 20px; margin-top: 0px;">
-                <button type="submit" style="padding: 10px 30px; background-color: #03045e; color: white; border: none; border-radius: 40px;">Guardar</button>
-                <button type="button" id="btnCancelar" style="padding: 10px 30px; background-color: white; color: #03045e; border: 2px solid #03045e; border-radius: 40px;">Cancelar</button>
+            <div id="peritoDropdownList" class="materiais-lista" style="display: none;">
+                <!-- preenchido por JS -->
             </div>
-        </form>
-    `;
+        </div>
 
-    // ========================== JS DO FORMULÁRIO ==========================
-    const form = document.getElementById("formEditarAuditoria");
-    form.style.rowGap = '30px';
+        <div>
+            <label><strong>Tipo de Auditoria:</strong></label>
+            <input type="text" value="${auditoria.tipoOcorrencia}" disabled style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; width: 100%;" />
+        </div>
+        
+
+        <div>
+            <label><strong>Estado:</strong></label>
+            <select name="estado">
+                <option value="Não Iniciada" ${auditoria.estado === 'Não Iniciada' ? 'selected' : ''}>Não Iniciada</option>
+                <option value="Em Progresso" ${auditoria.estado === 'Em Progresso' ? 'selected' : ''}>Em Progresso</option>
+                <option value="Concluída" ${auditoria.estado === 'Concluída' ? 'selected' : ''}>Concluída</option>
+            </select>
+        </div>
+
+        <div>
+            <label><strong>Duração Estimada:</strong></label>
+            <div style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; display: flex; gap: 10px; align-items: center;">
+                <input type="number" name="meses" value="${meses}" min="0" style="width: 65px;" /> <span>meses</span>
+                <input type="number" name="dias" value="${dias}" min="0" max="31" style="width: 65px;" /> <span>dias</span>
+                <input type="number" name="horas" value="${horas}" min="0" max="24" style="width: 65px;" /> <span>horas</span>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <label><strong>Urgência:</strong></label>
+            <div style="display: flex; gap: 15px; margin-top: 5px;">
+                ${[1, 2, 3, 4, 5].map(n => `
+                    <label style="display: flex; align-items: center; gap: 4px;">
+                        <input type="radio" name="urgencia" value="${n}" ${parseInt(auditoria.nivelUrgencia) === n ? 'checked' : ''}/> ${n}
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+        <div style="grid-column: span 2;">
+            <label><strong>Descrição:</strong></label>
+            <textarea name="descricao" style="min-height: 40px; resize: none;" oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';">${auditoria.descricao || ''}</textarea>
+        </div>
+        <div style="grid-column: span 2; display: flex; justify-content: center; gap: 20px; margin-top: 0px;">
+            <button type="submit" style="padding: 10px 30px; background-color: #03045e; color: white; border: none; border-radius: 40px;">Guardar</button>
+            <button type="button" id="btnCancelar" style="padding: 10px 30px; background-color: white; color: #03045e; border: 2px solid #03045e; border-radius: 40px;">Cancelar</button>
+        </div>
+    </form>
+`;
+
+// ========================== JS DO FORMULÁRIO ==========================
+const form = document.getElementById("formEditarAuditoria");
+form.style.rowGap = '30px';
 
     // ---------- MATERIAIS DROPDOWN ----------
-const materialsSearchInput = document.getElementById('materialsSearchInput');
-const materialsList = document.getElementById('materialsList');
-const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
-const checkboxes = document.querySelectorAll('input[name="materials"]');
+    const materialsSearchInput = document.getElementById('materialsSearchInput');
+    const materialsList = document.getElementById('materialsList');
+    const materialsDropdownIcon = document.getElementById('materialsDropdownIcon');
+    const checkboxes = document.querySelectorAll('input[name="materials"]');
 
-// Mostrar/ocultar dropdown
-function toggleMaterialsList() {
-    materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
-}
-materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
-materialsSearchInput.addEventListener('click', toggleMaterialsList);
-
-// Fechar dropdown se clicar fora
-window.addEventListener('click', function(event) {
-    if (!event.target.closest('.materiais-wrapper') && !event.target.closest('.materiais-lista')) {
-        materialsList.style.display = 'none';
+    // Mostrar/ocultar dropdown
+    function toggleMaterialsList() {
+        materialsList.style.display = materialsList.style.display === 'none' ? 'block' : 'none';
     }
-});
+    materialsDropdownIcon.addEventListener('click', toggleMaterialsList);
+    materialsSearchInput.addEventListener('click', toggleMaterialsList);
 
-// Atualizar seleção visual
-function updateSelectedMaterials() {
-    const selectedContainer = document.getElementById('selectedMaterials');
-    selectedContainer.innerHTML = '';
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            const tag = document.createElement('span');
-            tag.className = 'selected-item';
-            tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
-            selectedContainer.appendChild(tag);
+    // Fechar dropdown se clicar fora
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('.materiais-wrapper') && !event.target.closest('.materiais-lista')) {
+            materialsList.style.display = 'none';
         }
     });
 
-    document.querySelectorAll('.remove-material').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const value = this.getAttribute('data-value');
-            document.querySelector(`input[name="materials"][value="${value}"]`).checked = false;
-            updateSelectedMaterials();
+    // Atualizar seleção visual
+    function updateSelectedMaterials() {
+        const selectedContainer = document.getElementById('selectedMaterials');
+        selectedContainer.innerHTML = '';
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const tag = document.createElement('span');
+                tag.className = 'selected-item';
+                tag.innerHTML = checkbox.value + ' <span class="remove-material" data-value="' + checkbox.value + '">×</span>';
+                selectedContainer.appendChild(tag);
+            }
         });
+
+        document.querySelectorAll('.remove-material').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const value = this.getAttribute('data-value');
+                document.querySelector(`input[name="materials"][value="${value}"]`).checked = false;
+                updateSelectedMaterials();
+            });
+        });
+
+        updateInputText();
+    }
+
+    function updateInputText() {
+        const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+        materialsSearchInput.value = selected.length > 0 ? `${selected.length} item(s) selecionado(s)` : '';
+    }
+
+    // Ligar eventos aos checkboxes
+    checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedMaterials));
+
+    // Botões Selecionar Todos / Nenhum
+    document.getElementById('selecionarTodosMateriais').addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = true);
+        updateSelectedMaterials();
+    });
+    document.getElementById('removerTodosMateriais').addEventListener('click', function () {
+        checkboxes.forEach(cb => cb.checked = false);
+        updateSelectedMaterials();
     });
 
-    updateInputText();
-}
-
-function updateInputText() {
-    const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-    materialsSearchInput.value = selected.length > 0 ? `${selected.length} item(s) selecionado(s)` : '';
-}
-
-// Ligar eventos aos checkboxes
-checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedMaterials));
-
-// Botões Selecionar Todos / Nenhum
-document.getElementById('selecionarTodosMateriais').addEventListener('click', function () {
-    checkboxes.forEach(cb => cb.checked = true);
+    // Inicial
     updateSelectedMaterials();
-});
-document.getElementById('removerTodosMateriais').addEventListener('click', function () {
-    checkboxes.forEach(cb => cb.checked = false);
-    updateSelectedMaterials();
-});
-
-// Inicial
-updateSelectedMaterials();
 
     // ------ PERITOS -------
     const peritoSelecionadoInput = document.getElementById('peritoSelecionadoInput');
@@ -625,6 +629,18 @@ function formatarDuracao(meses, dias, horas) {
     return partes.length > 0 ? partes.join(', ') : '0 horas';
 }
 
+function formatarData(dataStr) {
+    if (dataStr.includes('-')) {
+        // Está no formato ISO (yyyy-mm-dd)
+        const [ano, mes, dia] = dataStr.split('-');
+        return `${dia}/${mes}/${ano}`;
+    } else if (dataStr.includes('/')) {
+        // Já está no formato dd/mm/aaaa
+        return dataStr;
+    }
+    return "—";
+}
+
 
 // ---------------------- ESTILO ESTADO ----------------------
 function getEstadoBadgeClass(estado) {
@@ -747,10 +763,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
      
     // Tipo de Ocorrencia
-    document.querySelectorAll('.submenu-item[data-tipo]').forEach(btn => {
+    document.querySelectorAll('[data-tipo]').forEach(btn => {
         btn.addEventListener('click', () => {
             const tipo = btn.getAttribute('data-tipo');
-            filterByTipoAuditoria(tipo); // <-- CORRETO
+            filterByTipoAuditoria(tipo); 
             btn.classList.toggle('active');
         });
     });
@@ -758,58 +774,45 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-estado]').forEach(btn => {
         btn.addEventListener('click', () => {
             const estado = btn.getAttribute('data-estado');
-            
-            // Remove 'active' de todos os botões de estado
-            document.querySelectorAll('[data-estado]').forEach(b => b.classList.remove('active'));
-            // Adiciona 'active' só ao botão clicado
-            btn.classList.add('active');
-            
-            // Atualiza o filtro para apenas este estado
-            currentEstadoFiltro = [estado];
+            const i = currentEstadoFiltro.indexOf(estado);
+            if (i >= 0) {
+                currentEstadoFiltro.splice(i, 1); // desselecionar
+                btn.classList.remove('active');
+            } else {
+                currentEstadoFiltro.push(estado); // selecionar
+                btn.classList.add('active');
+            }
+
             currentPage = 1;
             atualizarTabelaAuditorias();
             updatePagination();
         });
     });
+    
     // -------------------- FILTROS DE PESQUISA --------------------
     document.getElementById('searchButton').addEventListener('click', () => {
-        // ID auditoria
-        const id = document.getElementById('searchId').value.trim();
-        // Nome da auditoria
-        const filtroNomeAuditoria = document.getElementById('searchNomeAuditoria').value.trim().toLowerCase();
-        // Data
-        const data = document.getElementById('searchData').value;
-        // Nome Perito
-        const perito = document.getElementById('searchPerito').value.trim().toLowerCase();
-        
+        // Atualizar variáveis globais
+        filtroId = document.getElementById('searchId').value.trim();
+        filtroNomeAuditoria = document.getElementById('searchNomeAuditoria').value.trim().toLowerCase();
+        filtroData = document.getElementById('searchData').value;
+        filtroPerito = document.getElementById('searchPerito').value.trim().toLowerCase();
 
-        let filtradas = [...auditoriasData];
+        // Aplicar filtragem com base nas globais
+        const filtradas = filtrarAuditorias();
+        currentPage = 1;
 
-        if (id) filtradas = filtradas.filter(a => a.id.toString() === id);
-        if (filtroNomeAuditoria) {
-            filtradas = filtradas.filter(a =>
-                a.nome?.toLowerCase().includes(filtroNomeAuditoria)
-            );
-        }
-        if (data) filtradas = filtradas.filter(a => new Date(a.data) >= new Date(data));
-        if (perito) filtradas = filtradas.filter(a => a.perito?.toLowerCase().includes(perito));
-        
-        if (
-            id || filtroNomeAuditoria || data || perito
-        ) {
+        if (filtroId || filtroNomeAuditoria || filtroData || filtroPerito) {
             auditoriasFiltradasPesquisa = filtradas;
-            atualizarTabelaAuditorias(auditoriasFiltradasPesquisa);
-            updatePagination(auditoriasFiltradasPesquisa);
+            atualizarTabelaAuditorias(filtradas);
+            updatePagination(filtradas);
         } else {
             auditoriasFiltradasPesquisa = null;
             atualizarTabelaAuditorias();
             updatePagination();
         }
-        currentPage = 1;
-
     });
 
-    // Ativar pesquisa ao carregar Enter nos inputs
+    // pesquisa com Enter 
     ['searchId', 'searchNomeAuditoria', 'searchData', 'searchPerito'].forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener('keypress', (e) => {
@@ -818,11 +821,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    // Limpar filtros
+    // Limpar filtros (borracha)
     document.getElementById('clearFiltersBtn').addEventListener('click', limparFiltros);
 });
 
-// Mostrar modal customizado
+// ------ ALERTAS ------
 function showCustomAlert(message) {
     const modal = document.getElementById('customAlertModal');
     const msg = document.getElementById('customAlertMessage');
