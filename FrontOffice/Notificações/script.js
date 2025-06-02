@@ -24,9 +24,16 @@ function mostrarOcorrencias(pagina) {
 
   // Remover a condição if que estava aqui e mostrar as ocorrências filtradas
   paginaOcorrencias.forEach((ocorrencia) => {
+    const tipoParaImagem = {
+      "Buraco na estrada": "../Tipo de Ocorr/passeio2.png",
+      "Passeio danificado": "../Tipo de Ocorr/passei.png",
+      "Falta de sinalização": "../Tipo de Ocorr/passeio1.png",
+      "Iluminação pública": "../Tipo de Ocorr/lampada.png"
+    };
+
     const imgSrc = ocorrencia.imagens && ocorrencia.imagens.length > 0
       ? ocorrencia.imagens[0]
-      : 'placeholder.png';
+      : (tipoParaImagem[ocorrencia.tipo] || 'placeholder.png');
 
     const card = document.createElement('div');
     card.className = 'card';
