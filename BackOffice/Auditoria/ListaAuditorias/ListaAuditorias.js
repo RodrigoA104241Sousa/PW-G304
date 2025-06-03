@@ -469,7 +469,14 @@ form.style.rowGap = '30px';
     const peritoDropdownIcon = document.getElementById('peritoDropdownIcon');
     const peritoDropdownList = document.getElementById('peritoDropdownList');
 
-    let peritoSelecionado = auditoria.peritos?.[0] || null;
+   let peritoSelecionado = null;
+        const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
+
+        if (auditoria.peritos?.[0]) {
+            const idGuardado = auditoria.peritos[0].id;
+            peritoSelecionado = experts.find(p => p.id == idGuardado) || null;
+        }
+
 
     // Mostrar lista ao clicar
     function togglePeritoDropdown() {
@@ -489,7 +496,10 @@ form.style.rowGap = '30px';
     function carregarPeritosDisponiveis() {
         const tipo = auditoria.tipoOcorrencia;
         const experts = JSON.parse(localStorage.getItem('expertsData')) || [];
-        const disponiveis = experts.filter(p => p.status === "Disponível" && p.specialty === tipo);
+        const disponiveis = experts.filter(p =>
+            (p.status === "Disponível" || p.id == peritoSelecionado?.id) &&
+            p.specialty === tipo
+        );
 
         peritoDropdownList.innerHTML = `
             <div class="dropdown-item-perito" data-id="" data-nome="—" style="padding: 8px 12px; cursor: pointer;">

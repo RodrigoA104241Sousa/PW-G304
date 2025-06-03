@@ -9,26 +9,30 @@
     <link href="https://unpkg.com/lucide-icons/dist/umd/lucide-icons.min.js" rel="stylesheet">
 </head>
 <body>
+    <!-- Estrutura principal -->
     <div class="container">
-        <!-- Sidebar -->
+        <!-- Menu Lateral -->
         <div class="sidebar">
             <!-- Logo -->
             <div class="logo">
                 <div>Eyes</div>
                 <div>EveryWhere</div>
             </div>
-<!-- Filtros do Menu Lateral-->
+            <!-- Filtros do Menu Lateral-->
             <nav>
+                
                 <!-- Ordenar -->
                 <div class="menu-item">
                     <i data-lucide="sort-asc"></i>
                     <span>Ordenar</span>
                 </div>
+                <!-- + Recente -->
                 <div class="submenu">
                     <button class="submenu-item" data-sort="recente">
                         <span class="dot"></span>
                         <span>Mais Recente</span>
                     </button>
+                    <!-- + Antiga -->
                     <button class="submenu-item" data-sort="antiga">
                         <span class="dot"></span>
                         <span>Mais Antigo</span>
@@ -80,11 +84,11 @@
             </nav>
         </div>
 
-        <!-- Main Content -->
+        <!-- Página Principal -->
         <div class="main-content">
-            <!-- Header -->
+            <!-- Cabeçalho -->
             <header>
-
+                <!-- Centro -->
                 <div class="page-selector">
                     <button class="page-dropdown-btn">
                         Ocorrências Registadas
@@ -98,33 +102,42 @@
                     </div>
                 </div>
 
+                <!-- Botão Remover -->
                 <div class="header-right">
-
-                    <i data-lucide="settings"></i>
+                    <button class="btn btn-danger">
+                        <i data-lucide="minus"></i>
+                        <span>REMOVER</span>
+                    </button>
+                    <!-- LOGO -->
                     <div class="avatar">
-                        <img src="logo.png" alt="Avatar" width="24" height="24">
+                        <img src="logo.png" alt="Avatar" width="60" height="60">
                     </div>
                 </div>
             </header>
 
-            <!-- Filters -->
+            <!-- Filtros de pesquisa -->
             <div class="filters">
-                <input type="text" id="searchInput" placeholder="Nome / Email Usuário ...">
-                <input type="date" id="dateInput" placeholder="Trabalha desde ...">
-                <button class="search-button" id="searchButton">
-                    <span>Procurar</span>
-                    <i data-lucide="search"></i>
+                <input type="text" id="searchId" placeholder="ID da Ocorrência ...">
+                <input type="text" id="searchEmailUsuario" placeholder="Email Usuário ...">
+                <input type="date" id="searchData" placeholder="Trabalha desde ...">
+                <!-- Botões -->
+                <button id="searchButton" class="search-icon-btn">
+                    <img src="pesquisa.png" alt="Pesquisar" />
+                  </button>
+                <button id="clearFiltersBtn" class="search-icon-btn" title="Limpar Filtros">
+                    <img src="borracha.png" alt="Limpar" />
                 </button>
             </div>
 
-            <!-- Table -->
+            <!-- Tabela de Ocorrencias -->
             <div class="card-container">
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="header-checkbox"></th>
-                                <th>Nome / Email Usuário</th>
+                            <th><input type="checkbox" class="header-checkbox"></th>
+                                <th>ID</th>
+                                <th>Email Usuário</th>
                                 <th>Data</th>
                                 <th>Tipo</th>
                                 <th>Estado</th>
@@ -132,24 +145,26 @@
                             </tr>
                         </thead>
                         <tbody id="occurrencesTableBody">
-                            <!-- Rows will be populated by JavaScript -->
+                            <!-- JavaScript insere aqui -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
             
-            <!-- Pagination -->
+            <!-- Paginação -->
             <div class="pagination">
-                <div class="pagination-info">
-                    Mostrando 1 - 16 de 5.000 Ocorrências Registadas
-                </div>
+                <!-- Informação -->
+                <div class="pagination-info"> </div>
+                <!-- Controlos de página -->
                 <div class="pagination-controls">
-                    <select>
-                        <option>16</option>
-                        <option>32</option>
-                        <option>64</option>
+                    <select id="itemsPerPageSelect">
+                        <!-- Nº de Ocorrencias a aparecer -->
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
                     </select>
+                    <!-- Nº da página -->
                     <div class="pagination-buttons">
                         <button>&lt;</button>
                         <button class="active">1</button>
@@ -162,7 +177,9 @@
             </div>
         </div>
     </div>
+    <!-- Importar icones (lucide)-->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- JavaScript -->
     <script src="ocorrencias.js"></script>
 </body>
 </html>
